@@ -1,5 +1,4 @@
 package src.java;
-import src.java.ui.*;
 
 import java.util.Scanner;
 
