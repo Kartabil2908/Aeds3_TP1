@@ -13,14 +13,14 @@ import src.java.models.Usuario;
  * <li>Criar novos usuários;</li>
  * <li>Efetuar login;</li>
  * <li>Logout;</li>
- * <li>Desativar a própria conta do usuário logado;</li>
+ * <li>Desativar (soft delete) e Excluir (hard delete) a conta do usuário logado;</li>
  * <li>Exibir os dados do usuário logado.</li>
  * </ul>
  *
  * Mantém internamente o estado do usuário atualmente logado.
  *
  * @author Bernardo
- * @version 1.2
+ * @version 1.3
  */
 public class ControladorUsuario {
 
@@ -41,6 +41,8 @@ public class ControladorUsuario {
         this.usuarioLogado = null;
     }
 
+    // ... (os métodos criarNovoUsuario e loginUsuario permanecem os mesmos) ...
+    
     /**
      * Cria um novo usuário solicitando dados via terminal.
      * Realiza verificações para impedir a criação de usuários com e-mail duplicado.
@@ -118,6 +120,7 @@ public class ControladorUsuario {
         return null;
     }
 
+
     /**
      * Desconecta o usuário logado, limpando o estado da sessão.
      */
@@ -126,8 +129,8 @@ public class ControladorUsuario {
     }
 
     /**
-     * Permite ao usuário logado desativar sua própria conta.
-     * A operação agora atualiza o status do usuário para inativo, em vez de deletar o registro.
+     * Permite ao usuário logado desativar sua própria conta (soft delete).
+     * A operação atualiza o status do usuário para inativo.
      *
      * @param scanner Scanner para leitura da confirmação do usuário
      * @return true se a desativação foi confirmada e realizada com sucesso, false caso contrário
@@ -148,7 +151,6 @@ public class ControladorUsuario {
             String confirmacao = scanner.nextLine();
 
             if (confirmacao.equalsIgnoreCase("S")) {
-                // Lógica alterada: de delete para update
                 this.usuarioLogado.setAtivo(false);
                 boolean sucesso = arqUsuarios.update(this.usuarioLogado);
 
@@ -157,7 +159,6 @@ public class ControladorUsuario {
                     logout();
                     return true;
                 } else {
-                    // Reverte a mudança em memória caso a gravação falhe
                     this.usuarioLogado.setAtivo(true);
                     System.out.println("\n-- Falha ao desativar a conta. --\n");
                 }
@@ -170,6 +171,51 @@ public class ControladorUsuario {
         }
         return false;
     }
+
+    /**
+     * Permite ao usuário logado excluir permanentemente sua própria conta (hard delete).
+     * A operação remove o registro do arquivo e dos índices.
+     *
+     * @param scanner Scanner para leitura da confirmação do usuário
+     * @return true se a exclusão foi confirmada e realizada com sucesso, false caso contrário
+     */
+    public boolean excluirPropriaConta(Scanner scanner) {
+        if (this.usuarioLogado == null) {
+            System.out.println("\n-- ERRO: Não há um usuário logado para excluir. --\n");
+            return false;
+        }
+
+        System.out.println("\n--- Excluir Minha Conta Permanentemente ---");
+        try {
+            System.out.println("ATENÇÃO! Esta ação é PERMANENTE e IRREVERSÍVEL.");
+            System.out.println("Todos os seus dados serão apagados para sempre.");
+            System.out.println(" > Nome: " + this.usuarioLogado.getNome());
+            System.out.println(" > E-mail: " + this.usuarioLogado.getEmail());
+            System.out.print("\nDigite 'EXCLUIR' para confirmar a exclusão permanente de sua conta: ");
+
+            String confirmacao = scanner.nextLine();
+
+            if (confirmacao.equals("EXCLUIR")) {
+                // Lógica de exclusão permanente (hard delete)
+                boolean sucesso = arqUsuarios.delete(this.usuarioLogado.getId());
+
+                if (sucesso) {
+                    System.out.println("\n-- Conta excluída permanentemente com sucesso! Você será desconectado. --\n");
+                    logout();
+                    return true;
+                } else {
+                    System.out.println("\n-- Falha ao excluir a conta. --\n");
+                }
+            } else {
+                System.out.println("\n-- A confirmação não foi digitada corretamente. Operação cancelada. --\n");
+            }
+
+        } catch (Exception e) {
+            System.err.println("\nOcorreu um erro ao tentar excluir a conta: " + e.getMessage() + "\n");
+        }
+        return false;
+    }
+
 
     /**
      * Exibe os dados do usuário que está logado na sessão atual.

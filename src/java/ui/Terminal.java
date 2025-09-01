@@ -15,7 +15,7 @@ import src.java.models.Usuario;
  * <li>Criar uma nova conta de usuário;</li>
  * <li>Acessar o menu principal após autenticação;</li>
  * <li>Consultar seus dados pessoais;</li>
- * <li>Desativar a própria conta;</li>
+ * <li>Desativar ou Excluir a própria conta;</li>
  * <li>Efetuar logout.</li>
  * </ul>
  *
@@ -23,7 +23,7 @@ import src.java.models.Usuario;
  * relacionadas à autenticação e ao gerenciamento de usuários.
  *
  * @author Bernardo
- * @version 1.2
+ * @version 1.3
  */
 public class Terminal {
 
@@ -39,7 +39,8 @@ public class Terminal {
         this.controlador = controlador;
     }
 
-    /**
+    // ... (o método exibirTelaInicial permanece o mesmo) ...
+        /**
      * Exibe a tela inicial do sistema, onde o usuário pode escolher entre:
      * <ul>
      * <li>Fazer login;</li>
@@ -88,6 +89,7 @@ public class Terminal {
         }
     }
 
+
     /**
      * Exibe o menu principal após o login do usuário.
      *
@@ -95,7 +97,7 @@ public class Terminal {
      * <ul>
      * <li>Acessar seus dados pessoais;</li>
      * <li>Gerenciar listas (a implementar);</li>
-     * <li>Desativar a própria conta;</li>
+     * <li>Desativar ou Excluir a própria conta;</li>
      * <li>Efetuar logout e retornar à tela inicial.</li>
      * </ul>
      *
@@ -109,6 +111,7 @@ public class Terminal {
             System.out.println("(1) Meus dados");
             System.out.println("(2) Minhas listas");
             System.out.println("(3) Desativar minha conta");
+            System.out.println("(4) Excluir minha conta"); // Nova opção
             System.out.println("\n(5) Desconectar (Logout)");
             System.out.print("\nOpção: ");
 
@@ -117,7 +120,6 @@ public class Terminal {
 
                 switch (opcao) {
                     case 1:
-                        // Lógica implementada
                         controlador.exibirDadosDoUsuarioLogado();
                         break;
                     case 2:
@@ -126,6 +128,12 @@ public class Terminal {
                     case 3:
                         boolean foiDesativado = controlador.desativarPropriaConta(scanner);
                         if (foiDesativado) {
+                            return; // Retorna para a tela inicial
+                        }
+                        break;
+                    case 4: // Novo case
+                        boolean foiExcluido = controlador.excluirPropriaConta(scanner);
+                        if (foiExcluido) {
                             return; // Retorna para a tela inicial
                         }
                         break;
