@@ -8,16 +8,14 @@ import java.lang.reflect.Constructor;
  * Classe HashExtensivel<T>
  * -------------------------
  * Implementação de um índice baseado em Hash Extensível com armazenamento em disco.
- * 
- * Estrutura:
- *  - Diretório (armazena ponteiros para cestos, controlando profundidade global).
- *  - Cestos (blocos que armazenam elementos com limite fixo).
- * 
- * Cada operação (create, read, update, delete) acessa o diretório em disco,
+ * * Estrutura:
+ * - Diretório (armazena ponteiros para cestos, controlando profundidade global).
+ * - Cestos (blocos que armazenam elementos com limite fixo).
+ * * Cada operação (create, read, update, delete) acessa o diretório em disco,
  * localiza o cesto correspondente e realiza a operação.
  *
  * @param <T> Classe que implementa RegistroHashExtensivel<T>, garantindo métodos
- *            de serialização e comparação.
+ * de serialização e comparação.
  */
 public class HashExtensivel<T extends RegistroHashExtensivel<T>> {
 
@@ -106,13 +104,14 @@ public class HashExtensivel<T extends RegistroHashExtensivel<T>> {
 
       elementos = new ArrayList<>(quantidadeMaxima);
       byte[] dados = new byte[bytesPorElemento];
-      T elem;
-
-      for (int i = 0; i < quantidadeMaxima; i++) {
+      
+      int i=0;
+      while(i<this.quantidade) {
         dis.read(dados);
-        elem = construtor.newInstance();
+        T elem = construtor.newInstance();
         elem.fromByteArray(dados);
         elementos.add(elem);
+        i++;
       }
     }
 
@@ -225,7 +224,7 @@ public class HashExtensivel<T extends RegistroHashExtensivel<T>> {
 
     /** Atualiza o endereço de um cesto no diretório. */
     public boolean atualizaEndereco(int p, long e) {
-      if (p > Math.pow(2, profundidadeGlobal))
+      if (p >= Math.pow(2, profundidadeGlobal))
         return false;
       enderecos[p] = e;
       return true;
@@ -270,9 +269,9 @@ public class HashExtensivel<T extends RegistroHashExtensivel<T>> {
       return s;
     }
 
-    protected long endereço(int p) {
-      if (p > Math.pow(2, profundidadeGlobal))
-        return -1;
+    protected long endereco(int p) {
+      if (p >= Math.pow(2, profundidadeGlobal))
+          return -1;
       return enderecos[p];
     }
 
@@ -286,14 +285,11 @@ public class HashExtensivel<T extends RegistroHashExtensivel<T>> {
       int q2 = (int) Math.pow(2, profundidadeGlobal);
 
       long[] novosEnderecos = new long[q2];
-
-      // primeira metade
-      for (int i = 0; i < q1; i++)
+      
+      for (int i = 0; i < q1; i++) {
         novosEnderecos[i] = enderecos[i];
-
-      // segunda metade
-      for (int i = q1; i < q2; i++)
-        novosEnderecos[i] = enderecos[i - q1];
+        novosEnderecos[i+q1] = enderecos[i];
+      }
 
       enderecos = novosEnderecos;
       return true;
@@ -331,6 +327,7 @@ public class HashExtensivel<T extends RegistroHashExtensivel<T>> {
     if (arqDiretorio.length() == 0 || arqCestos.length() == 0) {
       diretorio = new Diretorio();
       byte[] bd = diretorio.toByteArray();
+      arqDiretorio.seek(0);
       arqDiretorio.write(bd);
 
       Cesto c = new Cesto(construtor, quantidadeDadosPorCesto);
@@ -340,32 +337,152 @@ public class HashExtensivel<T extends RegistroHashExtensivel<T>> {
     }
   }
 
-  // ---------------------------
-  // Métodos principais
-  // ---------------------------
+    // ---------------------------
+    // Métodos principais
+    // ---------------------------
 
-  /** Insere um elemento no hash extensível. */
-  public boolean create(T elem) throws Exception {
-    return true;
-  }
+    private void leDiretorio() throws Exception {
+        arqDiretorio.seek(0);
+        int tam = (int)arqDiretorio.length();
+        byte[] ba = new byte[tam];
+        arqDiretorio.read(ba);
+        diretorio = new Diretorio();
+        diretorio.fromByteArray(ba);
+    }
 
-  /** Busca um elemento pela chave (hashCode). */
-  public T read(int chave) throws Exception {
+    private Cesto leCesto(long end) throws Exception {
+        Cesto c = new Cesto(construtor, quantidadeDadosPorCesto);
+        byte[] ba = new byte[c.size()];
+        arqCestos.seek(end);
+        arqCestos.read(ba);
+        c.fromByteArray(ba);
+        return c;
+    }
+    
+    private void escreveCesto(Cesto c, long end) throws Exception {
+        arqCestos.seek(end);
+        arqCestos.write(c.toByteArray());
+    }
+    
+    /** Insere um elemento no hash extensível. */
+    public boolean create(T elem) throws Exception {
+        leDiretorio();
+        int hash = diretorio.hash(elem.hashCode());
+        long endCesto = diretorio.endereco(hash);
+        Cesto c = leCesto(endCesto);
+        
+        if (!c.full()) {
+            c.create(elem);
+            escreveCesto(c, endCesto);
+            return true;
+        }
 
-    return null;
-  }
+        // Cesto cheio: dividir
+        if (c.profundidadeLocal == diretorio.profundidadeGlobal) {
+            diretorio.duplica();
+        }
 
-  /** Atualiza um elemento existente. */
-  public boolean update(T elem) throws Exception {
-    return false;
-  }
+        c.profundidadeLocal++;
+        
+        // Cesto novo
+        Cesto c2 = new Cesto(construtor, quantidadeDadosPorCesto, c.profundidadeLocal);
+        long endCesto2 = arqCestos.length();
 
-  /** Remove um elemento pela chave. */
-  public boolean delete(int chave) throws Exception {
-    return false;
-  }
+        // Redistribuir elementos
+        ArrayList<T> temporario = new ArrayList<>();
+        temporario.addAll(c.elementos);
+        temporario.add(elem);
 
-  /** Imprime o conteúdo do diretório e dos cestos. */
-  public void print() {
-  }
+        c.elementos.clear();
+        c.quantidade = 0;
+        
+        for(T e : temporario) {
+            int hash2 = diretorio.hash2(e.hashCode(), c.profundidadeLocal);
+            if(diretorio.hash2(elem.hashCode(),c.profundidadeLocal) == hash2) {
+                c.create(e);
+            } else {
+                c2.create(e);
+            }
+        }
+        
+        // Atualiza os ponteiros no diretório
+        int hashAntigo = diretorio.hash2(elem.hashCode(), c.profundidadeLocal-1);
+        int pot = (int)Math.pow(2, diretorio.profundidadeGlobal - c.profundidadeLocal);
+        for(int i=0; i<pot; i++) {
+            int newHash = hashAntigo + i*(int)Math.pow(2, c.profundidadeLocal);
+            if(diretorio.hash2(elem.hashCode(), c.profundidadeLocal) == (newHash % (int)Math.pow(2,c.profundidadeLocal)))
+                diretorio.atualizaEndereco(newHash, endCesto);
+            else
+                diretorio.atualizaEndereco(newHash, endCesto2);
+        }
+
+        // Salvar alterações
+        arqDiretorio.seek(0);
+        arqDiretorio.write(diretorio.toByteArray());
+        escreveCesto(c, endCesto);
+        escreveCesto(c2, endCesto2);
+        
+        return true;
+    }
+
+    /** Busca um elemento pela chave (hashCode). */
+    public T read(int chave) throws Exception {
+        leDiretorio();
+        int hash = diretorio.hash(chave);
+        long endCesto = diretorio.endereco(hash);
+        if (endCesto == -1) return null;
+
+        Cesto c = leCesto(endCesto);
+        return c.read(chave);
+    }
+
+    /** Atualiza um elemento existente. */
+    public boolean update(T elem) throws Exception {
+        leDiretorio();
+        int hash = diretorio.hash(elem.hashCode());
+        long endCesto = diretorio.endereco(hash);
+        if (endCesto == -1) return false;
+
+        Cesto c = leCesto(endCesto);
+        if(c.update(elem)) {
+            escreveCesto(c, endCesto);
+            return true;
+        }
+        return false;
+    }
+
+    /** Remove um elemento pela chave. */
+    public boolean delete(int chave) throws Exception {
+        leDiretorio();
+        int hash = diretorio.hash(chave);
+        long endCesto = diretorio.endereco(hash);
+        if (endCesto == -1) return false;
+
+        Cesto c = leCesto(endCesto);
+        if (c.delete(chave)) {
+            escreveCesto(c, endCesto);
+            return true;
+        }
+        return false;
+    }
+
+    /** Imprime o conteúdo do diretório e dos cestos. */
+    public void print() {
+        try {
+            leDiretorio();
+            System.out.println(diretorio);
+            
+            long tam = arqCestos.length();
+            long pos = 0;
+            while(pos<tam) {
+                System.out.println("\nCESTO Endereço: "+pos);
+                Cesto c = leCesto(pos);
+                System.out.println(c);
+                pos += c.size();
+            }
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
