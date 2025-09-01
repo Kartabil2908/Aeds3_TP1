@@ -2,28 +2,28 @@
 package src.java.ui;
 
 import java.util.Scanner;
-import src.java.util.ControladorUsuario; 
+import src.java.util.ControladorUsuario;
 import src.java.models.Usuario;
 
 /**
- * Classe responsável por exibir e controlar a interface de linha de comando (terminal) 
- * do sistema PresenteFácil 1.0. 
- * 
+ * Classe responsável por exibir e controlar a interface de linha de comando (terminal)
+ * do sistema PresenteFácil 1.0.
+ *
  * Através desta interface, o usuário pode:
  * <ul>
- *   <li>Realizar login;</li>
- *   <li>Criar uma nova conta de usuário;</li>
- *   <li>Acessar o menu principal após autenticação;</li>
- *   <li>Consultar e gerenciar dados pessoais e listas (futuras implementações);</li>
- *   <li>Deletar a própria conta;</li>
- *   <li>Efetuar logout.</li>
+ * <li>Realizar login;</li>
+ * <li>Criar uma nova conta de usuário;</li>
+ * <li>Acessar o menu principal após autenticação;</li>
+ * <li>Consultar seus dados pessoais;</li>
+ * <li>Desativar a própria conta;</li>
+ * <li>Efetuar logout.</li>
  * </ul>
  *
  * O Terminal depende de um {@link ControladorUsuario} para realizar as operações
  * relacionadas à autenticação e ao gerenciamento de usuários.
- * 
+ *
  * @author Bernardo
- * @version 1.0
+ * @version 1.2
  */
 public class Terminal {
 
@@ -32,7 +32,7 @@ public class Terminal {
 
     /**
      * Construtor da classe Terminal.
-     * 
+     *
      * @param controlador instância de {@link ControladorUsuario} responsável pelas operações de usuário
      */
     public Terminal(ControladorUsuario controlador) {
@@ -42,9 +42,9 @@ public class Terminal {
     /**
      * Exibe a tela inicial do sistema, onde o usuário pode escolher entre:
      * <ul>
-     *   <li>Fazer login;</li>
-     *   <li>Criar um novo usuário;</li>
-     *   <li>Encerrar o programa.</li>
+     * <li>Fazer login;</li>
+     * <li>Criar um novo usuário;</li>
+     * <li>Encerrar o programa.</li>
      * </ul>
      *
      * @param scanner objeto {@link Scanner} para leitura de entradas do usuário
@@ -69,7 +69,7 @@ public class Terminal {
                             System.out.println("\n-- Login efetuado com sucesso! Bem-vindo(a), " + usuarioLogado.getNome() + ". --\n");
                             exibirMenuPrincipal(scanner);
                         } else {
-                            System.out.println("\n-- E-mail ou senha inválidos. Tente novamente. --\n");
+                            System.out.println("\n-- E-mail ou senha inválidos, ou conta desativada. Tente novamente. --\n");
                         }
                         break;
                     case 2:
@@ -90,25 +90,25 @@ public class Terminal {
 
     /**
      * Exibe o menu principal após o login do usuário.
-     * 
+     *
      * Permite ao usuário:
      * <ul>
-     *   <li>Acessar seus dados pessoais (a implementar);</li>
-     *   <li>Gerenciar listas (a implementar);</li>
-     *   <li>Deletar a própria conta;</li>
-     *   <li>Efetuar logout e retornar à tela inicial.</li>
+     * <li>Acessar seus dados pessoais;</li>
+     * <li>Gerenciar listas (a implementar);</li>
+     * <li>Desativar a própria conta;</li>
+     * <li>Efetuar logout e retornar à tela inicial.</li>
      * </ul>
      *
      * @param scanner objeto {@link Scanner} para leitura de entradas do usuário
      */
     public void exibirMenuPrincipal(Scanner scanner) {
         int opcao = 0;
-        while (true) { 
+        while (true) {
             System.out.println("Menu Principal");
             System.out.println("-----------------");
             System.out.println("(1) Meus dados");
             System.out.println("(2) Minhas listas");
-            System.out.println("(3) Deletar minha conta");
+            System.out.println("(3) Desativar minha conta");
             System.out.println("\n(5) Desconectar (Logout)");
             System.out.print("\nOpção: ");
 
@@ -117,15 +117,16 @@ public class Terminal {
 
                 switch (opcao) {
                     case 1:
-                        System.out.println("\n-- Função 'Meus dados' a ser implementada. --\n");
+                        // Lógica implementada
+                        controlador.exibirDadosDoUsuarioLogado();
                         break;
                     case 2:
                         System.out.println("\n-- Função 'Minhas listas' a ser implementada. --\n");
                         break;
                     case 3:
-                        boolean foiDeletado = controlador.deletarProprioUsuario(scanner);
-                        if (foiDeletado) {
-                            return;
+                        boolean foiDesativado = controlador.desativarPropriaConta(scanner);
+                        if (foiDesativado) {
+                            return; // Retorna para a tela inicial
                         }
                         break;
                     case 5:

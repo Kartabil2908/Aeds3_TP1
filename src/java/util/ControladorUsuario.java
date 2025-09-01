@@ -7,19 +7,20 @@ import src.java.models.Usuario;
 
 /**
  * Controlador responsável por gerenciar a lógica de usuários no sistema PresenteFácil 1.0.
- * 
+ *
  * Ele fornece métodos para:
  * <ul>
- *   <li>Criar novos usuários;</li>
- *   <li>Efetuar login;</li>
- *   <li>Logout;</li>
- *   <li>Deletar a própria conta do usuário logado.</li>
+ * <li>Criar novos usuários;</li>
+ * <li>Efetuar login;</li>
+ * <li>Logout;</li>
+ * <li>Desativar a própria conta do usuário logado;</li>
+ * <li>Exibir os dados do usuário logado.</li>
  * </ul>
- * 
+ *
  * Mantém internamente o estado do usuário atualmente logado.
- * 
+ *
  * @author Bernardo
- * @version 1.0
+ * @version 1.2
  */
 public class ControladorUsuario {
 
@@ -32,7 +33,7 @@ public class ControladorUsuario {
     /**
      * Construtor do controlador.
      * Inicializa o arquivo de usuários e garante que nenhum usuário esteja logado.
-     * 
+     *
      * @throws Exception caso ocorra algum problema ao abrir o arquivo de usuários
      */
     public ControladorUsuario() throws Exception {
@@ -43,7 +44,7 @@ public class ControladorUsuario {
     /**
      * Cria um novo usuário solicitando dados via terminal.
      * Realiza verificações para impedir a criação de usuários com e-mail duplicado.
-     * 
+     *
      * @param scanner Scanner para leitura de entradas do usuário
      */
     public void criarNovoUsuario(Scanner scanner) {
@@ -68,6 +69,7 @@ public class ControladorUsuario {
             System.out.print("Resposta secreta: ");
             String resposta = scanner.nextLine();
 
+            // O construtor já define o usuário como 'ativo'
             Usuario novoUsuario = new Usuario(nome, email, hashSenha, pergunta, resposta);
             int id = arqUsuarios.create(novoUsuario);
 
@@ -80,9 +82,10 @@ public class ControladorUsuario {
 
     /**
      * Efetua o login de um usuário solicitando e-mail e senha via terminal.
-     * 
+     * Verifica também se a conta está ativa.
+     *
      * @param scanner Scanner para leitura de entradas do usuário
-     * @return o {@link Usuario} logado se sucesso, ou null caso e-mail/senha estejam incorretos
+     * @return o {@link Usuario} logado se sucesso, ou null caso e-mail/senha estejam incorretos ou a conta inativa
      */
     public Usuario loginUsuario(Scanner scanner) {
         System.out.println("\n--- Login ---");
@@ -97,14 +100,20 @@ public class ControladorUsuario {
             if (usuario != null) {
                 int hashSenhaDigitada = senha.hashCode();
                 if (hashSenhaDigitada == usuario.getHashSenha()) {
-                    this.usuarioLogado = usuario;
-                    return this.usuarioLogado;
+                    // VERIFICAÇÃO ADICIONAL: A conta está ativa?
+                    if (usuario.isAtivo()) {
+                        this.usuarioLogado = usuario;
+                        return this.usuarioLogado;
+                    } else {
+                        System.out.println("\n-- ERRO: Esta conta foi desativada. --\n");
+                        return null;
+                    }
                 }
             }
         } catch (Exception e) {
             System.err.println("\nOcorreu um erro durante o login: " + e.getMessage() + "\n");
         }
-        
+
         this.usuarioLogado = null;
         return null;
     }
@@ -117,43 +126,63 @@ public class ControladorUsuario {
     }
 
     /**
-     * Permite ao usuário logado deletar sua própria conta.
-     * Confirmação via terminal é solicitada antes da exclusão.
-     * 
+     * Permite ao usuário logado desativar sua própria conta.
+     * A operação agora atualiza o status do usuário para inativo, em vez de deletar o registro.
+     *
      * @param scanner Scanner para leitura da confirmação do usuário
-     * @return true se a exclusão foi confirmada e realizada com sucesso, false caso contrário
+     * @return true se a desativação foi confirmada e realizada com sucesso, false caso contrário
      */
-    public boolean deletarProprioUsuario(Scanner scanner) {
+    public boolean desativarPropriaConta(Scanner scanner) {
         if (this.usuarioLogado == null) {
-            System.out.println("\n-- ERRO: Não há um usuário logado para deletar. --\n");
+            System.out.println("\n-- ERRO: Não há um usuário logado para desativar. --\n");
             return false;
         }
 
-        System.out.println("\n--- Deletar Minha Conta ---");
+        System.out.println("\n--- Desativar Minha Conta ---");
         try {
-            System.out.println("Atenção! Esta ação é permanente e não pode ser desfeita.");
+            System.out.println("Atenção! Esta ação fará com que você não possa mais acessar sua conta.");
             System.out.println(" > Nome: " + this.usuarioLogado.getNome());
             System.out.println(" > E-mail: " + this.usuarioLogado.getEmail());
-            System.out.print("\nVocê tem CERTEZA de que deseja deletar sua conta? (S/N): ");
-            
+            System.out.print("\nVocê tem CERTEZA de que deseja desativar sua conta? (S/N): ");
+
             String confirmacao = scanner.nextLine();
 
             if (confirmacao.equalsIgnoreCase("S")) {
-                boolean sucesso = arqUsuarios.delete(this.usuarioLogado.getEmail());
+                // Lógica alterada: de delete para update
+                this.usuarioLogado.setAtivo(false);
+                boolean sucesso = arqUsuarios.update(this.usuarioLogado);
+
                 if (sucesso) {
-                    System.out.println("\n-- Conta deletada com sucesso! Você será desconectado. --\n");
+                    System.out.println("\n-- Conta desativada com sucesso! Você será desconectado. --\n");
                     logout();
                     return true;
                 } else {
-                    System.out.println("\n-- Falha ao deletar a conta. --\n");
+                    // Reverte a mudança em memória caso a gravação falhe
+                    this.usuarioLogado.setAtivo(true);
+                    System.out.println("\n-- Falha ao desativar a conta. --\n");
                 }
             } else {
                 System.out.println("\n-- Operação cancelada. --\n");
             }
 
         } catch (Exception e) {
-            System.err.println("\nOcorreu um erro ao tentar deletar a conta: " + e.getMessage() + "\n");
+            System.err.println("\nOcorreu um erro ao tentar desativar a conta: " + e.getMessage() + "\n");
         }
         return false;
+    }
+
+    /**
+     * Exibe os dados do usuário que está logado na sessão atual.
+     * Utiliza o método toString() da classe Usuario.
+     */
+    public void exibirDadosDoUsuarioLogado() {
+        System.out.println("\n--- Meus Dados ---");
+        if (this.usuarioLogado != null) {
+            // O método toString() já formata os dados para nós
+            System.out.println(this.usuarioLogado.toString());
+        } else {
+            // Essa mensagem é uma salvaguarda, não deve ocorrer em uso normal
+            System.out.println("Nenhum usuário está logado no momento.\n");
+        }
     }
 }

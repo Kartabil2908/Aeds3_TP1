@@ -4,8 +4,8 @@ import java.io.*;
 
 /**
  * Representa um usuário do sistema, contendo informações pessoais,
- * credenciais e dados de recuperação de conta. 
- * 
+ * credenciais e dados de recuperação de conta.
+ *
  * A classe implementa a interface {@link Registro}, possibilitando
  * que seus objetos sejam armazenados e recuperados de arquivos
  * binários por meio da serialização em bytes.
@@ -30,6 +30,9 @@ public class Usuario implements Registro {
     /** Resposta da pergunta secreta. */
     private String RespostaSecreta;
 
+    /** Status do usuário (true para ativo, false para inativo). */
+    private boolean ativo;
+
 
     // ---------- Construtores ----------
 
@@ -43,6 +46,7 @@ public class Usuario implements Registro {
         this.HashSenha = -1;
         this.PerguntaSecreta = "";
         this.RespostaSecreta = "";
+        this.ativo = false; // Por padrão, um objeto vazio é inativo
     }
 
     /**
@@ -62,6 +66,7 @@ public class Usuario implements Registro {
         this.HashSenha = senhaHash;
         this.PerguntaSecreta = pergunta;
         this.RespostaSecreta = resposta;
+        this.ativo = true; // Novos usuários são criados como ativos por padrão
     }
 
 
@@ -99,6 +104,7 @@ public class Usuario implements Registro {
         dos.writeInt(this.HashSenha);
         dos.writeUTF(this.PerguntaSecreta);
         dos.writeUTF(this.RespostaSecreta);
+        dos.writeBoolean(this.ativo); // Adicionado
         return baos.toByteArray();
     }
 
@@ -118,6 +124,7 @@ public class Usuario implements Registro {
         this.HashSenha = dis.readInt();
         this.PerguntaSecreta = dis.readUTF();
         this.RespostaSecreta = dis.readUTF();
+        this.ativo = dis.readBoolean(); // Adicionado
     }
 
     /**
@@ -131,11 +138,12 @@ public class Usuario implements Registro {
                "Email: " + this.email + "\n" +
                "HashSenha: " + this.HashSenha + "\n" +
                "PerguntaSecreta: " + this.PerguntaSecreta + "\n" +
-               "RespostaSecreta: " + this.RespostaSecreta + "\n";
+               "RespostaSecreta: " + this.RespostaSecreta + "\n" +
+               "Ativo: " + this.ativo + "\n"; // Adicionado
     }
 
 
-    // ---------- Getters ----------
+    // ---------- Getters e Setters ----------
 
     /** @return o identificador único do usuário */
     public int getId() { return id; }
@@ -154,4 +162,12 @@ public class Usuario implements Registro {
 
     /** @return a resposta da pergunta secreta */
     public String getRespostaSecreta() { return RespostaSecreta; }
+    
+    /** @return true se o usuário estiver ativo, false caso contrário */
+    public boolean isAtivo() { return ativo; }
+
+    /** Define o status de ativação do usuário
+     * @param ativo novo status
+     */
+    public void setAtivo(boolean ativo) { this.ativo = ativo; }
 }
