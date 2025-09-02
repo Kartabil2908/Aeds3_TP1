@@ -104,7 +104,7 @@ public class Usuario implements Registro {
         dos.writeInt(this.HashSenha);
         dos.writeUTF(this.PerguntaSecreta);
         dos.writeUTF(this.RespostaSecreta);
-        dos.writeBoolean(this.ativo); // Adicionado
+        dos.writeBoolean(this.ativo);
         return baos.toByteArray();
     }
 
@@ -124,7 +124,7 @@ public class Usuario implements Registro {
         this.HashSenha = dis.readInt();
         this.PerguntaSecreta = dis.readUTF();
         this.RespostaSecreta = dis.readUTF();
-        this.ativo = dis.readBoolean(); // Adicionado
+        this.ativo = dis.readBoolean();
     }
 
     /**
@@ -133,13 +133,13 @@ public class Usuario implements Registro {
      * @return string com os atributos do usuário
      */
     public String toString() {
-        return "ID: " + this.id + "\n" +
+        return //"ID: " + this.id + "\n" +
                "Nome: " + this.nome + "\n" +
                "Email: " + this.email + "\n" +
-               "HashSenha: " + this.HashSenha + "\n" +
+               //"HashSenha: " + this.HashSenha + "\n" +
                "PerguntaSecreta: " + this.PerguntaSecreta + "\n" +
-               "RespostaSecreta: " + this.RespostaSecreta + "\n" +
-               "Ativo: " + this.ativo + "\n"; // Adicionado
+               //"RespostaSecreta: " + this.RespostaSecreta + "\n" +
+               "Ativo: " + this.ativo + "\n";
     }
 
 
