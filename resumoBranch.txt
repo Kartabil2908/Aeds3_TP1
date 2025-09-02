@@ -1,113 +1,120 @@
+🎁 Resumo do Projeto: PresenteFácil 1.0
+==================================================
 
-# 🎁 Resumo do Projeto: PresenteFácil 1.0
+✨ Funcionalidades Principais
+--------------------------------------------------
 
-### ✨ Funcionalidades Principais
+* Gestão Completa de Utilizadores:
+    - Criar, ler, atualizar e apagar utilizadores.
 
-* **Gestão Completa de Utilizadores:** Permite criar, ler, atualizar e apagar utilizadores.
-* **Autenticação:** Possui um sistema de login que verifica e-mail e palavra-passe.
-* **Dois Tipos de Exclusão:**
-    1.  **Desativar Conta (Soft Delete):** Marca o utilizador como "inativo" mas mantém os dados guardados. O utilizador desativado não pode fazer login.
-    2.  **Excluir Conta (Hard Delete):** Apaga permanentemente os dados do utilizador do ficheiro, libertando o espaço para ser reutilizado.
+* Autenticação:
+    - Sistema de login com verificação de e-mail e palavra-passe.
 
-### 🛠️ Arquitetura Técnica
-
-O sistema utiliza uma abordagem de baixo nível para a persistência de dados:
-
-* **Ficheiros Binários:** Todos os dados são guardados em ficheiros `.db` na pasta `data/usuarios`. O ficheiro principal que contém os dados completos dos utilizadores é o `usuarios.db`.
-
-* **Indexação com Hash Extensível:** Para encontrar os dados rapidamente sem ter de ler o ficheiro inteiro, o sistema usa uma técnica avançada de indexação. Existem dois índices:
-    * **Índice Primário:** Utilizado para encontrar um utilizador instantaneamente pelo seu `ID`.
-    * **Índice Secundário:** Utilizado para encontrar um utilizador rapidamente pelo seu `e-mail`, essencial para a funcionalidade de login.
-
+* Dois Tipos de Exclusão:
+    1. Desativar Conta (Soft Delete):
+        - Marca o utilizador como "inativo" mas mantém os dados.
+        - O utilizador desativado não pode fazer login.
+    2. Excluir Conta (Hard Delete):
+        - Apaga permanentemente os dados do utilizador.
+        - Liberta o espaço para ser reutilizado.
 
 
+🛠️ Arquitetura Técnica
+--------------------------------------------------
 
----------------------------------------------------------------------------------------------------------------------------------------------
+* Persistência em baixo nível:
+
+    - Ficheiros Binários:
+        - Todos os dados são guardados em arquivos `.db` na pasta `data/usuarios`.
+        - O ficheiro principal é `usuarios.db`.
+
+    - Indexação com Hash Extensível:
+        - Índice Primário: busca rápida por `ID`.
+        - Índice Secundário: busca por `e-mail` (essencial para login).
+
+====================================================================================================================
 
 
----
+🎁 Análise Detalhada do Projeto: PresenteFácil 1.0
+==================================================
 
-# 🎁 Análise Detalhada do Projeto: PresenteFácil 1.0
+1. Fluxo de uma Operação: A Jornada de um Login
+--------------------------------------------------
+
+1. Interface (UI Layer):
+    - Terminal captura e-mail e palavra-passe.
+    - Invoca o `ControladorUsuario`.
+
+2. Lógica de Negócio:
+    - `ControladorUsuario` chama `arqUsuarios.read(email)`.
+
+3. Acesso a Dados:
+    a. `ArquivoUsuario` consulta o Índice Secundário por E-mail.
+    b. Calcula o hash e acessa `indiceIndiretoEmail`.
+    c. Retorna o `ID` correspondente.
+    d. Com o `ID`, chama `super.read(id)`.
+    e. A classe `Arquivo` consulta o Índice Primário.
+    f. Localiza endereço em bytes nos ficheiros `usuarios.d.db` e `usuarios.c.db`.
+    g. Usa `seek(endereco)` para acessar direto o registo.
+    h. Desserializa os dados e reconstrói o objeto `Usuario`.
+
+4. Conclusão:
+    - Verifica hash da password e se o campo `ativo` é `true`.
+
+5. Feedback:
+    - Resultado do login é retornado ao terminal.
 
 
-## 1. Fluxo de uma Operação: A Jornada de um Login
+2. Análise Profunda da Camada de Persistência
+--------------------------------------------------
 
-Para entender a complexidade e a elegância do sistema, vamos rastrear o que acontece quando um utilizador tenta fazer login:
+2.1. Ficheiro de Dados Principal (`usuarios.db`)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Interface (UI Layer):** O utilizador interage com o `Terminal` e insere o seu e-mail e palavra-passe. O `Terminal` captura esta informação e invoca o `ControladorUsuario`.
-2.  **Lógica de Negócio (Business Logic Layer):** O `ControladorUsuario` recebe os dados e a sua primeira tarefa é **encontrar o utilizador**. Em vez de ler o ficheiro `usuarios.db` inteiro (o que seria extremamente ineficiente), ele delega esta tarefa à camada de acesso a dados, chamando `arqUsuarios.read(email)`.
-3.  **Acesso a Dados (Data Access Layer):**
-    a.  A classe `ArquivoUsuario` recebe o e-mail. A sua primeira ação é consultar o **Índice Secundário por E-mail**.
-    b.  Ela calcula o `hash` do e-mail e usa a estrutura de **Hash Extensível** (`indiceIndiretoEmail`) para procurar nos ficheiros `indiceEmail.d.db` e `indiceEmail.c.db`.
-    c.  Se for bem-sucedido, o índice retorna o `ID` do utilizador correspondente àquele e-mail.
-    d.  Agora, com o `ID` em mãos, a classe `ArquivoUsuario` invoca `super.read(id)`, chamando o método da sua classe pai, `Arquivo`.
-    e.  A classe `Arquivo` consulta o **Índice Primário por ID**.
-    f.  Ela usa o `ID` (que funciona como um hash direto neste caso) na sua própria estrutura de **Hash Extensível** (`indiceDireto`) para procurar nos ficheiros `usuarios.d.db` e `usuarios.c.db`.
-    g.  O índice primário retorna o `endereço`, que é a posição exata em bytes onde o registo do utilizador começa no ficheiro principal `usuarios.db`.
-    h.  Finalmente, a classe `Arquivo` usa `arquivo.seek(endereco)` para saltar diretamente para essa posição, lê os bytes do registo e os desserializa, reconstruindo o objeto `Usuario`.
-4.  **Conclusão da Lógica:** O objeto `Usuario` é retornado ao `ControladorUsuario`. Agora, com os dados do utilizador em memória, o controlador compara o hash da palavra-passe digitada com o hash armazenado e verifica se o campo `ativo` é `true`.
-5.  **Feedback ao Utilizador:** O `ControladorUsuario` retorna o resultado ao `Terminal`, que exibe a mensagem de sucesso ou falha no login.
+* Estrutura Binária:
+    - Cabeçalho (12 bytes):
+        - último ID (4 bytes)
+        - ponteiro da lista de livres (8 bytes)
 
-Este fluxo demonstra uma arquitetura de múltiplas camadas com uma clara separação de responsabilidades, onde cada classe faz uma tarefa específica e bem definida.
+    - Registo:
+        - Lápide (1 byte): `' '` (ativo) ou `'*'` (apagado)
+        - Tamanho do registo (2 bytes)
+        - Dados serializados (n bytes)
 
----
+* Gestão de Espaço:
+    - `delete`: marca como excluído e insere em lista de espaços livres.
+    - `create`: reutiliza espaço livre, se possível.
 
-## 2. Análise Profunda da Camada de Persistência
+2.2. Indexação: A Magia do Hash Extensível
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Esta é a parte mais complexa e fundamental do projeto.
+* Estrutura:
+    - Diretório `.d.db`: array de ponteiros (2^pG entradas)
+    - Cestos `.c.db`: blocos com dados (ex: `ParEmailID`)
 
-### 2.1. O Ficheiro de Dados Principal (`usuarios.db`)
+* Inserção:
+    1. Calcula hash da chave.
+    2. Usa `pG` bits para encontrar entrada no diretório.
+    3. Localiza e atualiza cesto no ficheiro.
 
-Este não é um simples ficheiro de texto. É um ficheiro binário estruturado para emular uma tabela de base de dados.
+* Cesto Cheio:
+    - Divide o cesto.
+    - Redistribui elementos.
+    - Atualiza ponteiros no diretório.
+    - Se necessário, duplica diretório (aumenta pG).
 
-- **Cabeçalho do Ficheiro (Primeiros 12 bytes):**
-  - `último ID (int - 4 bytes)`: Um contador que garante que cada novo utilizador tenha um ID único e auto-incremental.
-  - `ponteiro da lista de livres (long - 8 bytes)`: A cabeça de uma lista encadeada que aponta para o primeiro espaço livre deixado por um registo excluído.
+* Índices:
+    - Primário: `ParIDEndereco (ID -> Endereço)`
+    - Secundário: `ParEmailID (hash(E-mail) -> ID)`
 
-- **Estrutura de cada Registo:**
-  - `Lápide (byte - 1 byte)`: Indica o estado do registo.
-    - `' '` (espaço): Registo ativo. Os dados são válidos.
-    - `'*'` (asterisco): Registo "morto" (excluído permanentemente). Este espaço está na lista de livres e pode ser sobrescrito por um novo registo.
-  - `Tamanho do Registo (short - 2 bytes)`: Informa quantos bytes os dados do utilizador ocupam. Essencial para saber onde o próximo registo começa.
-  - `Dados (array de bytes)`: O objeto `Usuario` serializado, convertido para bytes através do método `.toByteArray()`.
 
-- **Gestão de Espaço (Exclusão e Inserção):**
-  - Ao **excluir** um utilizador (`delete`), o sistema não apaga os bytes. Ele simplesmente muda a lápide para `'*'` e, através de uma lógica complexa em `addDeleted`, insere este "buraco" numa lista encadeada de espaços livres, ordenada por tamanho. O ponteiro para o próximo espaço livre é escrito no próprio espaço do registo morto.
-  - Ao **criar** um novo utilizador (`create`), o sistema primeiro verifica na lista de livres (`getDeleted`) se existe algum "buraco" de um registo antigo que seja grande o suficiente para albergar os novos dados. Se houver, ele reutiliza esse espaço. Caso contrário, ele escreve o novo registo no final do ficheiro. Esta estratégia combate a fragmentação do ficheiro.
+3. Conclusão Final
+--------------------------------------------------
 
-### 2.2. A Magia da Indexação: Hash Extensível
+- Acesso aleatório a ficheiros
+- Serialização de objetos
+- Reaproveitamento de espaço e controle de fragmentação
+- Indexação primária e secundária
+- Hash extensível persistente
+- Arquitetura multi-camada
 
-Ler o `usuarios.db` sequencialmente para encontrar um utilizador seria inviável. É aqui que entram os índices. O **Hash Extensível** é uma estrutura de dados brilhante para este fim, pois é armazenada em ficheiro e cresce (e encolhe) de forma eficiente.
-
-- **Componentes:**
-  - **Diretório (ficheiros `.d.db`):** É um array de ponteiros (`long`). O tamanho deste array é sempre uma potência de 2, determinada pela `profundidade global (pG)`. Se `pG=4`, o diretório tem `2^4 = 16` entradas. Cada entrada aponta para um cesto.
-  - **Cestos ou Buckets (ficheiros `.c.db`):** São blocos de tamanho fixo que armazenam os dados do índice (ex: `ParEmailID` ou `ParIDEndereco`). Cada cesto tem uma `profundidade local (pL)` que indica quantos bits do hash são usados para identificar aquele cesto.
-
-- **Funcionamento (Create/Insert):**
-  1.  Calcula-se o hash da chave (e-mail ou ID).
-  2.  Usa-se os `pG` primeiros bits do hash para encontrar uma entrada no diretório. `posição = hash % 2^pG`.
-  3.  Segue-se o ponteiro dessa entrada para encontrar o endereço do cesto correto no ficheiro `.c.db`.
-  4.  Lê-se o cesto para a memória, insere-se o novo par (ex: `<yas@gmail.com, 22>`) e reescreve-se o cesto no ficheiro.
-
-- **O Ponto Crítico: Cesto Cheio**
-  - Se o cesto onde se tenta inserir já está cheio, a "magia" acontece:
-    1.  **Divisão do Cesto:** Cria-se um cesto novo. Os elementos do cesto antigo (mais o novo elemento) são redistribuídos entre o cesto antigo e o novo, com base no próximo bit do seu hash.
-    2.  **Atualização do Diretório:** Os ponteiros no diretório são atualizados para apontar para estes dois cestos.
-    3.  **Duplicação do Diretório:** Se a `profundidade local (pL)` do cesto que se dividiu for igual à `profundidade global (pG)` do diretório, significa que o diretório não tem "bits" suficientes para diferenciar os dois novos cestos. Neste caso, o diretório inteiro é duplicado de tamanho (`pG` é incrementado) e os ponteiros são ajustados. Este processo permite que a estrutura de dados cresça de forma controlada e sob demanda.
-
-- **Tipos de Índice Implementados:**
-  - **Índice Primário (`indiceDireto`):** Usa `ParIDEndereco`. Mapeia `ID -> Endereço`. É a forma mais rápida de encontrar um registo.
-  - **Índice Secundário (`indiceIndiretoEmail`):** Usa `ParEmailID`. Mapeia `hash(E-mail) -> ID`. É um passo intermediário essencial para permitir pesquisas por campos que não sejam a chave primária.
-
----
-
-## 3. Conclusão Final
-
-Este projeto vai muito além de um simples CRUD. É uma simulação completa de um motor de base de dados de baixo nível, implementando conceitos avançados como:
-
--   **Acesso Aleatório a Ficheiros** para performance.
--   **Serialização de Objetos** para armazenamento binário.
--   **Gestão de Espaço em Disco** com listas de reaproveitamento para evitar fragmentação.
--   **Indexação Primária e Secundária** para otimização de consultas.
--   **Estruturas de Dados Dinâmicas e Persistentes** como o Hash Extensível.
--   **Arquitetura Multi-camada** com clara separação de responsabilidades (UI, Lógica, Dados).
