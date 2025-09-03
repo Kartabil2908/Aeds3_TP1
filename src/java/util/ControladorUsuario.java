@@ -41,7 +41,6 @@ public class ControladorUsuario {
         this.usuarioLogado = null;
     }
 
-    // ... (os métodos criarNovoUsuario e loginUsuario permanecem os mesmos) ...
     
     /**
      * Cria um novo usuário solicitando dados via terminal.
@@ -227,7 +226,7 @@ public class ControladorUsuario {
             // O método toString() já formata os dados para nós
             System.out.println(this.usuarioLogado.toString());
         } else {
-            // Essa mensagem é uma salvaguarda, não deve ocorrer em uso normal
+            
             System.out.println("Nenhum usuário está logado no momento.\n");
         }
     }
