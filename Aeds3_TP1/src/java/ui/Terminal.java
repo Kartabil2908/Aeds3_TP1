@@ -31,7 +31,8 @@ public class Terminal {
 
     /** Controlador responsável pela lógica de usuários (injeção de dependência). */
     private ControladorUsuario controlador;
-
+    private ControladorLista controladorLista;
+    Usuario usuarioLogado;
     /**
      * Construtor da classe Terminal.
      *
@@ -67,7 +68,7 @@ public class Terminal {
 
                 switch (opcao) {
                     case 1:
-                        Usuario usuarioLogado = controlador.loginUsuario(scanner);
+                        usuarioLogado = controlador.loginUsuario(scanner);
                         if (usuarioLogado != null) {
                             System.out.println("\n-- Login efetuado com sucesso! Bem-vindo(a), " + usuarioLogado.getNome() + ". --\n");
                             exibirMenuPrincipal(scanner);
@@ -119,13 +120,11 @@ public class Terminal {
 
             try {
                 opcao = Integer.parseInt(scanner.nextLine());
-                System.out.println("op: " + opcao);
                 switch (opcao) {
                     case 1:
                         controlador.exibirDadosDoUsuarioLogado();
                         break;
                     case 2:
-                        System.out.println("\n-- Função 'Minhas listas' a ser implementada. --\n");
                         exibirMinhasListas(scanner);
                         break;
                     case 3:
@@ -156,7 +155,9 @@ public class Terminal {
 
     public void exibirMinhasListas(Scanner scanner){
         String opcao;
-        while(true){ // trocar isso!!!
+        boolean continua = true;
+
+        while(continua){ 
             System.out.println("PresenteFácil 1.0");
             System.out.println("-----------------");
             System.out.println("> Inicio > Minhas Listas");
@@ -170,15 +171,16 @@ public class Terminal {
             System.out.print("Opção: ");
 
             try {
-                opcao = scanner.nextLine();
+                opcao = scanner.nextLine().toUpperCase();
 
                 switch (opcao) {
                     case "N":
-                        ControladorLista lista = new ControladorLista();
-                        lista.criarNovaLista(scanner);
+                        controladorLista = new ControladorLista();
+                        controladorLista.criarNovaLista(scanner, usuarioLogado);
                         break;
                     case "R":
                         System.out.println("\n-- Retornando ao menu anterior. --\n");
+                        continua = false;
                         exibirMenuPrincipal(scanner);
                         break;
                     default:

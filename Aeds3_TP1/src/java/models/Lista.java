@@ -2,7 +2,6 @@ package src.java.models;
 
 import java.io.*;
 import java.time.LocalDate;
-//import app.models.NanoID;
 
 public class Lista{
     private int id;
@@ -12,7 +11,6 @@ public class Lista{
     private LocalDate dataCriacao;
     private LocalDate dataLimite;
     private int idUsuario; //Chave Estrangeira 
-    //private boolean ativo;
 
     public Lista(){
         this.id = -1;
@@ -24,12 +22,12 @@ public class Lista{
         this.idUsuario = -1;
     }
 
-    public Lista(int id, String codigo, String nome, String descricao, LocalDate dataLimite, int idUsuario){
-        this.id = id;
-        this.codigo = NanoID.nonoId();
+    public Lista(String codigo, String nome, String descricao, LocalDate dataCriacao, LocalDate dataLimite, int idUsuario){
+        this.id = -1;
+        this.codigo = codigo;
         this.nome = nome;
         this.descricao = descricao;
-        this.dataCriacao = LocalDate.now();
+        this.dataCriacao = dataCriacao;
         this.dataLimite = dataLimite;
         this.idUsuario = idUsuario;
     }
@@ -90,14 +88,6 @@ public class Lista{
         this.idUsuario = idUsuario;
     }
 
-    /*public boolean getAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }*/
-
     public byte[] toByteArray() throws Exception{
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
@@ -123,7 +113,8 @@ public class Lista{
             "\nNome..............: " + this.nome+ 
             "\nDescrição.........: " + this.descricao +
             "\nData de criação...: " + this.dataCriacao +
-            "\nData de limite....: " + this.dataLimite
+            "\nData de limite....: " + this.dataLimite +
+            "\nID Usuario........: " + this.idUsuario
         ;
     }
 }

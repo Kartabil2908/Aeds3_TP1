@@ -4,33 +4,33 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import src.java.models.Lista;
-import src.java.models.NanoID;
+import src.java.models.*;
+import src.java.util.*;
+import src.java.complementary.*;
 
 public class ControladorLista {
-    public void criarNovaLista(Scanner scanner){
+
+    public void criarNovaLista(Scanner scanner, Usuario usuario){
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        System.out.println("\n--- Novo Usuário ---");
+        System.out.println("\n--- Nova Lista ---");
         try{
             System.out.print("Nome da Lista: ");
             String nome = scanner.nextLine();
 
             System.out.print("Descrição: ");
-            String Descricao = scanner.nextLine();
+            String descricao = scanner.nextLine();
 
             System.out.print("Data limite (dd/MM/yyyy): ");
             String dataLimiteStr = scanner.nextLine();
 
-            try {
-                LocalDate dataLimite = LocalDate.parse(dataLimiteStr, formato);
-            } catch (Exception e) {
-                System.out.println("Formato inválido! Use dd/MM/yyyy.");
-            }
             
+            LocalDate dataLimite = LocalDate.parse(dataLimiteStr, formato);
             String codigo = NanoID.nonoId();
-
+            
+            int idUsuario = usuario.getID();
             LocalDate dataCriacao = LocalDate.now();
-            //Lista novaLista = new Lista();
+            System.out.println("id" + idUsuario);
+            Lista novaLista = new Lista(codigo, nome, descricao, dataCriacao, dataLimite, idUsuario);
 
             System.out.println("\n-- Usuário criado com sucesso! (Código compartilhável: " + codigo + ") --\n");
         }catch(Exception e){
