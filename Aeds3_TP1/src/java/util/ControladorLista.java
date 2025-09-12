@@ -10,9 +10,12 @@ import src.java.complementary.*;
 
 public class ControladorLista {
 
+    private ArquivoLista arqListas;
+
     public void criarNovaLista(Scanner scanner, Usuario usuario){
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         System.out.println("\n--- Nova Lista ---");
+
         try{
             System.out.print("Nome da Lista: ");
             String nome = scanner.nextLine();
@@ -29,8 +32,8 @@ public class ControladorLista {
             
             int idUsuario = usuario.getID();
             LocalDate dataCriacao = LocalDate.now();
-            System.out.println("id" + idUsuario);
             Lista novaLista = new Lista(codigo, nome, descricao, dataCriacao, dataLimite, idUsuario);
+            int id = arqListas.create(novaLista);
 
             System.out.println("\n-- Usuário criado com sucesso! (Código compartilhável: " + codigo + ") --\n");
         }catch(Exception e){
