@@ -3,24 +3,25 @@ package src.presenteFacil.controller;
 import src.presenteFacil.model.*;
 import src.presenteFacil.utils.ClearConsole;
 
-import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Arrays; // IMPORT ADICIONADO
+import java.util.Comparator; // IMPORT ADICIONADO
 
 
 public class ControladorListaDePresentes {
 
     private ArquivoLista arqListas;
+    private DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     
     public ControladorListaDePresentes() throws Exception {
         this.arqListas = new ArquivoLista();
     }
 
-    public void criarNovaLista(Scanner scanner, Usuario usuario) throws Exception {
+    public void criarNovaLista(Scanner scanner, Usuario usuario) {
         
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         System.out.println("\n--- Nova Lista ---");
 
         try{
@@ -30,24 +31,30 @@ public class ControladorListaDePresentes {
             System.out.print("Descrição: ");
             String descricao = scanner.nextLine();
 
-            System.out.print("Data limite (dd/MM/yyyy): ");
-            String dataLimiteStr = scanner.nextLine();
-
-            
-            LocalDate dataLimite = LocalDate.parse(dataLimiteStr, formato);
+            LocalDate dataLimite = null;
+            while(dataLimite == null) {
+                System.out.print("Data limite (dd/MM/yyyy): ");
+                String dataLimiteStr = scanner.nextLine();
+                try {
+                    dataLimite = LocalDate.parse(dataLimiteStr, formato);
+                } catch(DateTimeParseException e) {
+                    System.out.println("\n-- Data em formato inválido. Tente novamente. --\n");
+                }
+            }
             
             String codigo = NanoID.nanoId();
             
             int idUsuario = usuario.getID();
             LocalDate dataCriacao = LocalDate.now();
             Lista novaLista = new Lista(codigo, nome, descricao, dataCriacao, dataLimite, idUsuario);
-            int id = arqListas.create(novaLista);
+            arqListas.create(novaLista);
 
-            System.out.println("\n-- Lista criado com sucesso! (Código compartilhável: " + codigo + ") --\n");
+            System.out.println("\n-- Lista criada com sucesso! (Código compartilhável: " + codigo + ") --\n");
         }
         
         catch(Exception e){
             System.err.println("\nOcorreu um erro ao criar a Lista: " + e.getMessage() + "\n");
+            e.printStackTrace();
         }
     }
 
@@ -56,13 +63,18 @@ public class ControladorListaDePresentes {
             System.out.println("\n--- Listas Cadastradas ---\n");
             Lista[] listas = arqListas.readByUsuario(usuario.getId());
 
-            if (listas.length == 0) {
+            if (listas == null || listas.length == 0) {
                 System.out.println("\n-- Nenhuma lista cadastrada. --\n");
                 return null;
             }
+
+            // --- LINHA ADICIONADA PARA ORDENAR ---
+            Arrays.sort(listas, Comparator.comparing(Lista::getNome, String.CASE_INSENSITIVE_ORDER));
+            // ------------------------------------
+
             for (int i = 0; i < listas.length; i++) {
                 System.out.println("(" + (i + 1) + ") " + listas[i].getNome() + " - "
-                    + listas[i].getDataCriacao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                    + listas[i].getDataCriacao().format(formato));
             }
             System.out.println();
             return listas;
@@ -79,9 +91,8 @@ public class ControladorListaDePresentes {
         try {
             System.out.print("\nDigite o código da lista: ");
             String codigo = scanner.nextLine();
-            System.out.println("Código digitado: " + codigo); // Debug
             Lista lista = arqListas.readByCodigo(codigo);
-            System.out.println("ok"); // Debug
+            
             if (lista == null) {
                 System.out.println("\n-- Nenhuma lista encontrada com esse código. --\n");
             } else {
@@ -90,8 +101,8 @@ public class ControladorListaDePresentes {
                 System.out.println("\n--- Dados da Lista ---");
                 System.out.println("Nome: " + lista.getNome());
                 System.out.println("Descrição: " + lista.getDescricao());
-                System.out.println("Data de criação: " + lista.getDataCriacao());
-                System.out.println("Data limite: " + lista.getDataLimite());
+                System.out.println("Data de criação: " + lista.getDataCriacao().format(formato));
+                System.out.println("Data limite: " + lista.getDataLimite().format(formato));
                 System.out.println("ID do Usuário dono: " + lista.getIdUsuario());
                 System.out.println("Código compartilhável: " + lista.getCodigo());
                 System.out.println("------------------------------\n");
@@ -105,58 +116,105 @@ public class ControladorListaDePresentes {
         try {
             if (lista == null) {
                 System.out.println("\n-- Nenhuma lista encontrada com esse código. --\n");
-            } else {
-                System.out.println("\n-- Lista encontrada! --");
-                ClearConsole.clearScreen();
-                System.out.println("\n--- Dados da Lista ---\n");
-                System.out.println("Nome: " + lista.getNome());
-                System.out.println("Descrição: " + lista.getDescricao());
-                System.out.println("Data de criação: " + lista.getDataCriacao());
-                System.out.println("Data limite: " + lista.getDataLimite());
-                System.out.println("ID do Usuário dono: " + lista.getIdUsuario());
-                System.out.println("Código compartilhável: " + lista.getCodigo());
+                return;
+            }
+            
+            ClearConsole.clearScreen();
+            System.out.println("\n--- Dados da Lista ---\n");
+            System.out.println("Nome: " + lista.getNome());
+            System.out.println("Descrição: " + lista.getDescricao());
+            System.out.println("Data de criação: " + lista.getDataCriacao().format(formato));
+            System.out.println("Data limite: " + lista.getDataLimite().format(formato));
+            System.out.println("ID do Usuário dono: " + lista.getIdUsuario());
+            System.out.println("Código compartilhável: " + lista.getCodigo());
+            System.out.println();
+
+            String opcao;
+            boolean continua = true;
+
+            while(continua) {
+                System.out.println("(1) Gerenciar produtos da lista");
+                System.out.println("(2) Alterar dados da lista");
+                System.out.println("(3) Excluir lista");
                 System.out.println();
+                System.out.println("(R) Retornar ao menu anterior");
+                System.out.println();
+                System.out.print("\nOpção: ");
 
-                String opcao;
-                boolean continua = true;
+                opcao = scanner.nextLine().trim().toUpperCase();
 
-                while(continua) {
-                    System.out.println("(1) Gerenciar produtos da lista");
-                    System.out.println("(2) Alterar dados da lista");
-                    System.out.println("(3) Excluir lista");
-                    System.out.println();
-                    System.out.println("(R) Retornar ao menu anterior");
-                    System.out.println();
-                    System.out.print("\nOpção: ");
-
-                    opcao = scanner.nextLine().trim().toUpperCase();
-                    System.out.println(opcao);
-
-                    switch (opcao) {
-                        case "1":
-                            System.out.println("\n[Funcionalidade Produtos será implementada no TP2]\n");
-                            break;
-                        case "2":
-                            System.out.println("\n-- implententar!!!!. --\n");
+                switch (opcao) {
+                    case "1":
+                        System.out.println("\n[Funcionalidade Produtos será implementada no TP2]\n");
+                        break;
+                    case "2":
+                        alterarDadosLista(scanner, lista);
+                        continua = false; 
+                        break;
+                    case "3":
+                        boolean foiDeletado = deletarLista(scanner, lista.getId());
+                        if (foiDeletado) {
                             continua = false;
-                            break;
-                        case "3":
-                            boolean foiDeletado = deletarLista(scanner);
-                            if (foiDeletado) {
-                                continua = false;
-                            }
-                            break;
-                        case "R":
-                            System.out.println("\n-- Retornando ao menu anterior. --\n");
-                            continua = false;
-                            break;
-                        default:
-                            System.out.println("\nOpição Invalida. Tente novamente.\n");
-                    }
+                        }
+                        break;
+                    case "R":
+                        System.out.println("\n-- Retornando ao menu anterior. --\n");
+                        continua = false;
+                        break;
+                    default:
+                        System.out.println("\nOpção Inválida. Tente novamente.\n");
                 }
             }
         } catch (Exception e) {
-            System.err.println("\nErro ao buscar lista: " + e.getMessage() + "\n");
+            System.err.println("\nErro ao mostrar lista: " + e.getMessage() + "\n");
+        }
+    }
+
+    public void alterarDadosLista(Scanner scanner, Lista lista) {
+        System.out.println("\n--- Alterar Dados da Lista ---");
+        System.out.println("Deixe o campo em branco para manter a informação atual.\n");
+
+        try {
+            System.out.println("Nome atual: " + lista.getNome());
+            System.out.print("Novo nome: ");
+            String novoNome = scanner.nextLine();
+            if (!novoNome.trim().isEmpty()) {
+                lista.setNome(novoNome);
+            }
+
+            System.out.println("\nDescrição atual: " + lista.getDescricao());
+            System.out.print("Nova descrição: ");
+            String novaDescricao = scanner.nextLine();
+            if (!novaDescricao.trim().isEmpty()) {
+                lista.setDescricao(novaDescricao);
+            }
+
+            boolean dataValida = false;
+            while(!dataValida) {
+                System.out.println("\nData limite atual: " + lista.getDataLimite().format(formato));
+                System.out.print("Nova data limite (dd/MM/yyyy): ");
+                String novaDataStr = scanner.nextLine();
+                if (novaDataStr.trim().isEmpty()) {
+                    dataValida = true;
+                } else {
+                    try {
+                        LocalDate novaData = LocalDate.parse(novaDataStr, formato);
+                        lista.setDataLimite(novaData);
+                        dataValida = true;
+                    } catch (DateTimeParseException e) {
+                        System.out.println("\n-- Formato de data inválido. Tente novamente. --\n");
+                    }
+                }
+            }
+            
+            if (arqListas.update(lista)) {
+                System.out.println("\n-- Lista alterada com sucesso! --\n");
+            } else {
+                System.out.println("\n-- Erro ao alterar a lista. --\n");
+            }
+
+        } catch (Exception e) {
+            System.err.println("\nOcorreu um erro ao alterar a lista: " + e.getMessage() + "\n");
         }
     }
 
@@ -164,12 +222,17 @@ public class ControladorListaDePresentes {
         return this.arqListas;
     }
 
-    public boolean deletarLista(Scanner scanner) throws Exception {
+    public boolean deletarLista(Scanner scanner, int idLista) throws Exception {
         System.out.println("\n--- Deletar Lista ---");
-        try {
-            System.out.print("Digite o ID da lista a ser deletada: ");
-            int idLista = Integer.parseInt(scanner.nextLine());
+        System.out.print("Você tem certeza que deseja deletar esta lista? (S/N): ");
+        String confirmacao = scanner.nextLine().toUpperCase();
 
+        if (!confirmacao.equals("S")) {
+            System.out.println("\n-- Operação cancelada. --\n");
+            return false;
+        }
+        
+        try {
             boolean sucesso = arqListas.delete(idLista);
             if (sucesso) {
                 System.out.println("\n-- Lista deletada com sucesso! --\n");
@@ -181,7 +244,5 @@ public class ControladorListaDePresentes {
             System.err.println("\nErro ao deletar lista: " + e.getMessage() + "\n");
             return false;
         }
-
     }
-
 }

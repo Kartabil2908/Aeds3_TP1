@@ -1,6 +1,5 @@
+// src/presenteFacil/aeds3/ParCodigoID.java
 package src.presenteFacil.aeds3;
-
-import src.presenteFacil.aeds3.*;
 
 import java.io.*;
 
@@ -23,7 +22,7 @@ public class ParCodigoID implements RegistroHashExtensivel<ParCodigoID> {
     public String getCodigo() {
         return codigo; 
     }
-    
+
     public int getIDLista() { 
         return idLista; 
     }
@@ -34,7 +33,7 @@ public class ParCodigoID implements RegistroHashExtensivel<ParCodigoID> {
 
     @Override
     public int hashCode() {
-        return codigo.hashCode();
+        return Math.abs(this.codigo.hashCode());
     }
 
     @Override
@@ -42,33 +41,22 @@ public class ParCodigoID implements RegistroHashExtensivel<ParCodigoID> {
         return this.TAMANHO;
     }
 
-    /*@Override
-    public byte[] toByteArray() throws IOException {
-        return (codigo + ";" + idLista).getBytes();
-    }*/
-
     @Override
     public byte[] toByteArray() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
 
-        dos.writeUTF(codigo);   // escreve string com tamanho
-        dos.writeInt(idLista);  // escreve int fixo
+        dos.writeUTF(codigo);
+        dos.writeInt(idLista);
 
-        return baos.toByteArray();
-    }
-
-    /*@Override
-    public void fromByteArray(byte[] ba) throws IOException {
-        String[] s = new String(ba).split(";");
-
-        if (s.length >= 2) { // garante que s[1] existe
-            this.codigo = s[0];
-            this.idLista = Integer.parseInt(s[1]);
-        } else {
-            throw new IOException("Linha inválida ou incompleta: " + new String(ba));
+        byte[] dados = baos.toByteArray();
+        byte[] registro = new byte[TAMANHO];
+        for (int i = 0; i < dados.length && i < TAMANHO; i++) {
+            registro[i] = dados[i];
         }
-    }*/
+
+        return registro;
+    }
 
     @Override
     public void fromByteArray(byte[] ba) throws IOException {

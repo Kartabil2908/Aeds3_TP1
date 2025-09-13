@@ -1,3 +1,4 @@
+// src/presenteFacil/model/ArquivoLista.java
 package src.presenteFacil.model;
 
 import java.util.ArrayList;
@@ -5,6 +6,7 @@ import src.presenteFacil.aeds3.*;
 
 public class ArquivoLista extends Arquivo<Lista> {
 
+    // ... (conteúdo da classe permanece o mesmo) ...
     HashExtensivel<ParIDEndereco> indiceDiretoID;
     HashExtensivel<ParCodigoID> indiceDiretoCodigo;
     ArvoreBMais<ParIntInt> usuarioLista;
@@ -32,33 +34,28 @@ public class ArquivoLista extends Arquivo<Lista> {
             "./data/listas/lista.usuario.db"
         );
     }
-
+    
+    // ... (método create permanece o mesmo) ...
     @Override
     public int create(Lista l) throws Exception {
         int id = super.create(l);
-
-        // índice direto por ID
         indiceDiretoID.create(new ParIDEndereco(id, id));
-
-        // índice direto por Código
         indiceDiretoCodigo.create(new ParCodigoID(l.getCodigo(), id));
-
-        // Relacionamento Usuario -> Lista (1:N)
         usuarioLista.create(new ParIntInt(l.getIdUsuario(), id));
-
         return id;
     }
 
+    // --- CORREÇÃO AQUI ---
     public Lista readByCodigo(String codigo) throws Exception {
         ParCodigoID pci = this.indiceDiretoCodigo.read(ParCodigoID.hash(codigo));
-        if(pci == null) {
-            System.out.println("Lista não encontrada."+ pci.getIDLista());
+        if (pci == null) {
+            // A linha que causava o erro foi removida daqui.
             return null;
         }
-        System.out.println("ID da lista: " + pci.getIDLista());
         return super.read(pci.getIDLista());
     }
 
+    // ... (resto da classe permanece o mesmo) ...
     public Lista[] readByUsuario(int idUsuario) throws Exception {
         ArrayList<ParIntInt> pares = usuarioLista.read(new ParIntInt(idUsuario, -1));
         Lista[] listas = new Lista[pares.size()];
@@ -76,9 +73,8 @@ public class ArquivoLista extends Arquivo<Lista> {
         }
 
         if(super.update(novaLista)) {
-            // Se o código mudou, atualiza o índice direto por código
             if(!listaAntiga.getCodigo().equals(novaLista.getCodigo())) {
-                indiceDiretoCodigo.delete(new ParCodigoID(listaAntiga.getCodigo(), listaAntiga.getId()));
+                indiceDiretoCodigo.delete(ParCodigoID.hash(listaAntiga.getCodigo()));
                 indiceDiretoCodigo.create(new ParCodigoID(novaLista.getCodigo(), novaLista.getId()));
             }
             return true;
@@ -93,8 +89,8 @@ public class ArquivoLista extends Arquivo<Lista> {
         if(lista == null) return false;
 
         if(super.delete(idLista)) {
-            return indiceDiretoID.delete(new ParIDEndereco(lista.getId(), idLista))
-                && indiceDiretoCodigo.delete(new ParCodigoID(lista.getCodigo(), idLista))
+            return indiceDiretoID.delete(lista.getId())
+                && indiceDiretoCodigo.delete(ParCodigoID.hash(lista.getCodigo()))
                 && usuarioLista.delete(new ParIntInt(lista.getIdUsuario(), idLista));
         }
         return false;

@@ -8,8 +8,7 @@ import src.presenteFacil.aeds3.ParEmailID;
  * Classe ArquivoUsuario
  * ---------------------
  * Especialização da classe Arquivo para manipulação de objetos do tipo Usuario.
- * 
- * Além do arquivo principal (que armazena os usuários em si),
+ * * Além do arquivo principal (que armazena os usuários em si),
  * a classe mantém um índice indireto baseado no email do usuário,
  * utilizando Hash Extensível para permitir busca, atualização e exclusão por email.
  */
