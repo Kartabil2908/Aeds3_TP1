@@ -3,7 +3,7 @@ package src.presenteFacil.view;
 import java.util.Scanner;
 
 import src.presenteFacil.controller.ControladorListaDePresentes;
-import src.presenteFacil.model.Usuario;
+import src.presenteFacil.model.*;
 
 /**
  * Classe responsável por exibir e gerenciar o menu "Minhas Listas"
@@ -19,6 +19,7 @@ import src.presenteFacil.model.Usuario;
  * @author Yasmin
  * @version 1.0
  */
+
 public class MenuMinhasListas {
 
     private ControladorListaDePresentes giftListController;
@@ -39,55 +40,60 @@ public class MenuMinhasListas {
      * Exibe o menu "Minhas Listas" e processa as opções do usuário.
      * 
      * @param scanner objeto Scanner para leitura de entrada do usuário
-     */
-    public void exibir(Scanner scanner) throws Exception{
+     * @throws Exception 
+    */
+    public void exibirMenu(Scanner scanner) throws Exception {
         String opcao;
-
         boolean continua = true;
 
         while (continua) {
+            System.out.println("-------- PresenteFácil 1.0 --------"); 
+            System.out.println("-----------------------------------"); 
+            System.out.println("> Início > Minhas Listas\n"); 
+            System.out.println("LISTAS"); 
+            System.out.println("\n"); 
 
-            System.out.println("-------- PresenteFácil 1.0 --------");
-            System.out.println("-----------------------------------");
-            System.out.println("> Início > Minhas Listas\n");
-            
-            System.out.println("LISTAS");
-            System.out.println("\n");
-
-            // TODO: Listar as listas do usuário em ordem alfabética (via índice B+)
-            
-
-            System.out.println("(N) Nova Lista");
-            System.out.println("(R) Retornar ao menu anterior");
+            Lista[] listas = giftListController.mostrarMinhasListas(usuarioLogado);
+             
+            System.out.println("(N) Nova Lista"); 
+            System.out.println("(R) Retornar ao menu anterior"); 
             System.out.println();
-            System.out.print("\nOpção: ");
+            System.out.print("\nOpção: "); 
 
-            opcao = scanner.nextLine().toUpperCase();
+            opcao = scanner.nextLine().trim().toUpperCase(); 
+            System.out.println(opcao);
 
             switch (opcao) {
-
                 case "N":
                     giftListController.criarNovaLista(scanner, usuarioLogado);
                     break;
-
                 case "R":
                     System.out.println("\n-- Retornando ao menu anterior. --\n");
                     continua = false;
                     break;
-
                 default:
-                    // Permite selecionar uma lista pelo número (a ser implementado no TP2)
-                    if (opcao.matches("\\d+")) {
-                        int indice = Integer.parseInt(opcao);
-                        System.out.println("\n[Selecionou a lista " + indice + " - funcionalidade TP2]\n");
-                    } 
-                    
-                    else {
-                        System.out.println("\nOpção inválida. Tente novamente.\n");
-                    }
+                    if(isNumber(opcao)){ 
+                        int indice = Integer.parseInt(opcao); 
+                        System.out.println("\n[Selecionou a lista " + indice + "]\n"); 
 
-                    break;
+                        if(listas != null && indice > 0 && indice <= listas.length){ 
+                            giftListController.MostrarLista(scanner, listas[indice - 1]); 
+                        } else { 
+                            System.out.println("\nOpição Invalida. Tente novamente.\n");
+                        } 
+                    }else{
+                        System.out.println("\nOpição Invalida. Tente novamente.\n");
+                    }
             }
+        }
+    }
+
+    public boolean isNumber(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 }

@@ -2,12 +2,14 @@ package src.presenteFacil.aeds3;
 
 import src.presenteFacil.aeds3.*;
 
-import java.io.IOException;
+import java.io.*;
 
 public class ParCodigoID implements RegistroHashExtensivel<ParCodigoID> {
 
     private String codigo;
     private int idLista;
+
+    private final short TAMANHO = 24;
 
     public ParCodigoID() {
         this("", -1);
@@ -18,11 +20,16 @@ public class ParCodigoID implements RegistroHashExtensivel<ParCodigoID> {
         this.idLista = idLista;
     }
 
-    public String getCodigo() { return codigo; }
-    public int getIDLista() { return idLista; }
+    public String getCodigo() {
+        return codigo; 
+    }
+    
+    public int getIDLista() { 
+        return idLista; 
+    }
 
-    public static short hash(String codigo) {
-        return (short)Math.abs(codigo.hashCode());
+    public static int hash(String codigo) {
+        return Math.abs(codigo.hashCode());
     }
 
     @Override
@@ -32,15 +39,26 @@ public class ParCodigoID implements RegistroHashExtensivel<ParCodigoID> {
 
     @Override
     public short size() {
-        return (short)(codigo.getBytes().length + 4);
+        return this.TAMANHO;
     }
+
+    /*@Override
+    public byte[] toByteArray() throws IOException {
+        return (codigo + ";" + idLista).getBytes();
+    }*/
 
     @Override
     public byte[] toByteArray() throws IOException {
-        return (codigo + ";" + idLista).getBytes();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(baos);
+
+        dos.writeUTF(codigo);   // escreve string com tamanho
+        dos.writeInt(idLista);  // escreve int fixo
+
+        return baos.toByteArray();
     }
 
-    @Override
+    /*@Override
     public void fromByteArray(byte[] ba) throws IOException {
         String[] s = new String(ba).split(";");
 
@@ -50,6 +68,14 @@ public class ParCodigoID implements RegistroHashExtensivel<ParCodigoID> {
         } else {
             throw new IOException("Linha inválida ou incompleta: " + new String(ba));
         }
-    }
+    }*/
 
+    @Override
+    public void fromByteArray(byte[] ba) throws IOException {
+        ByteArrayInputStream bais = new ByteArrayInputStream(ba);
+        DataInputStream dis = new DataInputStream(bais);
+
+        this.codigo = dis.readUTF();
+        this.idLista = dis.readInt();
+    }
 }

@@ -452,7 +452,7 @@ public class HashExtensivel<T extends RegistroHashExtensivel<T>> {
     }
 
     /** Remove um elemento pela chave. */
-    public boolean delete(int chave) throws Exception {
+    public boolean delete(ParCodigoID chave) throws Exception {
       
         leDiretorio();
         int hash = diretorio.hash(chave);
@@ -460,7 +460,7 @@ public class HashExtensivel<T extends RegistroHashExtensivel<T>> {
         if (endCesto == -1) return false;
 
         Cesto c = leCesto(endCesto);
-        if (c.delete(chave)) {
+        if (c.delete(parCodigoID)) {
             escreveCesto(c, endCesto);
             return true;
         }

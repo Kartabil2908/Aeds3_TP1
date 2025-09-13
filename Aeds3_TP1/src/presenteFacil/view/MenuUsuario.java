@@ -75,7 +75,7 @@ public class MenuUsuario {
 
                     case 2:
                         MenuMinhasListas menuListas = new MenuMinhasListas(giftListController, usuarioLogado);
-                        menuListas.exibir(scanner);
+                        menuListas.exibirMenu(scanner);
                         break;
 
                     case 3:
