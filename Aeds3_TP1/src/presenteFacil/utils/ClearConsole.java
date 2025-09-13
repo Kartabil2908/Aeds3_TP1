@@ -18,7 +18,6 @@ public class ClearConsole {
         } 
         
         catch (final Exception e) {
-            // Handle exceptions, e.g., print an error message
             System.out.println("Error clearing console: " + e.getMessage());
         }
     }

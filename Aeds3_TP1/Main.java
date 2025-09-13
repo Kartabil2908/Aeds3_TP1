@@ -29,10 +29,8 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            // 1. Instancia o controlador principal de usuários
             ControladorUsuario userController = new ControladorUsuario();
 
-            // 2. Chama o MenuInicial
             MenuInicial menuInicial = new MenuInicial(userController);
             menuInicial.exibir(scanner);
 

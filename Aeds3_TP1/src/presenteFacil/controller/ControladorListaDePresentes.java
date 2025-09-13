@@ -3,13 +3,10 @@ package src.presenteFacil.controller;
 import src.presenteFacil.model.*;
 import src.presenteFacil.utils.ClearConsole;
 
-import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays; // IMPORT ADICIONADO
-import java.util.Comparator; // IMPORT ADICIONADO
-
+import java.util.*;
 
 public class ControladorListaDePresentes {
 
@@ -22,8 +19,9 @@ public class ControladorListaDePresentes {
 
     public void criarNovaLista(Scanner scanner, Usuario usuario) {
         
-        System.out.println("\n--- Nova Lista ---");
-
+        System.out.println("-------- PresenteFácil 1.0 --------"); 
+        System.out.println("-----------------------------------"); 
+        System.out.println("> Início > Minhas Listas > Nova Lista\n");
         try{
             System.out.print("Nome da Lista: ");
             String nome = scanner.nextLine();
@@ -60,7 +58,10 @@ public class ControladorListaDePresentes {
 
     public Lista[] mostrarMinhasListas(Usuario usuario) throws Exception{
         try{
-            System.out.println("\n--- Listas Cadastradas ---\n");
+            System.out.println("-------- PresenteFácil 1.0 --------"); 
+            System.out.println("-----------------------------------"); 
+            System.out.println("> Início > Minhas Listas\n");
+            System.out.println("LISTAS");
             Lista[] listas = arqListas.readByUsuario(usuario.getId());
 
             if (listas == null || listas.length == 0) {
@@ -68,9 +69,7 @@ public class ControladorListaDePresentes {
                 return null;
             }
 
-            // --- LINHA ADICIONADA PARA ORDENAR ---
             Arrays.sort(listas, Comparator.comparing(Lista::getNome, String.CASE_INSENSITIVE_ORDER));
-            // ------------------------------------
 
             for (int i = 0; i < listas.length; i++) {
                 System.out.println("(" + (i + 1) + ") " + listas[i].getNome() + " - "
@@ -85,8 +84,9 @@ public class ControladorListaDePresentes {
     }
 
     public void buscarListaPorCodigo(Scanner scanner, ArquivoLista arqListas) {
-
-        System.out.println("\n--- Buscar Lista ---");
+        System.out.println("-------- PresenteFácil 1.0 --------"); 
+        System.out.println("-----------------------------------"); 
+        System.out.println("> Início > Buscar Lista\n");
 
         try {
             System.out.print("\nDigite o código da lista: ");
@@ -98,7 +98,9 @@ public class ControladorListaDePresentes {
             } else {
                 System.out.println("\n-- Lista encontrada! --");
                 ClearConsole.clearScreen();
-                System.out.println("\n--- Dados da Lista ---");
+                System.out.println("-------- PresenteFácil 1.0 --------"); 
+                System.out.println("-----------------------------------"); 
+                System.out.println("> Início > Minhas Listas > " + lista.getNome() + "\n");
                 System.out.println("Nome: " + lista.getNome());
                 System.out.println("Descrição: " + lista.getDescricao());
                 System.out.println("Data de criação: " + lista.getDataCriacao().format(formato));
@@ -120,7 +122,9 @@ public class ControladorListaDePresentes {
             }
             
             ClearConsole.clearScreen();
-            System.out.println("\n--- Dados da Lista ---\n");
+            System.out.println("-------- PresenteFácil 1.0 --------"); 
+            System.out.println("-----------------------------------"); 
+            System.out.println("> Início > Minhas Listas > " + lista.getNome() + "\n");
             System.out.println("Nome: " + lista.getNome());
             System.out.println("Descrição: " + lista.getDescricao());
             System.out.println("Data de criação: " + lista.getDataCriacao().format(formato));
@@ -152,7 +156,7 @@ public class ControladorListaDePresentes {
                         continua = false; 
                         break;
                     case "3":
-                        boolean foiDeletado = deletarLista(scanner, lista.getId());
+                        boolean foiDeletado = deletarLista(scanner, lista.getId(), lista.getNome());
                         if (foiDeletado) {
                             continua = false;
                         }
@@ -171,8 +175,11 @@ public class ControladorListaDePresentes {
     }
 
     public void alterarDadosLista(Scanner scanner, Lista lista) {
-        System.out.println("\n--- Alterar Dados da Lista ---");
-        System.out.println("Deixe o campo em branco para manter a informação atual.\n");
+        System.out.println("-------- PresenteFácil 1.0 --------"); 
+        System.out.println("-----------------------------------"); 
+        System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Alterar Dados da Lista\n");
+        System.out.println("\n----- Alterar Dados da Lista ------");
+        System.out.println("[Deixe o campo em branco para manter a informação atual.]\n");
 
         try {
             System.out.println("Nome atual: " + lista.getNome());
@@ -222,8 +229,11 @@ public class ControladorListaDePresentes {
         return this.arqListas;
     }
 
-    public boolean deletarLista(Scanner scanner, int idLista) throws Exception {
-        System.out.println("\n--- Deletar Lista ---");
+    public boolean deletarLista(Scanner scanner, int idLista, String nome) throws Exception {
+        System.out.println("-------- PresenteFácil 1.0 --------"); 
+        System.out.println("-----------------------------------"); 
+        System.out.println("> Início > Minhas Listas > " + nome + " > Deletar Lista\n");
+        System.out.println("\n-------- Deletar Lista ----------");
         System.out.print("Você tem certeza que deseja deletar esta lista? (S/N): ");
         String confirmacao = scanner.nextLine().toUpperCase();
 

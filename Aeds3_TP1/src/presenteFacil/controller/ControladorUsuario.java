@@ -92,8 +92,7 @@ public class ControladorUsuario {
      */
     public Usuario loginUsuario(Scanner scanner) {
 
-        System.out.println("\n------ Login ------");
-
+        System.out.println("\n----------- Login ------------");
         try {
             
             System.out.print("\nE-mail: ");
@@ -110,7 +109,6 @@ public class ControladorUsuario {
                 int hashSenhaDigitada = senha.hashCode();
 
                 if (hashSenhaDigitada == usuario.getHashSenha()) {
-                    // VERIFICAÇÃO ADICIONAL: A conta está ativa?
                     if (usuario.isAtivo()) {
                         this.usuarioLogado = usuario;
                         return this.usuarioLogado;
@@ -147,13 +145,15 @@ public class ControladorUsuario {
      * @return true se a desativação foi confirmada e realizada com sucesso, false caso contrário
      */
     public boolean desativarPropriaConta(Scanner scanner) {
-
+        System.out.println("-------- PresenteFácil 1.0 --------"); 
+        System.out.println("-----------------------------------"); 
+        System.out.println("> Início > Desativar Conta\n");
         if (this.usuarioLogado == null) {
             System.out.println("\n-- ERRO: Não há um usuário logado para desativar. --\n");
             return false;
         }
 
-        System.out.println("\n------ Desativar Minha Conta ------");
+        //System.out.println("\n------ Desativar Minha Conta ------");
         try {
             System.out.println("Atenção! Esta ação fará com que você não possa mais acessar sua conta.");
             System.out.println(" > Nome: " + this.usuarioLogado.getNome());
@@ -192,12 +192,16 @@ public class ControladorUsuario {
      * @return true se a exclusão foi confirmada e realizada com sucesso, false caso contrário
      */
     public boolean excluirPropriaConta(Scanner scanner) {
+        System.out.println("-------- PresenteFácil 1.0 --------"); 
+        System.out.println("-----------------------------------"); 
+        System.out.println("> Início > Excluir Minha Conta\n");
+
         if (this.usuarioLogado == null) {
             System.out.println("\n-- ERRO: Não há um usuário logado para excluir. --\n");
             return false;
         }
 
-        System.out.println("\n--- Excluir Minha Conta Permanentemente ---");
+        //System.out.println("\n--- Excluir Minha Conta Permanentemente ---");
         try {
             System.out.println("ATENÇÃO! Esta ação é PERMANENTE e IRREVERSÍVEL.");
             System.out.println("Todos os seus dados serão apagados para sempre.");
@@ -234,7 +238,9 @@ public class ControladorUsuario {
      * Utiliza o método toString() da classe Usuario.
      */
     public void exibirDadosDoUsuarioLogado() {
-        System.out.println("\n--- Meus Dados ---");
+        System.out.println("-------- PresenteFácil 1.0 --------"); 
+        System.out.println("-----------------------------------"); 
+        System.out.println("> Início > Minhas Listas > Meus Dados\n");
         if (this.usuarioLogado != null) {
             // O método toString() já formata os dados para nós
             System.out.println(this.usuarioLogado.toString());

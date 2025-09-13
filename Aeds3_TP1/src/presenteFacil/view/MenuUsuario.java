@@ -7,19 +7,6 @@ import src.presenteFacil.controller.ControladorUsuario;
 import src.presenteFacil.controller.ControladorListaDePresentes;
 import src.presenteFacil.model.Usuario;
 
-/**
- * Classe responsável por exibir o menu principal do sistema
- * PresenteFácil 1.0, acessível após o login do usuário.
- * 
- * Nela o usuário pode:
- * - Ver seus dados pessoais
- * - Gerenciar listas
- * - Desativar ou excluir sua conta
- * - Efetuar logout
- * 
- * @author Yasmin
- * @version 1.0
- */
 public class MenuUsuario {
 
     private ControladorUsuario userController;
@@ -32,9 +19,6 @@ public class MenuUsuario {
         this.giftListController = new ControladorListaDePresentes();
     }
 
-    /**
-     * Exibe o menu principal para o usuário logado.
-     */
     public void exibir(Scanner scanner) throws Exception{
 
         int opcao = 0;
@@ -50,7 +34,7 @@ public class MenuUsuario {
             System.out.println("(5) Desativar minha conta.....");
             System.out.println("(6) Excluir minha conta.......");
 
-            System.out.println("\n(S) Sair....................");
+            System.out.println("\n(S) Sair......................");
 
             System.out.print("\nOpção: ");
 
@@ -83,7 +67,6 @@ public class MenuUsuario {
                         break;
 
                     case 4:
-                        //System.out.println("\n[Buscar lista por código NanoID - implementar aqui]\n");
                         giftListController.buscarListaPorCodigo(scanner, giftListController.getArquivoLista());
                         break;
 

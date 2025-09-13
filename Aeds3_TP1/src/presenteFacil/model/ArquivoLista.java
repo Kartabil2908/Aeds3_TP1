@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import src.presenteFacil.aeds3.*;
 
 public class ArquivoLista extends Arquivo<Lista> {
-
-    // ... (conteúdo da classe permanece o mesmo) ...
     HashExtensivel<ParIDEndereco> indiceDiretoID;
     HashExtensivel<ParCodigoID> indiceDiretoCodigo;
     ArvoreBMais<ParIntInt> usuarioLista;
@@ -35,7 +33,6 @@ public class ArquivoLista extends Arquivo<Lista> {
         );
     }
     
-    // ... (método create permanece o mesmo) ...
     @Override
     public int create(Lista l) throws Exception {
         int id = super.create(l);
@@ -45,17 +42,14 @@ public class ArquivoLista extends Arquivo<Lista> {
         return id;
     }
 
-    // --- CORREÇÃO AQUI ---
     public Lista readByCodigo(String codigo) throws Exception {
         ParCodigoID pci = this.indiceDiretoCodigo.read(ParCodigoID.hash(codigo));
         if (pci == null) {
-            // A linha que causava o erro foi removida daqui.
             return null;
         }
         return super.read(pci.getIDLista());
     }
 
-    // ... (resto da classe permanece o mesmo) ...
     public Lista[] readByUsuario(int idUsuario) throws Exception {
         ArrayList<ParIntInt> pares = usuarioLista.read(new ParIntInt(idUsuario, -1));
         Lista[] listas = new Lista[pares.size()];
