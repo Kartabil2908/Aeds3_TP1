@@ -93,7 +93,7 @@ public class ControladorListaDePresentes {
             String codigo = scanner.nextLine();
             Lista lista = arqListas.readByCodigo(codigo);
             
-            if (lista == null) {
+            if (lista == null || !lista.isAtiva() ) {
                 System.out.println("\n-- Nenhuma lista encontrada com esse código. --\n");
             } else {
                 System.out.println("\n-- Lista encontrada! --");
@@ -107,6 +107,7 @@ public class ControladorListaDePresentes {
                 System.out.println("Data limite: " + lista.getDataLimite().format(formato));
                 System.out.println("ID do Usuário dono: " + lista.getIdUsuario());
                 System.out.println("Código compartilhável: " + lista.getCodigo());
+                System.err.println("ativa: " + lista.isAtiva());
                 System.out.println("------------------------------\n");
             }
         } catch (Exception e) {

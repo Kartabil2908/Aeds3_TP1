@@ -2,8 +2,7 @@ package src.presenteFacil.controller;
 
 import java.util.Scanner;
 
-import src.presenteFacil.model.ArquivoUsuario;
-import src.presenteFacil.model.Usuario;
+import src.presenteFacil.model.*;
 
 /**
  * Controlador responsável por gerenciar a lógica de usuários no sistema PresenteFácil 1.0.
@@ -27,6 +26,10 @@ public class ControladorUsuario {
     /** Arquivo persistente de usuários. */
     private ArquivoUsuario arqUsuarios;
 
+    /** Arquivo persistente de lista. */
+    private ArquivoLista arqListas;
+
+
     /** Usuário atualmente logado na sessão; null se ninguém estiver logado. */
     private Usuario usuarioLogado;
 
@@ -38,10 +41,10 @@ public class ControladorUsuario {
      */
     public ControladorUsuario() throws Exception {
         this.arqUsuarios = new ArquivoUsuario();
+        this.arqListas = new ArquivoLista();
         this.usuarioLogado = null;
     }
 
-    
     /**
      * Cria um novo usuário solicitando dados via terminal.
      * Realiza verificações para impedir a criação de usuários com e-mail duplicado.
@@ -144,10 +147,11 @@ public class ControladorUsuario {
      * @param scanner Scanner para leitura da confirmação do usuário
      * @return true se a desativação foi confirmada e realizada com sucesso, false caso contrário
      */
-    public boolean desativarPropriaConta(Scanner scanner) {
+    public boolean desativarPropriaConta(Scanner scanner) throws Exception {
         System.out.println("-------- PresenteFácil 1.0 --------"); 
         System.out.println("-----------------------------------"); 
         System.out.println("> Início > Desativar Conta\n");
+        
         if (this.usuarioLogado == null) {
             System.out.println("\n-- ERRO: Não há um usuário logado para desativar. --\n");
             return false;
@@ -161,18 +165,32 @@ public class ControladorUsuario {
             System.out.print("\nVocê tem CERTEZA de que deseja desativar sua conta? (S/N): ");
 
             String confirmacao = scanner.nextLine();
+            String resp = "N";
 
             if (confirmacao.equalsIgnoreCase("S")) {
-                this.usuarioLogado.setAtivo(false);
-                boolean sucesso = arqUsuarios.update(this.usuarioLogado);
+                Lista[] listas = arqListas.readByUsuario(usuarioLogado.getId());
+                
+                if(listas.length > 0){
+                    System.out.print("Ainda existem listas vinculadas a sua conta. Deseja desativar sua conta mesmo assim? (S/N): ");
+                    resp = scanner.nextLine();
+                    if(resp.equalsIgnoreCase("N")){
+                        System.out.println("\n------- Operação cancelada. ------\n");
+                        return false;
+                    }
+                }
 
-                if (sucesso) {
-                    System.out.println("\n-- Conta desativada com sucesso! Você será desconectado. --\n");
-                    logout();
-                    return true;
-                } else {
-                    this.usuarioLogado.setAtivo(true);
-                    System.out.println("\n-- Falha ao desativar a conta. --\n");
+                if((listas.length == 0 || resp.equalsIgnoreCase("S")) && confirmacao.equalsIgnoreCase("S")){
+                    this.arqListas.desativarLista(usuarioLogado.getId());
+                    this.usuarioLogado.setAtivo(false);
+                    boolean sucesso = arqUsuarios.update(this.usuarioLogado);
+                    if (sucesso) {
+                        System.out.println("\n-- Conta desativada com sucesso! Você será desconectado. --\n");
+                        logout();
+                        return true;
+                    } else {
+                        this.usuarioLogado.setAtivo(true);
+                        System.out.println("\n-- Falha ao desativar a conta. --\n");
+                    }
                 }
             } else {
                 System.out.println("\n-- Operação cancelada. --\n");
@@ -212,9 +230,23 @@ public class ControladorUsuario {
             String confirmacao = scanner.nextLine();
 
             if (confirmacao.equals("EXCLUIR")) {
-                // Lógica de exclusão permanente (hard delete)
-                boolean sucesso = arqUsuarios.delete(this.usuarioLogado.getId());
+                Lista[] listas = arqListas.readByUsuario(usuarioLogado.getId());
 
+                if(listas.length > 0){
+                    System.out.print("Ainda existem listas vinculadas a sua conta. Deseja apagalas permanentimente? (S/N): ");
+                    String resp = scanner.nextLine();
+
+                    if(!resp.equalsIgnoreCase("S")){
+                        System.out.println("\n------- Operação cancelada. ------\n");
+                        return false;
+                    }else{
+                        for(Lista lista : listas){
+                            arqListas.desativarLista(lista.getIdUsuario());
+                            arqListas.delete(lista.getId());
+                        }
+                    }  
+                }
+                boolean sucesso = arqUsuarios.delete(this.usuarioLogado.getId());
                 if (sucesso) {
                     System.out.println("\n-- Conta excluída permanentemente com sucesso! Você será desconectado. --\n");
                     logout();

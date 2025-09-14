@@ -10,7 +10,8 @@ public class Lista implements Registro {
     private String descricao;
     private LocalDate dataCriacao;
     private LocalDate dataLimite;
-    private int idUsuario; //Chave Estrangeira 
+    private int idUsuario; //Chave Estrangeira
+    private boolean ativa;
 
     public Lista(){
         this.id = -1;
@@ -20,6 +21,7 @@ public class Lista implements Registro {
         this.dataCriacao = LocalDate.now();
         this.dataLimite = LocalDate.now();
         this.idUsuario = -1;
+        this.ativa = true;
     }
 
     public Lista(String codigo, String nome, String descricao, LocalDate dataCriacao, LocalDate dataLimite, int idUsuario){
@@ -30,6 +32,7 @@ public class Lista implements Registro {
         this.dataCriacao = dataCriacao;
         this.dataLimite = dataLimite;
         this.idUsuario = idUsuario;
+        this.ativa = true;
     }
 
     public int getId() {
@@ -88,6 +91,14 @@ public class Lista implements Registro {
         this.idUsuario = idUsuario;
     }
 
+    public void setAtiva(boolean ativa) {
+        this.ativa = ativa;
+    }
+
+    public boolean isAtiva() {
+        return ativa;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -115,6 +126,7 @@ public class Lista implements Registro {
         dos.writeInt((int)this.dataCriacao.toEpochDay());
         dos.writeInt((int)this.dataLimite.toEpochDay());
         dos.writeInt(this.idUsuario);
+        dos.writeBoolean(this.ativa);
         return baos.toByteArray();
     }
 
@@ -129,6 +141,7 @@ public class Lista implements Registro {
         this.dataCriacao = LocalDate.ofEpochDay(dis.readInt());
         this.dataLimite = LocalDate.ofEpochDay(dis.readInt());
         this.idUsuario = dis.readInt();
+        this.ativa = dis.readBoolean();
     }
 
     @Override
@@ -140,7 +153,8 @@ public class Lista implements Registro {
             "\nDescrição.........: " + this.descricao +
             "\nData de criação...: " + this.dataCriacao +
             "\nData de limite....: " + this.dataLimite +
-            "\nID Usuario........: " + this.idUsuario
+            "\nID Usuario........: " + this.idUsuario +
+            "\nAtiva.............: " + this.ativa
         ;
     }
 }

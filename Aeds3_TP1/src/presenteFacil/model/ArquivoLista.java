@@ -76,6 +76,15 @@ public class ArquivoLista extends Arquivo<Lista> {
         return false;
     }
 
+    public boolean desativarLista(int idLista) throws Exception {
+        Lista lista = super.read(idLista);
+        
+        if(lista == null) return false;
+
+        lista.setAtiva(false);
+        return super.update(lista);
+    }
+
     @Override
     public boolean delete(int idLista) throws Exception {
         Lista lista = super.read(idLista);
