@@ -62,6 +62,7 @@ public class ControladorListaDePresentes {
             System.out.println("-----------------------------------"); 
             System.out.println("> Início > Minhas Listas\n");
             System.out.println("LISTAS");
+            boolean temListasAtivas = false;
             Lista[] listas = arqListas.readByUsuario(usuario.getId());
 
             if (listas == null || listas.length == 0) {
@@ -72,8 +73,15 @@ public class ControladorListaDePresentes {
             Arrays.sort(listas, Comparator.comparing(Lista::getNome, String.CASE_INSENSITIVE_ORDER));
 
             for (int i = 0; i < listas.length; i++) {
-                System.out.println("(" + (i + 1) + ") " + listas[i].getNome() + " - "
-                    + listas[i].getDataCriacao().format(formato));
+                if(listas[i].isAtiva()){
+                    temListasAtivas = true;
+                    System.out.println("(" + (i + 1) + ") " + listas[i].getNome() + " - "
+                        + listas[i].getDataCriacao().format(formato));
+                }
+            }
+            if(!temListasAtivas){
+                System.out.println("\n-- Nenhuma lista ativa. --\n");
+                return null;
             }
             System.out.println();
             return listas;
@@ -81,6 +89,38 @@ public class ControladorListaDePresentes {
             System.err.println("\nErro ao buscar lista: " + e.getMessage() + "\n");
         }
         return null;
+    }
+
+    public void mostrarListasDesativadas(Usuario usuario) {
+        System.out.println("-------- PresenteFácil 1.0 --------"); 
+        System.out.println("-----------------------------------"); 
+        System.out.println("> Início > Minhas Listas > Listas Desativadas\n");
+        try{
+            boolean temListasDesativadas = false;
+            Lista[] listas = arqListas.readByUsuarioDisableLists(usuario.getId());
+
+            if (listas == null || listas.length == 0) {
+                System.out.println("\n-- Nenhuma lista cadastrada. --\n");
+                return;
+            }
+
+            Arrays.sort(listas, Comparator.comparing(Lista::getNome, String.CASE_INSENSITIVE_ORDER));
+
+            for (int i = 0; i < listas.length; i++) {
+                if(!listas[i].isAtiva()){
+                    temListasDesativadas = true;
+                    System.out.println("(" + (i + 1) + ") " + listas[i].getNome() + " - "
+                        + listas[i].getDataCriacao().format(formato) + " - (Código: " + listas[i].getCodigo() + ")");
+                }
+            }
+            if(!temListasDesativadas){
+                System.out.println("\n-- Nenhuma lista desativada. --\n");
+                return;
+            }
+            System.out.println();
+        } catch (Exception e) {
+            System.err.println("\nErro ao buscar lista: " + e.getMessage() + "\n");
+        }
     }
 
     public void buscarListaPorCodigo(Scanner scanner, ArquivoLista arqListas) {
@@ -140,7 +180,8 @@ public class ControladorListaDePresentes {
             while(continua) {
                 System.out.println("(1) Gerenciar produtos da lista");
                 System.out.println("(2) Alterar dados da lista");
-                System.out.println("(3) Excluir lista");
+                System.out.println("(3) Desativar lista");
+                System.out.println("(4) Excluir lista");
                 System.out.println();
                 System.out.println("(R) Retornar ao menu anterior");
                 System.out.println();
@@ -157,6 +198,15 @@ public class ControladorListaDePresentes {
                         continua = false; 
                         break;
                     case "3":
+                        boolean resp = desativarLista(scanner, lista.getId(), lista.getNome());
+                        if(resp){
+                            System.out.println("\n-- Lista desativada com sucesso! --\n");
+                        } else {
+                            System.out.println("\n-- Erro ao desativar a lista. --\n");
+                        }
+                        continua = false;
+                        break;
+                    case "4":
                         boolean foiDeletado = deletarLista(scanner, lista.getId(), lista.getNome());
                         if (foiDeletado) {
                             continua = false;
@@ -254,6 +304,72 @@ public class ControladorListaDePresentes {
         } catch (Exception e) {
             System.err.println("\nErro ao deletar lista: " + e.getMessage() + "\n");
             return false;
+        }
+    }
+
+    public boolean desativarLista(Scanner scanner, int idLista, String nome) throws Exception {
+        System.out.println("-------- PresenteFácil 1.0 --------"); 
+        System.out.println("-----------------------------------"); 
+        System.out.println("> Início > Minhas Listas > " + nome + " > Desativar Lista\n");
+        System.out.println("\n-------- Desativar Lista ----------");
+        System.out.print("Você tem certeza que deseja deletar esta lista? (S/N): ");
+        String confirmacao = scanner.nextLine().toUpperCase();
+
+        if (!confirmacao.equals("S")) {
+            System.out.println("\n-- Operação cancelada. --\n");
+            return false;
+        }
+        
+        try {
+            boolean sucesso = arqListas.disableList(idLista);
+            if (sucesso) {
+                System.out.println("\n-- Lista desativada com sucesso! --\n");
+            } else {
+                System.out.println("\n-- Nenhuma lista encontrada com esse ID. --\n");
+            }
+            return sucesso;
+        } catch (Exception e) {
+            System.err.println("\nErro ao desativar lista: " + e.getMessage() + "\n");
+            return false;
+        }
+    }
+
+    public void reativarLista(Scanner scanner) {
+        System.out.println("-------- PresenteFácil 1.0 --------"); 
+        System.out.println("-----------------------------------"); 
+        System.out.println("> Início > Minhas Listas > Reativar Lista\n");
+        try {
+            System.out.print("Digite o código da lista a ser reativada: ");
+            String codigo = scanner.nextLine();
+            Lista lista = arqListas.readByCodigo(codigo);
+            
+            if (lista == null) {
+                System.out.println("\n-- Nenhuma lista encontrada com esse código. --\n");
+                return;
+            }
+            
+            if (lista.isAtiva()) {
+                System.out.println("\n-- A lista já está ativa. --\n");
+                return;
+            }
+
+            System.out.print("Você tem certeza que deseja reativar esta lista? (S/N): ");
+            String confirmacao = scanner.nextLine().toUpperCase();
+
+            if (!confirmacao.equals("S")) {
+                System.out.println("\n-- Operação cancelada. --\n");
+                return;
+            }
+
+            lista.setAtiva(true);
+            if (arqListas.update(lista)) {
+                System.out.println("\n-- Lista reativada com sucesso! --\n");
+            } else {
+                System.out.println("\n-- Erro ao reativar a lista. --\n");
+            }
+
+        } catch (Exception e) {
+            System.err.println("\nErro ao reativar lista: " + e.getMessage() + "\n");
         }
     }
 }

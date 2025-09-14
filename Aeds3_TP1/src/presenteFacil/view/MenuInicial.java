@@ -25,6 +25,7 @@ public class MenuInicial {
             System.out.println("-----------------------------------");
             System.out.println("\n(1) Login");
             System.out.println("(2) Novo usuário");
+            System.out.println("(3) Reativar usuário");
 
             System.out.println("\n(S) Sair");
 
@@ -62,7 +63,9 @@ public class MenuInicial {
                     case 2:
                         controlador.criarNovoUsuario(scanner);
                         break;
-
+                    case 3:
+                        controlador.reativarUsuario(scanner);
+                        break;
                     default:
                         System.out.println("\nOpção inválida. Tente novamente.\n");
                         break;

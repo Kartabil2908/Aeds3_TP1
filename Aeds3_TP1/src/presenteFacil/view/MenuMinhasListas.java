@@ -30,6 +30,8 @@ public class MenuMinhasListas {
              
             System.out.println("(N) Nova Lista"); 
             System.out.println("(R) Retornar ao menu anterior"); 
+            System.out.println("(D) Mostrar Listas Desativadas");
+            System.out.println("(A) Reativar Lista");
             System.out.println();
             System.out.print("\nOpção: "); 
 
@@ -44,6 +46,12 @@ public class MenuMinhasListas {
                     System.out.println("\n-- Retornando ao menu anterior. --\n");
                     continua = false;
                     break;
+                case "A":
+                    giftListController.reativarLista(scanner);
+                    break;
+                case "D":
+                    menuExibirListaDesativadas(scanner);
+                    break;
                 default:
                     if(isNumber(opcao)){ 
                         int indice = Integer.parseInt(opcao); 
@@ -57,6 +65,40 @@ public class MenuMinhasListas {
                     }else{
                         System.out.println("\nOpição Invalida. Tente novamente.\n");
                     }
+            }
+        }
+    }
+
+    public void menuExibirListaDesativadas(Scanner scanner) throws Exception{
+        String opcao;
+        boolean continua = true;
+
+        while (continua) {
+            System.out.println("-------- PresenteFácil 1.0 --------"); 
+            System.out.println("-----------------------------------"); 
+            System.out.println("> Início > Minhas Listas\n"); 
+
+            giftListController.mostrarListasDesativadas(usuarioLogado);
+             
+            System.out.println("(R) Retornar ao menu anterior");
+            System.out.println("(A) Reativar Lista");
+            System.out.println();
+            System.out.print("\nOpção: "); 
+
+            opcao = scanner.nextLine().trim().toUpperCase(); 
+            System.out.println(opcao);
+
+            switch (opcao) {
+                case "R":
+                    System.out.println("\n-- Retornando ao menu anterior. --\n");
+                    continua = false;
+                    break;
+
+                case "A":
+                    giftListController.reativarLista(scanner);
+                    break;
+                default:
+                    System.out.println("\nOpição Invalida. Tente novamente.\n");
             }
         }
     }

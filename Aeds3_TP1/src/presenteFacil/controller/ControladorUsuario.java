@@ -52,8 +52,9 @@ public class ControladorUsuario {
      * @param scanner Scanner para leitura de entradas do usuário
      */
     public void criarNovoUsuario(Scanner scanner) {
-
-        System.out.println("\n------- Novo Usuário -------");
+        System.out.println("-------- PresenteFácil 1.0 --------"); 
+        System.out.println("-----------------------------------"); 
+        System.out.println("\n---------- Novo Usuário -----------");
         
         try {
             System.out.print("\nNome completo: ");
@@ -94,8 +95,9 @@ public class ControladorUsuario {
      * @return o {@link Usuario} logado se sucesso, ou null caso e-mail/senha estejam incorretos ou a conta inativa
      */
     public Usuario loginUsuario(Scanner scanner) {
-
-        System.out.println("\n----------- Login ------------");
+        System.out.println("-------- PresenteFácil 1.0 --------"); 
+        System.out.println("-----------------------------------"); 
+        System.out.println("\n------------- Login ---------------");
         try {
             
             System.out.print("\nE-mail: ");
@@ -180,7 +182,7 @@ public class ControladorUsuario {
                 }
 
                 if((listas.length == 0 || resp.equalsIgnoreCase("S")) && confirmacao.equalsIgnoreCase("S")){
-                    this.arqListas.desativarLista(usuarioLogado.getId());
+                    this.arqListas.disableList(usuarioLogado.getId());
                     this.usuarioLogado.setAtivo(false);
                     boolean sucesso = arqUsuarios.update(this.usuarioLogado);
                     if (sucesso) {
@@ -241,7 +243,7 @@ public class ControladorUsuario {
                         return false;
                     }else{
                         for(Lista lista : listas){
-                            arqListas.desativarLista(lista.getIdUsuario());
+                            arqListas.disableList(lista.getIdUsuario());
                             arqListas.delete(lista.getId());
                         }
                     }  
@@ -262,6 +264,65 @@ public class ControladorUsuario {
             System.err.println("\nOcorreu um erro ao tentar excluir a conta: " + e.getMessage() + "\n");
         }
         return false;
+    }
+
+    public void reativarUsuario(Scanner scanner) throws Exception {
+        System.out.println("-------- PresenteFácil 1.0 --------"); 
+        System.out.println("-----------------------------------"); 
+        System.out.println("\n--------- Reativar Usuário --------");
+
+        System.out.print("\nE-mail: ");
+        String email = scanner.nextLine();
+        System.out.print("\nSenha: ");
+        String senha = scanner.nextLine();
+
+        Usuario usuario = arqUsuarios.read(email);
+
+        if (usuario != null) {
+            int hashSenhaDigitada = senha.hashCode();
+
+            if (hashSenhaDigitada == usuario.getHashSenha()) {
+                if (!usuario.isAtivo()) {
+                    System.out.print("\nPergunta secreta: " + usuario.getPerguntaSecreta() + "\n");
+                    System.out.print("\nResposta secreta: ");
+                    String resposta = scanner.nextLine();
+
+                    if (resposta.equals(usuario.getRespostaSecreta())) {
+
+                        System.out.print("\nDeseja reativar sua conta? (S/N): ");
+                        String resp = scanner.nextLine();
+
+                        if(!resp.equalsIgnoreCase("S")) {
+                            System.out.println("\n------- Operação cancelada. ------\n");
+                            return;
+                        }
+
+                        usuario.setAtivo(true);
+                        boolean sucesso = arqUsuarios.update(usuario);
+                        if (sucesso) {
+                            Lista[] listas = arqListas.readByUsuario(usuario.getId());
+
+                            if(listas.length > 0){
+                                for(Lista lista : listas){
+                                    arqListas.activeList(lista.getId());
+                                }
+                            }
+
+                            System.out.println("\n-- Conta reativada com sucesso! --\n");
+                        } else {
+                            usuario.setAtivo(false);
+                            System.out.println("\n-- Falha ao reativar a conta. --\n");
+                        }
+                    } else {
+                        System.out.println("\n-- Resposta secreta incorreta. --\n");
+                    }
+                }else {
+                    System.out.println("\n-- ERRO: Esta conta foi desativada. --\n");
+                }
+            }
+        }else{
+            System.out.println("\n-- ERRO: Conta não encontrada. --\n");
+        }
     }
 
 

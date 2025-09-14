@@ -52,12 +52,30 @@ public class ArquivoLista extends Arquivo<Lista> {
 
     public Lista[] readByUsuario(int idUsuario) throws Exception {
         ArrayList<ParIntInt> pares = usuarioLista.read(new ParIntInt(idUsuario, -1));
-        Lista[] listas = new Lista[pares.size()];
-        int i = 0;
-        for(ParIntInt p : pares) {
-            listas[i++] = super.read(p.getId2());
+        ArrayList<Lista> ativas = new ArrayList<>();
+
+        for (ParIntInt p : pares) {
+            Lista l = super.read(p.getId2());
+            if (l != null && l.isAtiva()) {
+                ativas.add(l);
+            }
         }
-        return listas;
+
+        return ativas.toArray(new Lista[0]);
+    }
+
+    public Lista[] readByUsuarioDisableLists(int idUsuario) throws Exception {
+        ArrayList<ParIntInt> pares = usuarioLista.read(new ParIntInt(idUsuario, -1));
+        ArrayList<Lista> ativas = new ArrayList<>();
+
+        for (ParIntInt p : pares) {
+            Lista l = super.read(p.getId2());
+            if (l != null && !l.isAtiva()) {
+                ativas.add(l);
+            }
+        }
+
+        return ativas.toArray(new Lista[0]);
     }
 
     public boolean update(Lista novaLista) throws Exception {
@@ -76,12 +94,21 @@ public class ArquivoLista extends Arquivo<Lista> {
         return false;
     }
 
-    public boolean desativarLista(int idLista) throws Exception {
+    public boolean disableList(int idLista) throws Exception {
         Lista lista = super.read(idLista);
         
         if(lista == null) return false;
 
         lista.setAtiva(false);
+        return super.update(lista);
+    }
+
+    public boolean activeList(int idLista) throws Exception {
+        Lista lista = super.read(idLista);
+        
+        if(lista == null) return false;
+
+        lista.setAtiva(true);
         return super.update(lista);
     }
 
