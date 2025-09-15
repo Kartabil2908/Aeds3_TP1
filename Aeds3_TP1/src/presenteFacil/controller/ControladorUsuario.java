@@ -80,7 +80,7 @@ public class ControladorUsuario {
             Usuario novoUsuario = new Usuario(nome, email, hashSenha, pergunta, resposta);
             int id = arqUsuarios.create(novoUsuario);
 
-            System.out.println("\n-- Usuário criado com sucesso! (ID: " + id + ") --\n");
+            System.out.println("\n-- Usuário criado com sucesso! --\n");
 
         } catch (Exception e) {
             System.err.println("\nOcorreu um erro ao criar o usuário: " + e.getMessage() + "\n");
