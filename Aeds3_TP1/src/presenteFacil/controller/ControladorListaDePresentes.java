@@ -145,7 +145,6 @@ public class ControladorListaDePresentes {
                 System.out.println("Descrição: " + lista.getDescricao());
                 System.out.println("Data de criação: " + lista.getDataCriacao().format(formato));
                 System.out.println("Data limite: " + lista.getDataLimite().format(formato));
-                System.out.println("ID do Usuário dono: " + lista.getIdUsuario());
                 System.out.println("Código compartilhável: " + lista.getCodigo());
                 System.err.println("ativa: " + lista.isAtiva());
                 System.out.println("------------------------------\n");
