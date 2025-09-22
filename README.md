@@ -118,6 +118,7 @@ A seguir, são apresentadas as respostas ao checklist proposto para a avaliaçã
 
 Primeiramente, a estrutura da classe inclui um índice indireto, uma `HashExtensivel`, para mapear o e-mail do usuário ao seu ID. O construtor inicializa este índice e o método `create` é sobrescrito para garantir que, ao criar um usuário, seu e-mail e ID sejam devidamente registrados no índice.
 <br>
+<br>
 *Figura 6: Evidência em Código: Estrutura, construtor e criação em `ArquivoUsuario.java`. 
 <br>
 ![Evidência em Código: Estrutura, construtor e criação em ArquivoUsuario.java](figuras_readme/Figura6.png)
@@ -126,6 +127,7 @@ Fonte: Elaborado pelos autores.*
 <br>
 A principal vantagem desse índice é permitir a leitura de um usuário diretamente pelo seu e-mail. O método `read(String email)` utiliza o índice para encontrar o ID correspondente ao e-mail e, em seguida, chama o método de leitura por ID da classe pai.
 <br>
+<br>
 *Figura 7: Evidência em Código: Leitura de usuário por e-mail. 
 <br>
 ![Evidência em Código: Leitura de usuário por e-mail](figuras_readme/Figura7.png)
@@ -133,6 +135,7 @@ Fonte: Elaborado pelos autores.*
 <br>
 <br>
 Para manter a integridade do índice, os métodos `delete` e `update` também são sobrescritos. Eles garantem que qualquer remoção ou alteração de um usuário (principalmente do seu e-mail) seja refletida no arquivo de índice.
+<br>
 <br>
 *Figura 8: Evidência em Código: Manutenção do índice nos métodos delete e update. 
 <br>
@@ -153,7 +156,8 @@ Fonte: Elaborado pelos autores.*
 ### 3.2 Há um CRUD de listas que funciona corretamente?
 **Sim.** De forma análoga, a classe `ArquivoLista` estende `Arquivo` e implementa todas as operações de CRUD para a entidade `Lista`. A imagem abaixo demonstra a criação de uma nova lista para um usuário logado.
 
-<br<
+<br>
+<br>
 *Figura 10: Evidência em Código: Índices de `ArquivoLista.java`. 
 ![Evidência em Código: Índices de ArquivoLista.java](figuras_readme/Figura10.png)
 Fonte: Elaborado pelos autores.*
@@ -169,6 +173,7 @@ Fonte: Elaborado pelos autores.*
 ### 3.3 Há uma árvore B+ que registre o relacionamento 1:N entre usuários e listas?
 **Sim.** A classe `ArquivoLista` utiliza uma `ArvoreBMais<ParIntInt>` para armazenar pares de `(idUsuario, idLista)`. A prova de que a árvore funciona é a funcionalidade "Minhas Listas", que consulta a árvore para exibir apenas as listas do usuário logado.
 <br>
+<br>
 *Figura 12: Evidência em Código: Uso da Árvore B+ em `ArquivoLista.java`.
 ![Evidência em Código: Uso da Árvore B+ em ArquivoLista.java](figuras_readme/Figura12.png)
 Fonte: Elaborado pelos autores.*
@@ -183,6 +188,7 @@ Fonte: Elaborado pelos autores.*
 ### 3.4 Há uma visualização das listas por meio de um código NanoID?
 **Sim.** A funcionalidade "Buscar Lista" solicita um código ao usuário e utiliza o índice indireto para encontrá-la. A execução dessa busca é mostrada no terminal.
 <br>
+<br>
 *Figura 14: Evidência em Código: Método de busca por código. 
 ![Evidência em Código: Método de busca por código](figuras_readme/Figura14.png)
 <br>
@@ -196,6 +202,7 @@ Fonte: Elaborado pelos autores.*
 <br>
 ### 3.5 O trabalho está completo e funcionando sem erros de execução?
 **Sim.** O sistema implementa todas as funcionalidades propostas. A imagem abaixo mostra o menu inicial do programa em execução, que serve como ponto de partida para todas as outras operações, demonstrando que o sistema inicia e opera corretamente.
+<br>
 <br>
 *Figura 16: Prova de Execução: Menu inicial da aplicação.
 ![Prova de Execução: Menu inicial da aplicação](figuras_readme/Figura16.png)
