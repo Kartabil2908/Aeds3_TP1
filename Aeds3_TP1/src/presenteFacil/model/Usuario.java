@@ -139,7 +139,7 @@ public class Usuario implements Registro {
                //"HashSenha: " + this.HashSenha + "\n" +
                "PerguntaSecreta: " + this.PerguntaSecreta + "\n" +
                //"RespostaSecreta: " + this.RespostaSecreta + "\n" +
-               "Ativo: " + this.ativo + "\n";
+               "Ativo: " + (this.ativo ? "Sim" : "Não") + "\n";
     }
 
 

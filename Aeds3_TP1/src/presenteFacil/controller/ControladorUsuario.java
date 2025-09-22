@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import src.presenteFacil.model.ArquivoUsuario;
 import src.presenteFacil.model.Usuario;
+import src.presenteFacil.utils.ClearConsole;
 
 /**
  * Controlador responsável por gerenciar a lógica de usuários no sistema PresenteFácil 1.0.
@@ -76,7 +77,10 @@ public class ControladorUsuario {
             Usuario novoUsuario = new Usuario(nome, email, hashSenha, pergunta, resposta);
             int id = arqUsuarios.create(novoUsuario);
 
-            System.out.println("\n-- Usuário criado com sucesso! (ID: " + id + ") --\n");
+            System.out.println("\n-- Usuário criado com sucesso! --\n");
+            //System.out.println(ID: " + id + ");
+            
+            ClearConsole.clearScreen();
 
         } catch (Exception e) {
             System.err.println("\nOcorreu um erro ao criar o usuário: " + e.getMessage() + "\n");
@@ -92,6 +96,8 @@ public class ControladorUsuario {
      */
     public Usuario loginUsuario(Scanner scanner) {
 
+        ClearConsole.clearScreen();
+
         System.out.println("\n------ Login ------");
 
         try {
@@ -102,6 +108,8 @@ public class ControladorUsuario {
             System.out.print("\nSenha: ");
             String senha = scanner.nextLine();
             System.out.println("\n");
+
+            ClearConsole.clearScreen();
 
             Usuario usuario = arqUsuarios.read(email);
 
