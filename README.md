@@ -74,33 +74,38 @@ O método de leitura utiliza o índice primário para encontrar o endereço do r
 
 Por fim, o método `update` controla a atualização de registros, realocando-os quando necessário.
 
+*Figura 1: Estrutura e construtor da classe `Arquivo.java`. 
+<br>
 ![Estrutura e construtor da classe Arquivo.java](figuras_readme/Figura1.png)
+Fonte: Elaborado pelos autores.*
 <br>
-*Figura 1: Estrutura e construtor da classe `Arquivo.java`. Fonte: Elaborado pelos autores.*
 <br>
 <br>
+*Figura 2: Lógica de criação de registros em `Arquivo.java`. 
 <br>
 ![Lógica de criação de registros em Arquivo.java](figuras_readme/Figura2.png)
+Fonte: Elaborado pelos autores.*
 <br>
-*Figura 2: Lógica de criação de registros em `Arquivo.java`. Fonte: Elaborado pelos autores.*
 <br>
 <br>
+<br>
+*Figura 3: Método de leitura em `Arquivo.java`. 
 <br>
 ![Método de leitura em Arquivo.java](figuras_readme/Figura3.png)
+Fonte: Elaborado pelos autores.*
 <br>
-*Figura 3: Método de leitura em `Arquivo.java`. Fonte: Elaborado pelos autores.*
 <br>
-<br>
+*Figura 4: Método de exclusão em `Arquivo.java`. 
 <br>
 ![Método de exclusão em Arquivo.java](figuras_readme/Figura4.png)
+Fonte: Elaborado pelos autores.*
 <br>
-*Figura 4: Método de exclusão em `Arquivo.java`. Fonte: Elaborado pelos autores.*
 <br>
 <br>
+*Figura 5: Lógica de atualização de registros em `Arquivo.java`. 
 <br>
 ![Lógica de atualização de registros em Arquivo.java](figuras_readme/Figura5.png)
-<br>
-*Figura 5: Lógica de atualização de registros em `Arquivo.java`. Fonte: Elaborado pelos autores.*
+Fonte: Elaborado pelos autores.*
 <br>
 <br>
 <br>
@@ -112,80 +117,90 @@ A seguir, são apresentadas as respostas ao checklist proposto para a avaliaçã
 **Sim.** A classe `ArquivoUsuario`, que herda da classe genérica `Arquivo`, é a responsável por gerenciar a persistência e indexação dos usuários. Sua funcionalidade será detalhada a seguir.
 
 Primeiramente, a estrutura da classe inclui um índice indireto, uma `HashExtensivel`, para mapear o e-mail do usuário ao seu ID. O construtor inicializa este índice e o método `create` é sobrescrito para garantir que, ao criar um usuário, seu e-mail e ID sejam devidamente registrados no índice.
-
-![Evidência em Código: Estrutura, construtor e criação em ArquivoUsuario.java](figuras_readme/Figura6.png)
 <br>
-*Figura 6: Evidência em Código: Estrutura, construtor e criação em `ArquivoUsuario.java`. Fonte: Elaborado pelos autores.*
+*Figura 6: Evidência em Código: Estrutura, construtor e criação em `ArquivoUsuario.java`. 
+<br>
+![Evidência em Código: Estrutura, construtor e criação em ArquivoUsuario.java](figuras_readme/Figura6.png)
+Fonte: Elaborado pelos autores.*
 <br>
 <br>
 A principal vantagem desse índice é permitir a leitura de um usuário diretamente pelo seu e-mail. O método `read(String email)` utiliza o índice para encontrar o ID correspondente ao e-mail e, em seguida, chama o método de leitura por ID da classe pai.
-
-![Evidência em Código: Leitura de usuário por e-mail](figuras_readme/Figura7.png)
 <br>
-*Figura 7: Evidência em Código: Leitura de usuário por e-mail. Fonte: Elaborado pelos autores.*
+*Figura 7: Evidência em Código: Leitura de usuário por e-mail. 
+<br>
+![Evidência em Código: Leitura de usuário por e-mail](figuras_readme/Figura7.png)
+Fonte: Elaborado pelos autores.*
 <br>
 <br>
 Para manter a integridade do índice, os métodos `delete` e `update` também são sobrescritos. Eles garantem que qualquer remoção ou alteração de um usuário (principalmente do seu e-mail) seja refletida no arquivo de índice.
-
-![Evidência em Código: Manutenção do índice nos métodos delete e update](figuras_readme/Figura8.png)
 <br>
-*Figura 8: Evidência em Código: Manutenção do índice nos métodos delete e update. Fonte: Elaborado pelos autores.*
+*Figura 8: Evidência em Código: Manutenção do índice nos métodos delete e update. 
+<br>
+![Evidência em Código: Manutenção do índice nos métodos delete e update](figuras_readme/Figura8.png)
+Fonte: Elaborado pelos autores.*
 <br>
 <br>
 A figura a seguir mostra a prova de execução da criação de um novo usuário através do menu do sistema no terminal.
 <br>
-
+<br>
+*Figura 9: Prova de Execução: Tela de criação de um novo usuário. 
+<br>
 ![Prova de Execução: Tela de criação de um novo usuário](figuras_readme/Figura9.jpg)
+Fonte: Elaborado pelos autores.*
 <br>
-*Figura 9: Prova de Execução: Tela de criação de um novo usuário. Fonte: Elaborado pelos autores.*
 <br>
-<br>
+
 ### 3.2 Há um CRUD de listas que funciona corretamente?
 **Sim.** De forma análoga, a classe `ArquivoLista` estende `Arquivo` e implementa todas as operações de CRUD para a entidade `Lista`. A imagem abaixo demonstra a criação de uma nova lista para um usuário logado.
 
+<br<
+*Figura 10: Evidência em Código: Índices de `ArquivoLista.java`. 
 ![Evidência em Código: Índices de ArquivoLista.java](figuras_readme/Figura10.png)
-<br>
-*Figura 10: Evidência em Código: Índices de `ArquivoLista.java`. Fonte: Elaborado pelos autores.*
-<br>
+Fonte: Elaborado pelos autores.*
 <br>
 <br>
+<br>
+*Figura 11: Prova de Execução: Tela de criação de uma nova lista. 
 ![Prova de Execução: Tela de criação de uma nova lista](figuras_readme/Figura11.png)
+Fonte: Elaborado pelos autores.*
 <br>
-*Figura 11: Prova de Execução: Tela de criação de uma nova lista. Fonte: Elaborado pelos autores.*
 <br>
 <br>
 ### 3.3 Há uma árvore B+ que registre o relacionamento 1:N entre usuários e listas?
 **Sim.** A classe `ArquivoLista` utiliza uma `ArvoreBMais<ParIntInt>` para armazenar pares de `(idUsuario, idLista)`. A prova de que a árvore funciona é a funcionalidade "Minhas Listas", que consulta a árvore para exibir apenas as listas do usuário logado.
-
+<br>
+*Figura 12: Evidência em Código: Uso da Árvore B+ em `ArquivoLista.java`.
 ![Evidência em Código: Uso da Árvore B+ em ArquivoLista.java](figuras_readme/Figura12.png)
+Fonte: Elaborado pelos autores.*
 <br>
-*Figura 12: Evidência em Código: Uso da Árvore B+ em `ArquivoLista.java`. Fonte: Elaborado pelos autores.*
 <br>
-<br>
+*Figura 13: Prova de Execução: Tela "Minhas Listas" mostrando o resultado da consulta.
 ![Prova de Execução: Tela "Minhas Listas" mostrando o resultado da consulta](figuras_readme/Figura13.png)
 <br>
-*Figura 13: Prova de Execução: Tela "Minhas Listas" mostrando o resultado da consulta. Fonte: Elaborado pelos autores.*
+Fonte: Elaborado pelos autores.*
 <br>
 <br>
 ### 3.4 Há uma visualização das listas por meio de um código NanoID?
 **Sim.** A funcionalidade "Buscar Lista" solicita um código ao usuário e utiliza o índice indireto para encontrá-la. A execução dessa busca é mostrada no terminal.
-
+<br>
+*Figura 14: Evidência em Código: Método de busca por código. 
 ![Evidência em Código: Método de busca por código](figuras_readme/Figura14.png)
 <br>
-*Figura 14: Evidência em Código: Método de busca por código. Fonte: Elaborado pelos autores.*
+Fonte: Elaborado pelos autores.*
 <br>
 <br>
+*Figura 15: Prova de Execução: Busca de uma lista pelo seu código NanoID. 
 ![Prova de Execução: Busca de uma lista pelo seu código NanoID](figuras_readme/Figura15.jpg)
-<br>
-*Figura 15: Prova de Execução: Busca de uma lista pelo seu código NanoID. Fonte: Elaborado pelos autores.*
+Fonte: Elaborado pelos autores.*
 <br>
 <br>
 ### 3.5 O trabalho está completo e funcionando sem erros de execução?
 **Sim.** O sistema implementa todas as funcionalidades propostas. A imagem abaixo mostra o menu inicial do programa em execução, que serve como ponto de partida para todas as outras operações, demonstrando que o sistema inicia e opera corretamente.
-
+<br>
+*Figura 16: Prova de Execução: Menu inicial da aplicação.
 ![Prova de Execução: Menu inicial da aplicação](figuras_readme/Figura16.png)
 <br>
-*Figura 16: Prova de Execução: Menu inicial da aplicação. Fonte: Elaborado pelos autores.*
+Fonte: Elaborado pelos autores.*
 <br>
 
 ### 3.6 O trabalho é original e não a cópia de um trabalho de outro grupo?
