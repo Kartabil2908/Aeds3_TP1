@@ -1,0 +1,51 @@
+package src.presenteFacil.view;
+
+import src.presenteFacil.controller.ControladorProduto;
+import src.presenteFacil.utils.ClearConsole;
+import java.util.Scanner;
+
+public class MenuProdutos {
+
+    private ControladorProduto produtoController;
+
+    public MenuProdutos(ControladorProduto produtoController) {
+        this.produtoController = produtoController;
+    }
+
+    public void exibirMenu(Scanner scanner) {
+        String opcao;
+        boolean continua = true;
+
+        while (continua) {
+            System.out.println("-------- PresenteFácil 1.0 --------");
+            System.out.println("-----------------------------------");
+            System.out.println("> Início > Produtos\n");
+            System.out.println("(1) Buscar produtos por GTIN");
+            System.out.println("(2) Listar todos os produtos");
+            System.out.println("(3) Cadastrar um novo produto");
+            System.out.println("\n(R) Retornar ao menu anterior");
+            System.out.print("\nOpção: ");
+
+            opcao = scanner.nextLine().trim().toUpperCase();
+            ClearConsole.clearScreen();
+
+            switch (opcao) {
+                case "1":
+                    produtoController.buscarProdutoPorGtin(scanner);
+                    break;
+                case "2":
+                    produtoController.listarTodosOsProdutos(scanner);
+                    break;
+                case "3":
+                    produtoController.cadastrarNovoProduto(scanner);
+                    break;
+                case "R":
+                    continua = false;
+                    break;
+                default:
+                    System.out.println("\n-- Opção inválida. Tente novamente. --\n");
+                    break;
+            }
+        }
+    }
+}

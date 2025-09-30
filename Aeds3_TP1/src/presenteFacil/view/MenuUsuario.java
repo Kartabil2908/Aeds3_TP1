@@ -1,11 +1,12 @@
 package src.presenteFacil.view;
+
+import src.presenteFacil.controller.ControladorListaDePresentes;
+import src.presenteFacil.controller.ControladorProduto;
+import src.presenteFacil.controller.ControladorUsuario;
+import src.presenteFacil.model.Usuario;
 import src.presenteFacil.utils.ClearConsole;
 
 import java.util.Scanner;
-
-import src.presenteFacil.controller.ControladorUsuario;
-import src.presenteFacil.controller.ControladorListaDePresentes;
-import src.presenteFacil.model.Usuario;
 
 public class MenuUsuario {
 
@@ -19,9 +20,9 @@ public class MenuUsuario {
         this.giftListController = new ControladorListaDePresentes();
     }
 
-    public void exibir(Scanner scanner) throws Exception{
+    public void exibir(Scanner scanner) throws Exception {
 
-        int opcao = 0;
+        String entrada;
 
         while (true) {
             System.out.println("------- Menu Principal -------");
@@ -38,21 +39,19 @@ public class MenuUsuario {
 
             System.out.print("\nOpção: ");
 
-            String entrada = scanner.nextLine().toUpperCase();
+            entrada = scanner.nextLine().toUpperCase();
             ClearConsole.clearScreen();
 
+            if (entrada.equals("S")) {
+                userController.logout();
+                System.out.println("\n-- Você foi desconectado. --\n");
+                return;
+            }
+
             try {
-
-                if (entrada.equals("S")) {
-                    userController.logout();
-                    System.out.println("\n-- Você foi desconectado. --\n");
-                    return;
-                }
-
-                opcao = Integer.parseInt(entrada);
+                int opcao = Integer.parseInt(entrada);
 
                 switch (opcao) {
-
                     case 1:
                         userController.exibirDadosDoUsuarioLogado();
                         break;
@@ -63,7 +62,13 @@ public class MenuUsuario {
                         break;
 
                     case 3:
-                        System.out.println("\n[Funcionalidade Produtos será implementada no TP2]\n");
+                        try {
+                            ControladorProduto produtoController = new ControladorProduto();
+                            MenuProdutos menuProdutos = new MenuProdutos(produtoController);
+                            menuProdutos.exibirMenu(scanner);
+                        } catch (Exception e) {
+                            System.err.println("\nErro ao inicializar o módulo de produtos: " + e.getMessage() + "\n");
+                        }
                         break;
 
                     case 4:
@@ -72,12 +77,12 @@ public class MenuUsuario {
 
                     case 5:
                         boolean foiDesativado = userController.desativarPropriaConta(scanner);
-                        if (foiDesativado) return;
+                        if (foiDesativado) return; // Se a conta foi desativada, sai do menu
                         break;
 
                     case 6:
                         boolean foiExcluido = userController.excluirPropriaConta(scanner);
-                        if (foiExcluido) return;
+                        if (foiExcluido) return; // Se a conta foi excluída, sai do menu
                         break;
 
                     default:
