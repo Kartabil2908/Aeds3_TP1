@@ -53,7 +53,7 @@ public class MenuUsuario {
 
                 switch (opcao) {
                     case 1:
-                        userController.exibirDadosDoUsuarioLogado();
+                        userController.exibirMeusDados(scanner);
                         break;
 
                     case 2:

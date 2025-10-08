@@ -1,0 +1,11 @@
+    private void alterarDadosProduto(Scanner scanner, Produto produto) {
+        try {
+            System.out.println("\n-------- Alterar Descricao do Produto --------");
+            System.out.println("Deixe vazio para manter a descricao atual.\n");
+
+            System.out.println("Descricao atual: " + produto.getDescricao());
+            System.out.print("Nova descricao: ");
+            String novaDescricao = scanner.nextLine();
+            if (!novaDescricao.trim().isEmpty()) {
+                produto.setDescricao(novaDescricao);
+            }
