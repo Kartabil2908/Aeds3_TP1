@@ -1,4 +1,3 @@
-// src/presenteFacil/model/ArquivoLista.java
 package src.presenteFacil.model;
 
 import java.util.ArrayList;

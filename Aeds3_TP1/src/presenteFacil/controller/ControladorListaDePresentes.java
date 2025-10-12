@@ -2,6 +2,7 @@ package src.presenteFacil.controller;
 
 import src.presenteFacil.model.*;
 import src.presenteFacil.utils.ClearConsole;
+import src.presenteFacil.controller.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -11,14 +12,15 @@ import java.util.*;
 public class ControladorListaDePresentes {
 
     private ArquivoLista arqListas;
+    private ControladorListaProduto controladorListaProduto = new ControladorListaProduto();
     private DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     
     public ControladorListaDePresentes() throws Exception {
         this.arqListas = new ArquivoLista();
+        this.controladorListaProduto = new ControladorListaProduto();
     }
 
-    public void criarNovaLista(Scanner scanner, Usuario usuario) {
-        
+    public void criarNovaLista(Scanner scanner, Usuario usuario) {   
         System.out.println("-------- PresenteFácil 1.0 --------"); 
         System.out.println("-----------------------------------"); 
         System.out.println("> Início > Minhas Listas > Nova Lista\n");
@@ -190,7 +192,8 @@ public class ControladorListaDePresentes {
 
                 switch (opcao) {
                     case "1":
-                        System.out.println("\n[Funcionalidade Produtos será implementada no TP2]\n");
+                        controladorListaProduto.gerenciarProdutoLista(scanner, lista);
+                        continua = false;
                         break;
                     case "2":
                         alterarDadosLista(scanner, lista);

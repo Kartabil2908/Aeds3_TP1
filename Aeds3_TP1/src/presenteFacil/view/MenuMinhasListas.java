@@ -21,10 +21,6 @@ public class MenuMinhasListas {
         boolean continua = true;
 
         while (continua) {
-            System.out.println("-------- PresenteFácil 1.0 --------"); 
-            System.out.println("-----------------------------------"); 
-            System.out.println("> Início > Minhas Listas\n"); 
-            //System.out.println("LISTAS"); 
 
             Lista[] listas = giftListController.mostrarMinhasListas(usuarioLogado);
              

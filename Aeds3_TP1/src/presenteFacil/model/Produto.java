@@ -28,6 +28,14 @@ public class Produto implements Registro {
 
     // --- Getters e Setters ---
 
+    public int getId(){
+        return id;
+    }
+
+    public void setId(int id){
+        this.id = id;
+    }
+
     public String getGtin13() {
         return gtin13;
     }

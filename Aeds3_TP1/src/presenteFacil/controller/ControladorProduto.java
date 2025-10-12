@@ -129,6 +129,11 @@ public class ControladorProduto {
         }
     }
 
+    public void mostrarDetalhesProduto(Scanner scanner, Produto produto) throws Exception {
+        exibirDetalhesProduto(scanner, produto);
+    }
+
+
     private void exibirDetalhesProduto(Scanner scanner, Produto produto) throws Exception {
         while (true) {
             System.out.println("\n-------- Detalhes do Produto --------");
