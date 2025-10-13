@@ -8,12 +8,16 @@ public class ControladorUsuario {
 
     private ArquivoUsuario arqUsuarios;
     private ArquivoLista arqListas;
-    private Usuario usuarioLogado;
+    public Usuario usuarioLogado;
 
     public ControladorUsuario() throws Exception {
         this.arqUsuarios = new ArquivoUsuario();
         this.arqListas = new ArquivoLista();
         this.usuarioLogado = null;
+    }
+
+    public Usuario getUsuarioLogado() {
+        return this.usuarioLogado;
     }
 
     public void criarNovoUsuario(Scanner scanner) {

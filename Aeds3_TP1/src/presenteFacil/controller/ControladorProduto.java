@@ -1,7 +1,11 @@
 package src.presenteFacil.controller;
 
+import src.presenteFacil.model.ArquivoListaProduto;
 import src.presenteFacil.model.ArquivoProduto;
+import src.presenteFacil.model.Lista;
 import src.presenteFacil.model.Produto;
+import src.presenteFacil.model.Usuario;
+import src.presenteFacil.controller.*;
 
 import java.util.Comparator;
 import java.util.List;
@@ -10,9 +14,16 @@ import java.util.Scanner;
 public class ControladorProduto {
 
     private ArquivoProduto arqProdutos;
+    private ArquivoListaProduto arqListaProduto;
+    private Usuario usuario;
 
     public ControladorProduto() throws Exception {
         this.arqProdutos = new ArquivoProduto();
+        this.arqListaProduto = new ArquivoListaProduto();
+    }
+
+    public void setUsuario(Usuario usuarioLogado){
+        this.usuario = usuarioLogado;
     }
 
     public void cadastrarNovoProduto(Scanner scanner) {
@@ -61,24 +72,12 @@ public class ControladorProduto {
         }
     }
 
-    public void listarTodosOsProdutos(Scanner scanner) {
+    public boolean mostrarTodosOsProdutos(Scanner scanner, List<Produto> produtos){
         try {
-            List<Produto> produtos = arqProdutos.listarTodos();
-            if (produtos.isEmpty()) {
-                System.out.println("\n-- Nenhum produto cadastrado. --\n");
-                return;
-            }
-
-            produtos.sort(Comparator.comparing(Produto::getNome, String.CASE_INSENSITIVE_ORDER));
-
             int paginaAtual = 0;
             final int ITENS_POR_PAGINA = 10;
             boolean sair = false;
-
             while (!sair) {
-                System.out.println("-------- PresenteFacil 1.0 --------");
-                System.out.println("-----------------------------------");
-                System.out.println("> Inicio > Produtos > Listagem\n");
 
                 int totalPaginas = (int) Math.ceil((double) produtos.size() / ITENS_POR_PAGINA);
                 System.out.println("Pagina " + (paginaAtual + 1) + " de " + totalPaginas);
@@ -124,6 +123,33 @@ public class ControladorProduto {
                         break;
                 }
             }
+            return true;
+        } catch (Exception e) {
+            System.err.println("\nErro ao listar produtos: " + e.getMessage() + "\n");
+            return true;
+        }
+    }
+
+    public void listarTodosOsProdutos(Scanner scanner, Usuario usuarioLogado) {
+        try {
+            List<Produto> produtos = arqProdutos.listarTodos();
+            if (produtos.isEmpty()) {
+                System.out.println("\n-- Nenhum produto cadastrado. --\n");
+                return;
+            }
+
+            setUsuario(usuarioLogado);
+
+            produtos.sort(Comparator.comparing(Produto::getNome, String.CASE_INSENSITIVE_ORDER));
+            boolean sair = false;
+
+            while (!sair) {
+                System.out.println("-------- PresenteFacil 1.0 --------");
+                System.out.println("-----------------------------------");
+                System.out.println("> Inicio > Produtos > Listagem\n");
+
+                sair = mostrarTodosOsProdutos(scanner, produtos);
+            }
         } catch (Exception e) {
             System.err.println("\nErro ao listar produtos: " + e.getMessage() + "\n");
         }
@@ -136,9 +162,16 @@ public class ControladorProduto {
 
     private void exibirDetalhesProduto(Scanner scanner, Produto produto) throws Exception {
         while (true) {
+            System.out.println("-------- PresenteFacil 1.0 --------");
+            System.out.println("-----------------------------------");
+            System.out.println("> Inicio > Produtos > Listagem > " + produto.getNome() +" \n");
+
             System.out.println("\n-------- Detalhes do Produto --------");
             System.out.println(produto.toString());
             System.out.println("-------------------------------------\n");
+
+            produtoApareceListas(produto);
+
             System.out.println("(1) Alterar dados do produto");
             if (produto.isAtivo()) {
                 System.out.println("(2) Inativar o produto");
@@ -175,6 +208,28 @@ public class ControladorProduto {
                 default:
                     System.out.println("\n-- Opcao invalida. --\n");
             }
+        }
+    }
+
+    private void produtoApareceListas(Produto produto){ 
+        try{
+            System.out.println("Aparece nas minhas listas: ");
+
+            Lista[] listasDoUsuario = arqListaProduto.getListaByProdutoIdAndUsuario(produto.getId(), usuario.getId());
+            Lista[] listas = arqListaProduto.getListasByProdutoId(produto.getId());
+
+            for(int i = 0; i < listasDoUsuario.length; i++){
+                System.out.println("- " + listasDoUsuario[i].getNome());
+            }
+
+            System.out.println();
+
+            int listasDeOutrasPessoas = (listas.length) - (listasDoUsuario.length);
+            System.out.println("Aparece também em mais " + listasDeOutrasPessoas + " lista(s) de outras pessoas. \n");
+
+        } catch (Exception e) {
+            System.err.println("\nErro: " + e.getMessage() + "\n");
+            return;
         }
     }
 

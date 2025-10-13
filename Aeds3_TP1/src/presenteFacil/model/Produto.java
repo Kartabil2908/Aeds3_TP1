@@ -105,9 +105,9 @@ public class Produto implements Registro {
 
     @Override
     public String toString() {
-        return "NOME......: " + this.nome +
-               "\nGTIN-13...: " + this.gtin13 +
-               "\nDESCRIÇÃO.: " + this.descricao +
-               "\nATIVO.....: " + (this.ativo ? "Sim" : "Não");
+        return "NOME...........: " + this.nome +
+               "\nGTIN-13........: " + this.gtin13 +
+               "\nDESCRIÇÃO......: " + this.descricao +
+               "\nATIVO..........: " + (this.ativo ? "Sim" : "Não");
     }
 }

@@ -13,11 +13,16 @@ public class ControladorListaDePresentes {
 
     private ArquivoLista arqListas;
     private ControladorListaProduto controladorListaProduto = new ControladorListaProduto();
+    private Usuario usuarioLogado;
     private DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     
     public ControladorListaDePresentes() throws Exception {
         this.arqListas = new ArquivoLista();
         this.controladorListaProduto = new ControladorListaProduto();
+    }
+
+    public void setUsuario(Usuario usuarioLogado){
+        this.usuarioLogado = usuarioLogado;
     }
 
     public void criarNovaLista(Scanner scanner, Usuario usuario) {   
@@ -156,12 +161,13 @@ public class ControladorListaDePresentes {
         }   
     }
 
-    public void MostrarLista(Scanner scanner, Lista lista) throws Exception{
+    public void MostrarLista(Scanner scanner, Lista lista, Usuario usuarioLogado) throws Exception{
         try {
             if (lista == null) {
                 System.out.println("\n-- Nenhuma lista encontrada com esse código. --\n");
                 return;
             }
+            setUsuario(usuarioLogado);
             
             ClearConsole.clearScreen();
             System.out.println("-------- PresenteFácil 1.0 --------"); 
@@ -192,7 +198,7 @@ public class ControladorListaDePresentes {
 
                 switch (opcao) {
                     case "1":
-                        controladorListaProduto.gerenciarProdutoLista(scanner, lista);
+                        controladorListaProduto.gerenciarProdutoLista(scanner, lista, usuarioLogado);
                         continua = false;
                         break;
                     case "2":

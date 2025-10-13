@@ -111,8 +111,8 @@ public class ListaProduto implements Registro{
         this.quantidade = dis.readInt();
         this.observacoes = dis.readUTF();
     }
-
-    @Override
+    
+    /*@Override
     public String toString() {
         return "ListaProduto{" +
                 "idLista=" + idLista +
@@ -120,6 +120,12 @@ public class ListaProduto implements Registro{
                 ", quantidade=" + quantidade +
                 ", observacoes='" + observacoes + '\'' +
                 '}';
+    }*/
+
+    @Override
+    public String toString() {
+        return "QUANTIDADE.....: " + this.quantidade +
+               "\nOBESERVAÇÕES.: " + this.observacoes;
     }
 }
 

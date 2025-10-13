@@ -11,6 +11,7 @@ public class ControladorListaProduto {
     private ArquivoListaProduto arqListaProduto; 
     private ArquivoProduto arqProduto;
     private ControladorProduto controladorProduto;
+    private Usuario usuarioLogado;
 
     public ControladorListaProduto() throws Exception{
         this.arqListaProduto = new ArquivoListaProduto();
@@ -18,18 +19,23 @@ public class ControladorListaProduto {
         this.controladorProduto = new ControladorProduto();
     }
 
-    public void gerenciarProdutoLista(Scanner scanner, Lista lista) throws Exception{
-        System.out.println("-------- PresenteFácil 1.0 --------"); 
-        System.out.println("-----------------------------------"); 
-        System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Produtos \n");
+    public void setUsuario(Usuario usuarioLogado){
+        this.usuarioLogado = usuarioLogado;
+    }
 
+    public void gerenciarProdutoLista(Scanner scanner, Lista lista, Usuario usuarioLogado) throws Exception{
+        setUsuario(usuarioLogado);
         String opcao;
         boolean continua = true;
 
-        Produto[] produtos = mostrarProdutosPorListaProduto(lista);
-
         try{
             while(continua) {
+                System.out.println("-------- PresenteFácil 1.0 --------"); 
+                System.out.println("-----------------------------------"); 
+                System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Produtos \n");
+
+                Produto[] produtos = mostrarProdutosPorListaProduto(lista);
+                
                 System.out.println();
                 System.out.println("(A) Acrescentar produto");
                 System.out.println("(R) Retornar ao menu anterior");
@@ -54,7 +60,7 @@ public class ControladorListaProduto {
                             System.out.println("\n[Selecionou a lista " + indice + "]\n"); 
 
                             if(produtos != null && indice > 0 && indice <= produtos.length){ 
-                                controladorProduto.mostrarDetalhesProduto(scanner, produtos[indice - 1]); 
+                                mostrarDetalhesListaProduto(scanner, lista, produtos[indice - 1]); 
                             } else { 
                                 System.out.println("\nOpição Invalida. Tente novamente.\n");
                             } 
@@ -68,12 +74,88 @@ public class ControladorListaProduto {
         }
     }
 
-    public void buscarProdutorPorGtin(Scanner scanner, Lista lista) throws Exception {
-        System.out.println("-------- PresenteFácil 1.0 --------"); 
-        System.out.println("-----------------------------------"); 
-        System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Produtos > Acrescentar produto > Buscar por GTIN \n");
+    public void mostrarDetalhesListaProduto(Scanner scanner, Lista lista, Produto produto) throws Exception{
+        try{
+            ListaProduto listaProduto = arqListaProduto.readByListaIdAndProdutoId(lista.getId(), produto.getId());
+            boolean continua = true;
 
+            while (continua) {
+                System.out.println("-------- PresenteFácil 1.0 --------"); 
+                System.out.println("-----------------------------------"); 
+                System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Produtos > " + produto.getNome() +"\n");
+
+                System.out.println("\n-------- Detalhes do Produto --------");
+                System.out.println(produto.toString());
+                System.out.println(listaProduto.toString());
+                System.out.println("-------------------------------------\n");
+                System.out.println("(1) Alterar a quantidade");
+                System.out.println("(2) Alterar as observações");
+                System.out.println("(3) Remover o produto desta lista");
+                System.out.println("(R) Retornar ao menu anterior");
+                System.out.print("\nOpcao: ");
+
+                String opcao = scanner.nextLine().trim().toUpperCase();
+                switch (opcao) {
+                    case "1":
+                        mudarQuantidade(scanner, listaProduto);
+                        break;
+                    case "2":
+                        mudarObservacoes(scanner, listaProduto);
+                        break;
+                    case "3":
+                        boolean result = removerProdutoDaLista(scanner, listaProduto);
+                        if(result){
+                            continua = false;
+                        }
+                        break;
+                    case "R":
+                        return;
+                    default:
+                        System.out.println("\n-- Opcao invalida. --\n");
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("\nErro ao buscar mostrar Detalhes ListaProduto: " + e.getMessage() + "\n");
+        }
+    }
+
+    public boolean removerProdutoDaLista(Scanner scanner, ListaProduto listaProduto) throws Exception{
+        try{
+            String opcao = "";
+            boolean continua = true;
+
+            while (continua) {
+                System.out.print("Deseja deletar esse produto da lista? (S/N): ");
+                opcao = scanner.nextLine().trim().toUpperCase();
+
+                if (opcao.equals("S")) {
+                    boolean result = arqListaProduto.delete(listaProduto.getId());
+                    if(result){
+                        System.out.println("\n--- Produto deletado com sucesso! ---\n");
+                    }else{
+                        System.out.println("\n--- Erro ao deletar o produto! ---\n");
+                    }
+                    continua = false;
+                    return result;
+                } else if (opcao.equals("N")) {
+                    System.out.println("\n--- Produto não foi deletado da lista. ---\n");
+                    return false;
+                } else {
+                    System.out.println("Entrada inválida. Por favor, digite 'S' para sim ou 'N' para não.");
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("\nErro ao remover produto da lista: " + e.getMessage() + "\n");
+        }
+        return false;
+    }
+
+    public void buscarProdutorPorGtin(Scanner scanner, Lista lista) throws Exception {
         try {
+            System.out.println("-------- PresenteFácil 1.0 --------"); 
+            System.out.println("-----------------------------------"); 
+            System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Produtos > Acrescentar produto > Buscar por GTIN \n");
+
             System.out.print("Digite o GTIN-13 do produto: ");
             String gtin13 = scanner.nextLine();
             boolean estaNaLista = false;
@@ -99,8 +181,19 @@ public class ControladorListaProduto {
                 System.out.println("\n-------- Detalhes do Produto --------");
                 System.out.println(produto);
                 System.out.println("-------------------------------------\n");
-                System.out.print("Digite a quantidade: ");
-                int quantidade = scanner.nextInt();
+
+                boolean continua = true;
+                int quantidade = 1;
+
+                while(continua){
+                    System.out.print("Digite a quantidade: ");
+                    quantidade = scanner.nextInt();
+
+                    if(quantidade < 1){
+                        System.out.println("--- A quantidade não pode ser menor ou igual a zero! ---");
+                    }
+                    continua = false;
+                }
                 scanner.nextLine();
 
                 System.out.println();
@@ -109,7 +202,8 @@ public class ControladorListaProduto {
                 System.out.println();
 
                 String opcao = "";
-                boolean continua = true;
+                continua = true;
+
                 while (continua) {
                     System.out.print("Deseja acrescentar esse produto à lista? (S/N): ");
                     opcao = scanner.nextLine().trim().toUpperCase();
@@ -153,13 +247,14 @@ public class ControladorListaProduto {
                 opcao = scanner.nextLine().trim().toUpperCase();
 
                 switch (opcao) {
-                    case "1":
+                    case "1": //busca por GTIN
                         buscarProdutorPorGtin(scanner, lista);
                         continua = false;
                         break;
-                    case "2":
+                    case "2": // listagem 
                         System.out.println("\n-- Há ser acrescentada. --\n");
-                        //continua = false;
+                        listagemDeProdutos(scanner, lista);
+                        continua = false;
                         break;
                     case "R":
                         System.out.println("\n-- Retornando ao menu anterior. --\n");
@@ -199,6 +294,52 @@ public class ControladorListaProduto {
         } catch (Exception e) {
             System.err.println("\nErro ao mostrar produtos por ListaProduto: " + e.getMessage() + "\n");
             return null;  
+        }
+    }
+
+    public void listagemDeProdutos(Scanner scanner, Lista lista){ //coisas aqui
+        try {
+            List<Produto> produtos = arqProduto.listarTodos();
+            if (produtos.isEmpty()) {
+                System.out.println("\n-- Nenhum produto cadastrado. --\n");
+                return;
+            }
+
+            produtos.sort(Comparator.comparing(Produto::getNome, String.CASE_INSENSITIVE_ORDER));
+            boolean sair = false;
+
+            while (!sair){
+                System.out.println("-------- PresenteFácil 1.0 --------"); 
+                System.out.println("-----------------------------------"); 
+                System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Protudos > Acrescentar produto > Listagem \n");
+
+                controladorProduto.setUsuario(usuarioLogado);
+                sair =  controladorProduto.mostrarTodosOsProdutos(scanner, produtos);
+            }
+        }  catch (Exception e) {
+            System.err.println("\nErro ao listar produtos: " + e.getMessage() + "\n");
+        }
+    }
+
+    public void mudarQuantidade(Scanner scanner, ListaProduto listaProduto){
+        boolean continua = true;
+
+        while(continua){
+            System.out.print("Digite a nova quantidade: ");
+            int quantidade = scanner.nextInt();
+            if(quantidade < 1){
+                System.out.println("--- A quantidade não pode ser menor ou igual a zero! ---");
+            }
+            listaProduto.setQuantidade(quantidade);
+            continua = false;
+        }
+    }
+
+    public void mudarObservacoes(Scanner scanner, ListaProduto listaProduto){
+        System.out.print("Digite aas novas observações: ");
+        String observacoes = scanner.nextLine();
+        if(!observacoes.equals(" ")){
+            listaProduto.setObservacoes(observacoes);
         }
     }
 

@@ -64,7 +64,7 @@ public class MenuUsuario {
                     case 3:
                         try {
                             ControladorProduto produtoController = new ControladorProduto();
-                            MenuProdutos menuProdutos = new MenuProdutos(produtoController);
+                            MenuProdutos menuProdutos = new MenuProdutos(produtoController, usuarioLogado);
                             menuProdutos.exibirMenu(scanner);
                         } catch (Exception e) {
                             System.err.println("\nErro ao inicializar o módulo de produtos: " + e.getMessage() + "\n");

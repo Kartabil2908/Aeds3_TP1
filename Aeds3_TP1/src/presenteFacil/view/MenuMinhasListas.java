@@ -54,7 +54,7 @@ public class MenuMinhasListas {
                         System.out.println("\n[Selecionou a lista " + indice + "]\n"); 
 
                         if(listas != null && indice > 0 && indice <= listas.length){ 
-                            giftListController.MostrarLista(scanner, listas[indice - 1]); 
+                            giftListController.MostrarLista(scanner, listas[indice - 1], usuarioLogado); 
                         } else { 
                             System.out.println("\nOpição Invalida. Tente novamente.\n");
                         } 

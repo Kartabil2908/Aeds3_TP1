@@ -2,14 +2,18 @@ package src.presenteFacil.view;
 
 import src.presenteFacil.controller.ControladorProduto;
 import src.presenteFacil.utils.ClearConsole;
+import src.presenteFacil.model.*;
+
 import java.util.Scanner;
 
 public class MenuProdutos {
 
     private ControladorProduto produtoController;
+    private Usuario usuarioLogado;
 
-    public MenuProdutos(ControladorProduto produtoController) {
+    public MenuProdutos(ControladorProduto produtoController, Usuario usuarioLogado) {
         this.produtoController = produtoController;
+        this.usuarioLogado = usuarioLogado;
     }
 
     public void exibirMenu(Scanner scanner) {
@@ -34,7 +38,7 @@ public class MenuProdutos {
                     produtoController.buscarProdutoPorGtin(scanner);
                     break;
                 case "2":
-                    produtoController.listarTodosOsProdutos(scanner);
+                    produtoController.listarTodosOsProdutos(scanner, usuarioLogado);
                     break;
                 case "3":
                     produtoController.cadastrarNovoProduto(scanner);
