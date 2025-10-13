@@ -5,7 +5,6 @@ import src.presenteFacil.model.ArquivoProduto;
 import src.presenteFacil.model.Lista;
 import src.presenteFacil.model.Produto;
 import src.presenteFacil.model.Usuario;
-import src.presenteFacil.controller.*;
 
 import java.util.Comparator;
 import java.util.List;
@@ -53,10 +52,13 @@ public class ControladorProduto {
         }
     }
 
-    public void buscarProdutoPorGtin(Scanner scanner) {
+    public void buscarProdutoPorGtin(Scanner scanner, Usuario usuarioLogado) {
         System.out.println("-------- PresenteFacil 1.0 --------");
         System.out.println("-----------------------------------");
         System.out.println("> Inicio > Produtos > Buscar por GTIN\n");
+
+        setUsuario(usuarioLogado);
+
         try {
             System.out.print("Digite o GTIN-13 do produto: ");
             String gtin13 = scanner.nextLine();

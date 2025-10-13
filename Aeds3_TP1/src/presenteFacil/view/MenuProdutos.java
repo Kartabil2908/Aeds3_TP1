@@ -35,7 +35,7 @@ public class MenuProdutos {
 
             switch (opcao) {
                 case "1":
-                    produtoController.buscarProdutoPorGtin(scanner);
+                    produtoController.buscarProdutoPorGtin(scanner, usuarioLogado);
                     break;
                 case "2":
                     produtoController.listarTodosOsProdutos(scanner, usuarioLogado);

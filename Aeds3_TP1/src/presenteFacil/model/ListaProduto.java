@@ -125,7 +125,7 @@ public class ListaProduto implements Registro{
     @Override
     public String toString() {
         return "QUANTIDADE.....: " + this.quantidade +
-               "\nOBESERVAÇÕES.: " + this.observacoes;
+               "\nOBESERVAÇÕES...: " + this.observacoes;
     }
 }
 

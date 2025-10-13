@@ -35,7 +35,7 @@ public class ControladorListaProduto {
                 System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Produtos \n");
 
                 Produto[] produtos = mostrarProdutosPorListaProduto(lista);
-                
+
                 System.out.println();
                 System.out.println("(A) Acrescentar produto");
                 System.out.println("(R) Retornar ao menu anterior");
@@ -305,19 +305,132 @@ public class ControladorListaProduto {
                 return;
             }
 
-            produtos.sort(Comparator.comparing(Produto::getNome, String.CASE_INSENSITIVE_ORDER));
+            int paginaAtual = 0;
+            final int ITENS_POR_PAGINA = 10;
             boolean sair = false;
+
+            produtos.sort(Comparator.comparing(Produto::getNome, String.CASE_INSENSITIVE_ORDER));
 
             while (!sair){
                 System.out.println("-------- PresenteFácil 1.0 --------"); 
                 System.out.println("-----------------------------------"); 
                 System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Protudos > Acrescentar produto > Listagem \n");
 
-                controladorProduto.setUsuario(usuarioLogado);
-                sair =  controladorProduto.mostrarTodosOsProdutos(scanner, produtos);
+                int totalPaginas = (int) Math.ceil((double) produtos.size() / ITENS_POR_PAGINA);
+                System.out.println("Pagina " + (paginaAtual + 1) + " de " + totalPaginas);
+                System.out.println("----------------------------------\n");
+
+                int inicio = paginaAtual * ITENS_POR_PAGINA;
+                int fim = Math.min(inicio + ITENS_POR_PAGINA, produtos.size());
+
+                for (int i = inicio; i < fim; i++) {
+                    System.out.println("(" + (i + 1) + ") " + produtos.get(i).getNome());
+                }
+
+                System.out.println("\nDigite o numero para ver detalhes");
+                System.out.println("(P) Proxima pagina");
+                System.out.println("(A) Pagina anterior");
+                System.out.println("(R) Retornar ao menu anterior");
+                System.out.print("\nOpcao: ");
+                String opcao = scanner.nextLine().trim().toUpperCase();
+
+                switch (opcao) {
+                    case "P":
+                        if (paginaAtual < totalPaginas - 1) paginaAtual++;
+                        break;
+                    case "A":
+                        if (paginaAtual > 0) paginaAtual--;
+                        break;
+                    case "R":
+                        sair = true;
+                        break;
+                    default:
+                        try {
+                            int escolha = Integer.parseInt(opcao);
+                            int indiceEscolhido = escolha - 1;
+                            if (indiceEscolhido >= inicio && indiceEscolhido < fim) {
+                                Produto selecionado = produtos.get(indiceEscolhido); 
+                                acrescentarPorListagemDeProdutos(scanner, lista, selecionado);
+                            } else {
+                                System.out.println("\n-- Numero fora da pagina atual. --\n");
+                            }
+                        } catch (NumberFormatException nf) {
+                            System.out.println("\n-- Opcao invalida. --\n");
+                        }
+                        break;
+                }
             }
         }  catch (Exception e) {
             System.err.println("\nErro ao listar produtos: " + e.getMessage() + "\n");
+        }
+    }
+
+    public void acrescentarPorListagemDeProdutos(Scanner scanner, Lista lista, Produto produto){
+        try {
+            boolean estaNaLista = false;
+            Produto[] produtos = arqListaProduto.getProdutosByListaId(lista.getId());
+
+            for(int i = 0; i < produtos.length; i++){
+                if(produto.getGtin13().equals(produtos[i].getGtin13())){
+                    estaNaLista = true;
+                    break;
+                }
+            }
+
+            if(estaNaLista){
+                System.out.println("\n--- Projduto já está cadastrado na lista! ---\n");
+                return;
+            }
+
+            if (produto == null) {
+                System.out.println("\n-- Nenhum produto encontrado com este GTIN-13. --\n");
+            } else {
+                System.out.println("\n-------- Detalhes do Produto --------");
+                System.out.println(produto);
+                System.out.println("-------------------------------------\n");
+
+                boolean continua = true;
+                int quantidade = 1;
+
+                while(continua){
+                    System.out.print("Digite a quantidade: ");
+                    quantidade = scanner.nextInt();
+
+                    if(quantidade < 1){
+                        System.out.println("--- A quantidade não pode ser menor ou igual a zero! ---");
+                    }
+                    continua = false;
+                }
+                scanner.nextLine();
+
+                System.out.println();
+                System.out.print("Observações (Opcional): ");
+                String observacoes = scanner.nextLine();
+                System.out.println();
+
+                String opcao = "";
+                continua = true;
+
+                while (continua) {
+                    System.out.print("Deseja acrescentar esse produto à lista? (S/N): ");
+                    opcao = scanner.nextLine().trim().toUpperCase();
+
+                    if (opcao.equals("S")) {
+                        System.out.println("Produto adicionado à lista com sucesso!");
+                        continua = false;
+                    } else if (opcao.equals("N")) {
+                        System.out.println("Produto não foi adicionado à lista.");
+                        return;
+                    } else {
+                        System.out.println("Entrada inválida. Por favor, digite 'S' para sim ou 'N' para não.");
+                    }
+                }
+
+                ListaProduto novaListaProduto = new ListaProduto(lista.getId(), produto.getId(), quantidade, observacoes);
+                arqListaProduto.create(novaListaProduto);
+            }
+        } catch (Exception e) {
+            System.err.println("\nErro ao acrescentar por listagem de produto: " + e.getMessage() + "\n");
         }
     }
 
