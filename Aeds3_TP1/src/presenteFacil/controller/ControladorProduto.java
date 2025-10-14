@@ -74,12 +74,25 @@ public class ControladorProduto {
         }
     }
 
-    public boolean mostrarTodosOsProdutos(Scanner scanner, List<Produto> produtos){
+    public void listarTodosOsProdutos(Scanner scanner, Usuario usuarioLogado) {
         try {
+            setUsuario(usuarioLogado);
+            List<Produto> produtos = arqProdutos.listarTodos();
+            if (produtos.isEmpty()) {
+                System.out.println("\n-- Nenhum produto cadastrado. --\n");
+                return;
+            }
+
+            produtos.sort(Comparator.comparing(Produto::getNome, String.CASE_INSENSITIVE_ORDER));
+
             int paginaAtual = 0;
             final int ITENS_POR_PAGINA = 10;
             boolean sair = false;
+
             while (!sair) {
+                System.out.println("-------- PresenteFacil 1.0 --------");
+                System.out.println("-----------------------------------");
+                System.out.println("> Inicio > Produtos > Listagem\n");
 
                 int totalPaginas = (int) Math.ceil((double) produtos.size() / ITENS_POR_PAGINA);
                 System.out.println("Pagina " + (paginaAtual + 1) + " de " + totalPaginas);
@@ -125,37 +138,11 @@ public class ControladorProduto {
                         break;
                 }
             }
-            return true;
-        } catch (Exception e) {
-            System.err.println("\nErro ao listar produtos: " + e.getMessage() + "\n");
-            return true;
-        }
-    }
-
-    public void listarTodosOsProdutos(Scanner scanner, Usuario usuarioLogado) {
-        try {
-            List<Produto> produtos = arqProdutos.listarTodos();
-            if (produtos.isEmpty()) {
-                System.out.println("\n-- Nenhum produto cadastrado. --\n");
-                return;
-            }
-
-            setUsuario(usuarioLogado);
-
-            produtos.sort(Comparator.comparing(Produto::getNome, String.CASE_INSENSITIVE_ORDER));
-            boolean sair = false;
-
-            while (!sair) {
-                System.out.println("-------- PresenteFacil 1.0 --------");
-                System.out.println("-----------------------------------");
-                System.out.println("> Inicio > Produtos > Listagem\n");
-
-                sair = mostrarTodosOsProdutos(scanner, produtos);
-            }
         } catch (Exception e) {
             System.err.println("\nErro ao listar produtos: " + e.getMessage() + "\n");
         }
     }
+
 
     public void mostrarDetalhesProduto(Scanner scanner, Produto produto) throws Exception {
         exibirDetalhesProduto(scanner, produto);
