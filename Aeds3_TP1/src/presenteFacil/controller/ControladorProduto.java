@@ -88,7 +88,8 @@ public class ControladorProduto {
                 int fim = Math.min(inicio + ITENS_POR_PAGINA, produtos.size());
 
                 for (int i = inicio; i < fim; i++) {
-                    System.out.println("(" + (i + 1) + ") " + produtos.get(i).getNome());
+                    int numeroExibido = (i - inicio) + 1; // numeração reinicia a cada página
+                    System.out.println("(" + numeroExibido + ") " + produtos.get(i).getNome());
                 }
 
                 System.out.println("\nDigite o numero para ver detalhes");
@@ -111,9 +112,9 @@ public class ControladorProduto {
                     default:
                         try {
                             int escolha = Integer.parseInt(opcao);
-                            int indiceEscolhido = escolha - 1;
-                            if (indiceEscolhido >= inicio && indiceEscolhido < fim) {
-                                Produto selecionado = produtos.get(indiceEscolhido);
+                            int indicePagina = escolha - 1; // índice relativo à página atual
+                            if (indicePagina >= 0 && indicePagina < (fim - inicio)) {
+                                Produto selecionado = produtos.get(inicio + indicePagina);
                                 exibirDetalhesProduto(scanner, selecionado);
                             } else {
                                 System.out.println("\n-- Numero fora da pagina atual. --\n");
