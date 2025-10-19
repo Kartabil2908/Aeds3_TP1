@@ -26,7 +26,7 @@ public class ControladorProduto {
     }
 
     public void cadastrarNovoProduto(Scanner scanner) {
-        System.out.println("-------- PresenteFacil 1.0 --------");
+        System.out.println("-------- PresenteFácil 1.0 --------");
         System.out.println("-----------------------------------");
         System.out.println("> Inicio > Produtos > Cadastrar\n");
         try {
@@ -34,7 +34,7 @@ public class ControladorProduto {
             String gtin13 = scanner.nextLine();
 
             if (arqProdutos.read(gtin13) != null) {
-                System.out.println("\n-- ERRO: Ja existe um produto com o GTIN-13 informado. --\n");
+                System.out.println("\n-- ERRO: Já existe um produto com o GTIN-13 informado. --\n");
                 return;
             }
 
@@ -53,7 +53,7 @@ public class ControladorProduto {
     }
 
     public void buscarProdutoPorGtin(Scanner scanner, Usuario usuarioLogado) {
-        System.out.println("-------- PresenteFacil 1.0 --------");
+        System.out.println("-------- PresenteFácil 1.0 --------");
         System.out.println("-----------------------------------");
         System.out.println("> Inicio > Produtos > Buscar por GTIN\n");
 
@@ -90,12 +90,12 @@ public class ControladorProduto {
             boolean sair = false;
 
             while (!sair) {
-                System.out.println("-------- PresenteFacil 1.0 --------");
+                System.out.println("-------- PresenteFácil 1.0 --------");
                 System.out.println("-----------------------------------");
-                System.out.println("> Inicio > Produtos > Listagem\n");
+                System.out.println("> Início > Produtos > Listagem\n");
 
                 int totalPaginas = (int) Math.ceil((double) produtos.size() / ITENS_POR_PAGINA);
-                System.out.println("Pagina " + (paginaAtual + 1) + " de " + totalPaginas);
+                System.out.println("Página " + (paginaAtual + 1) + " de " + totalPaginas);
                 System.out.println("----------------------------------\n");
 
                 int inicio = paginaAtual * ITENS_POR_PAGINA;
@@ -106,11 +106,11 @@ public class ControladorProduto {
                     System.out.println("(" + numeroExibido + ") " + produtos.get(i).getNome());
                 }
 
-                System.out.println("\nDigite o numero para ver detalhes");
-                System.out.println("(P) Proxima pagina");
-                System.out.println("(A) Pagina anterior");
+                System.out.println("\nDigite uma letra para ver detalhes:");
+                System.out.println("(P) Proxima página");
+                System.out.println("(A) Página anterior");
                 System.out.println("(R) Retornar ao menu anterior");
-                System.out.print("\nOpcao: ");
+                System.out.print("\nOpção: ");
                 String opcao = scanner.nextLine().trim().toUpperCase();
 
                 switch (opcao) {

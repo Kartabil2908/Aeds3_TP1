@@ -47,6 +47,8 @@ public class MenuInicial {
                     case 1:
                         usuarioLogado = controlador.loginUsuario(scanner);
 
+                        ClearConsole.clearScreen();
+
                         if (usuarioLogado != null) {
                             System.out.println("\n-- Login efetuado com sucesso! Bem-vindo(a), " 
                                                 + usuarioLogado.getNome() + ". --\n");

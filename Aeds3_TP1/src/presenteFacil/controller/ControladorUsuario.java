@@ -3,6 +3,7 @@ package src.presenteFacil.controller;
 import java.util.Scanner;
 
 import src.presenteFacil.model.*;
+import src.presenteFacil.utils.ClearConsole;
 
 public class ControladorUsuario {
 
@@ -21,16 +22,16 @@ public class ControladorUsuario {
     }
 
     public void criarNovoUsuario(Scanner scanner) {
-        System.out.println("-------- PresenteFacil 1.0 --------");
+        System.out.println("-------- PresenteFácil 1.0 --------");
         System.out.println("-----------------------------------");
-        System.out.println("\n---------- Novo Usuario -----------");
+        System.out.println("\n---------- Novo Usuário -----------");
         try {
             System.out.print("\nNome completo: ");
             String nome = scanner.nextLine();
             System.out.print("\nE-mail: ");
             String email = scanner.nextLine();
             if (arqUsuarios.read(email) != null) {
-                System.out.println("\n-- ERRO: O e-mail informado ja esta em uso! --\n");
+                System.out.println("\n-- ERRO: O e-mail informado já está em uso! --\n");
                 return;
             }
             System.out.print("\nSenha: ");
@@ -42,14 +43,18 @@ public class ControladorUsuario {
             String resposta = scanner.nextLine();
             Usuario novoUsuario = new Usuario(nome, email, hashSenha, pergunta, resposta);
             arqUsuarios.create(novoUsuario);
-            System.out.println("\n-- Usuario criado com sucesso! --\n");
+
+            ClearConsole.clearScreen();
+
+            System.out.println("\n-- Usuário criado com sucesso! --\n");
+
         } catch (Exception e) {
-            System.err.println("\nOcorreu um erro ao criar o usuario: " + e.getMessage() + "\n");
+            System.err.println("\nOcorreu um erro ao criar o usuário: " + e.getMessage() + "\n");
         }
     }
 
     public Usuario loginUsuario(Scanner scanner) {
-        System.out.println("-------- PresenteFacil 1.0 --------");
+        System.out.println("-------- PresenteFácil 1.0 --------");
         System.out.println("-----------------------------------");
         System.out.println("\n------------- Login ---------------");
         try {
@@ -74,7 +79,7 @@ public class ControladorUsuario {
         } catch (Exception e) {
             System.err.println("\nErro no login: " + e.getMessage() + "\n");
         }
-        System.out.println("\n-- E-mail ou senha invalidos. --\n");
+        System.out.println("\n-- E-mail ou senha inválidos. --\n");
         return null;
     }
 
@@ -85,16 +90,19 @@ public class ControladorUsuario {
             System.out.println("\n-- Nao ha usuario logado para desativar. --\n");
             return false;
         }
-        System.out.println("-------- PresenteFacil 1.0 --------");
+        System.out.println("-------- PresenteFácil 1.0 --------");
         System.out.println("-----------------------------------");
         System.out.println("\n------ Desativar Minha Conta ------");
         System.out.print("Tem certeza que deseja desativar sua conta? (S/N): ");
         String confirmacao = scanner.nextLine().toUpperCase();
+        
         if (!confirmacao.equals("S")) {
             System.out.println("\n-- Operacao cancelada. --\n");
             return false;
         }
+
         this.usuarioLogado.setAtivo(false);
+
         boolean sucesso = arqUsuarios.update(this.usuarioLogado);
         if (sucesso) {
             Lista[] listas = arqListas.readByUsuario(usuarioLogado.getId());
@@ -130,7 +138,7 @@ public class ControladorUsuario {
     }
 
     public void reativarUsuario(Scanner scanner) throws Exception {
-        System.out.println("-------- PresenteFacil 1.0 --------");
+        System.out.println("-------- PresenteFácil 1.0 --------");
         System.out.println("-----------------------------------");
         System.out.println("\n--------- Reativar Usuario --------");
         System.out.print("\nE-mail: ");
@@ -157,9 +165,9 @@ public class ControladorUsuario {
 
     // Meus dados + edição
     public void exibirDadosDoUsuarioLogado() {
-        System.out.println("-------- PresenteFacil 1.0 --------");
+        System.out.println("-------- PresenteFácil 1.0 --------");
         System.out.println("-----------------------------------");
-        System.out.println("> Inicio > Meus Dados\n");
+        System.out.println("> Início > Meus Dados\n");
         if (this.usuarioLogado != null) {
             System.out.println(this.usuarioLogado.toString());
         } else {
@@ -174,14 +182,17 @@ public class ControladorUsuario {
         }
         boolean sair = false;
         while (!sair) {
-            System.out.println("-------- PresenteFacil 1.0 --------");
+            System.out.println("-------- PresenteFácil 1.0 --------");
             System.out.println("-----------------------------------");
-            System.out.println("> Inicio > Meus Dados\n");
+            System.out.println("> Início > Meus Dados\n");
             System.out.println(this.usuarioLogado.toString());
             System.out.println("(1) Alterar meus dados");
             System.out.println("(R) Retornar");
             System.out.print("\nOpcao: ");
             String op = scanner.nextLine().trim().toUpperCase();
+
+            ClearConsole.clearScreen();
+
             switch (op) {
                 case "1":
                     alterarDadosUsuario(scanner);
@@ -196,18 +207,23 @@ public class ControladorUsuario {
     }
 
     private void alterarDadosUsuario(Scanner scanner) {
+
         if (this.usuarioLogado == null) return;
         boolean sair = false;
         while (!sair) {
             System.out.println("\n-------- Alterar Meus Dados --------");
-            System.out.println("(1) Alterar nome");
-            System.out.println("(2) Alterar e-mail");
-            System.out.println("(3) Alterar senha");
-            System.out.println("(4) Alterar pergunta secreta");
-            System.out.println("(5) Alterar resposta secreta");
+            System.out.println("\n");
+            System.out.println("(1) Nome");
+            System.out.println("(2) E-mail");
+            System.out.println("(3) Senha");
+            System.out.println("(4) Pergunta Secreta");
+            System.out.println("(5) Resposta Secreta");
             System.out.println("(R) Retornar");
             System.out.print("\nOpcao: ");
             String op = scanner.nextLine().trim().toUpperCase();
+
+            ClearConsole.clearScreen();
+
             try {
                 switch (op) {
                     case "1": {
