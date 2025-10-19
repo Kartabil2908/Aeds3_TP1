@@ -1,10 +1,7 @@
 package src.presenteFacil.controller;
 
-import src.presenteFacil.model.ArquivoListaProduto;
 import src.presenteFacil.model.ArquivoProduto;
-import src.presenteFacil.model.Lista;
 import src.presenteFacil.model.Produto;
-import src.presenteFacil.model.Usuario;
 
 import java.util.Comparator;
 import java.util.List;
@@ -13,16 +10,9 @@ import java.util.Scanner;
 public class ControladorProduto {
 
     private ArquivoProduto arqProdutos;
-    private ArquivoListaProduto arqListaProduto;
-    private Usuario usuario;
 
     public ControladorProduto() throws Exception {
         this.arqProdutos = new ArquivoProduto();
-        this.arqListaProduto = new ArquivoListaProduto();
-    }
-
-    public void setUsuario(Usuario usuarioLogado){
-        this.usuario = usuarioLogado;
     }
 
     public void cadastrarNovoProduto(Scanner scanner) {
@@ -52,13 +42,10 @@ public class ControladorProduto {
         }
     }
 
-    public void buscarProdutoPorGtin(Scanner scanner, Usuario usuarioLogado) {
+    public void buscarProdutoPorGtin(Scanner scanner) {
         System.out.println("-------- PresenteFacil 1.0 --------");
         System.out.println("-----------------------------------");
         System.out.println("> Inicio > Produtos > Buscar por GTIN\n");
-
-        setUsuario(usuarioLogado);
-
         try {
             System.out.print("Digite o GTIN-13 do produto: ");
             String gtin13 = scanner.nextLine();
@@ -74,9 +61,8 @@ public class ControladorProduto {
         }
     }
 
-    public void listarTodosOsProdutos(Scanner scanner, Usuario usuarioLogado) {
+    public void listarTodosOsProdutos(Scanner scanner) {
         try {
-            setUsuario(usuarioLogado);
             List<Produto> produtos = arqProdutos.listarTodos();
             if (produtos.isEmpty()) {
                 System.out.println("\n-- Nenhum produto cadastrado. --\n");
@@ -142,10 +128,6 @@ public class ControladorProduto {
         } catch (Exception e) {
             System.err.println("\nErro ao listar produtos: " + e.getMessage() + "\n");
         }
-    }
-
-    public void mostrarDetalhesProduto(Scanner scanner, Produto produto) throws Exception {
-        exibirDetalhesProduto(scanner, produto);
     }
 
     private void exibirDetalhesProduto(Scanner scanner, Produto produto) throws Exception {

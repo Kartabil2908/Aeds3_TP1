@@ -67,24 +67,38 @@ public class ArquivoProduto extends Arquivo<Produto> {
     }
 
     public List<Produto> listarTodos() throws Exception {
+        // Faz varredura sequencial no arquivo para garantir que
+        // todos os registros ativos presentes no .db sejam listados,
+        // mesmo que alguma entrada no índice direto esteja ausente.
         List<Produto> produtos = new ArrayList<>();
-        RandomAccessFile arq = new RandomAccessFile(".\\data\\produtos\\produtos.db", "r");
-        
-        if (arq.length() == 0) {
-            arq.close();
-            return produtos;
-        }
 
-        arq.seek(0);
-        int ultimoID = arq.readInt();
-        arq.close();
+        try (RandomAccessFile arq = new RandomAccessFile(".\\data\\produtos\\produtos.db", "r")) {
+            if (arq.length() < 12) return produtos; // arquivo sem cabeçalho
 
-        for (int i = 1; i <= ultimoID; i++) {
-            Produto p = super.read(i);
-            if (p != null && p.isAtivo()) { // Apenas produtos ativos
-                produtos.add(p);
+            // Pula o cabeçalho: [int ultimoID][long cabecaListaExcluidos]
+            arq.seek(0);
+            arq.readInt();
+            arq.readLong();
+
+            while (arq.getFilePointer() < arq.length()) {
+                byte lapide = arq.readByte();
+                short tamanho = arq.readShort();
+
+                if (tamanho < 0) break; // sanidade
+
+                if (lapide == ' ') {
+                    byte[] ba = new byte[tamanho];
+                    arq.readFully(ba);
+                    Produto p = new Produto();
+                    p.fromByteArray(ba);
+                    if (p.isAtivo()) produtos.add(p);
+                } else {
+                    // Registro excluído: avança o ponteiro
+                    arq.skipBytes(tamanho);
+                }
             }
         }
+
         return produtos;
     }
 }
