@@ -1,15 +1,14 @@
 package src.presenteFacil.controller;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
 import src.presenteFacil.model.ArquivoListaProduto;
 import src.presenteFacil.model.ArquivoProduto;
 import src.presenteFacil.model.Lista;
 import src.presenteFacil.model.Produto;
 import src.presenteFacil.model.Usuario;
 import src.presenteFacil.utils.ClearConsole;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
 
 public class ControladorProduto {
 
@@ -28,7 +27,7 @@ public class ControladorProduto {
 
     public void cadastrarNovoProduto(Scanner scanner) {
 
-        System.out.println("-------- PresenteFácil 1.0 --------");
+        System.out.println("-------- PresenteFácil 2.0 --------");
         System.out.println("-----------------------------------");
         System.out.println("> Inicio > Produtos > Cadastrar\n");
 
@@ -68,7 +67,7 @@ public class ControladorProduto {
 
     public void buscarProdutoPorGtin(Scanner scanner, Usuario usuarioLogado) {
 
-        System.out.println("-------- PresenteFácil 1.0 --------");
+        System.out.println("-------- PresenteFácil 2.0 --------");
         System.out.println("-----------------------------------");
         System.out.println("> Inicio > Produtos > Buscar por GTIN\n");
 
@@ -105,7 +104,7 @@ public class ControladorProduto {
             boolean sair = false;
 
             while (!sair) {
-                System.out.println("------------ PresenteFácil 1.0 -----------");
+                System.out.println("------------ PresenteFácil 2.0 -----------");
                 System.out.println("------------------------------------------");
                 System.out.println("> Início > Produtos > Listagem\n");
 
@@ -169,7 +168,7 @@ public class ControladorProduto {
         
         while (true) {
 
-            System.out.println("------------- PresenteFácil 1.0 -------------");
+            System.out.println("------------- PresenteFácil 2.0 -------------");
             System.out.println("---------------------------------------------");
             System.out.println("> Início > Produtos > Listagem > " + produto.getNome() + "\n");
 

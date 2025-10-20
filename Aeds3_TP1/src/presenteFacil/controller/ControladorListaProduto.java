@@ -1,11 +1,8 @@
 package src.presenteFacil.controller;
 
+import java.util.*;
 import src.presenteFacil.model.*;
 import src.presenteFacil.utils.ClearConsole;
-import src.presenteFacil.controller.*;
-import src.presenteFacil.view.MenuMinhasListas;
-
-import java.util.*;
 
 public class ControladorListaProduto {
     private ArquivoListaProduto arqListaProduto; 
@@ -31,7 +28,7 @@ public class ControladorListaProduto {
 
         try{
             while(continua) {
-                System.out.println("-------- PresenteFácil 1.0 --------"); 
+                System.out.println("-------- PresenteFácil 2.0 --------"); 
                 System.out.println("-----------------------------------"); 
                 System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Produtos \n");
 
@@ -83,7 +80,7 @@ public class ControladorListaProduto {
             boolean continua = true;
 
             while (continua) {
-                System.out.println("-------- PresenteFácil 1.0 --------"); 
+                System.out.println("-------- PresenteFácil 2.0 --------"); 
                 System.out.println("-----------------------------------"); 
                 System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Produtos > " + produto.getNome() +"\n");
 
@@ -160,7 +157,7 @@ public class ControladorListaProduto {
 
     public void buscarProdutosPorGTIN(Scanner scanner, Lista lista) throws Exception {
         try {
-            System.out.println("-------- PresenteFácil 1.0 --------"); 
+            System.out.println("-------- PresenteFácil 2.0 --------"); 
             System.out.println("-----------------------------------"); 
             System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Produtos > Acrescentar produto > Buscar por GTIN \n");
 
@@ -246,7 +243,7 @@ public class ControladorListaProduto {
 
     public void acresentarProdutoLista(Scanner scanner, Lista lista) throws Exception {
 
-        System.out.println("-------- PresenteFácil 1.0 --------"); 
+        System.out.println("-------- PresenteFácil 2.0 --------"); 
         System.out.println("-----------------------------------"); 
         System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Produtos > Acrescentar produto \n");
 
@@ -332,7 +329,7 @@ public class ControladorListaProduto {
             produtos.sort(Comparator.comparing(Produto::getNome, String.CASE_INSENSITIVE_ORDER));
 
             while (!sair){
-                System.out.println("-------- PresenteFácil 1.0 --------"); 
+                System.out.println("-------- PresenteFácil 2.0 --------"); 
                 System.out.println("-----------------------------------"); 
                 System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Produtos > Acrescentar produto > Listagem \n");
 

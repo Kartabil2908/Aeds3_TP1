@@ -1,10 +1,9 @@
 package src.presenteFacil.view;
 
-import src.presenteFacil.controller.ControladorProduto;
-import src.presenteFacil.utils.ClearConsole;
-import src.presenteFacil.model.*;
-
 import java.util.Scanner;
+import src.presenteFacil.controller.ControladorProduto;
+import src.presenteFacil.model.*;
+import src.presenteFacil.utils.ClearConsole;
 
 public class MenuProdutos {
 
@@ -21,7 +20,7 @@ public class MenuProdutos {
         boolean continua = true;
 
         while (continua) {
-            System.out.println("-------- PresenteFácil 1.0 --------");
+            System.out.println("-------- PresenteFácil 2.0 --------");
             System.out.println("-----------------------------------");
             System.out.println("> Início > Produtos\n");
             System.out.println("(1) Buscar produtos por GTIN");

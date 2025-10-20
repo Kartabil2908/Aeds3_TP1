@@ -1,7 +1,6 @@
 package src.presenteFacil.controller;
 
 import java.util.Scanner;
-
 import src.presenteFacil.model.*;
 import src.presenteFacil.utils.ClearConsole;
 
@@ -22,7 +21,7 @@ public class ControladorUsuario {
     }
 
     public void criarNovoUsuario(Scanner scanner) {
-        System.out.println("-------- PresenteFácil 1.0 --------");
+        System.out.println("-------- PresenteFácil 2.0 --------");
         System.out.println("-----------------------------------");
         System.out.println("\n---------- Novo Usuário -----------");
         try {
@@ -54,7 +53,7 @@ public class ControladorUsuario {
     }
 
     public Usuario loginUsuario(Scanner scanner) {
-        System.out.println("-------- PresenteFácil 1.0 --------");
+        System.out.println("-------- PresenteFácil 2.0 --------");
         System.out.println("-----------------------------------");
         System.out.println("\n------------- Login ---------------");
         try {
@@ -90,7 +89,7 @@ public class ControladorUsuario {
             System.out.println("\n-- Nao ha usuario logado para desativar. --\n");
             return false;
         }
-        System.out.println("-------- PresenteFácil 1.0 --------");
+        System.out.println("-------- PresenteFácil 2.0 --------");
         System.out.println("-----------------------------------");
         System.out.println("\n------ Desativar Minha Conta ------");
         System.out.print("Tem certeza que deseja desativar sua conta? (S/N): ");
@@ -138,7 +137,7 @@ public class ControladorUsuario {
     }
 
     public void reativarUsuario(Scanner scanner) throws Exception {
-        System.out.println("-------- PresenteFácil 1.0 --------");
+        System.out.println("-------- PresenteFácil 2.0 --------");
         System.out.println("-----------------------------------");
         System.out.println("\n--------- Reativar Usuario --------");
         System.out.print("\nE-mail: ");
@@ -165,7 +164,7 @@ public class ControladorUsuario {
 
     // Meus dados + edição
     public void exibirDadosDoUsuarioLogado() {
-        System.out.println("-------- PresenteFácil 1.0 --------");
+        System.out.println("-------- PresenteFácil 2.0 --------");
         System.out.println("-----------------------------------");
         System.out.println("> Início > Meus Dados\n");
         if (this.usuarioLogado != null) {
@@ -182,7 +181,7 @@ public class ControladorUsuario {
         }
         boolean sair = false;
         while (!sair) {
-            System.out.println("-------- PresenteFácil 1.0 --------");
+            System.out.println("-------- PresenteFácil 2.0 --------");
             System.out.println("-----------------------------------");
             System.out.println("> Início > Meus Dados\n");
             System.out.println(this.usuarioLogado.toString());

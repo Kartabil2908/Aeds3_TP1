@@ -1,7 +1,6 @@
 package src.presenteFacil.view;
 
 import java.util.Scanner;
-
 import src.presenteFacil.controller.ControladorListaDePresentes;
 import src.presenteFacil.model.*;
 import src.presenteFacil.utils.ClearConsole;
@@ -75,7 +74,7 @@ public class MenuMinhasListas {
         boolean continua = true;
 
         while (continua) {
-            System.out.println("-------- PresenteFácil 1.0 --------"); 
+            System.out.println("-------- PresenteFácil 2.0 --------"); 
             System.out.println("-----------------------------------"); 
             System.out.println("> Início > Minhas Listas\n"); 
 
