@@ -340,11 +340,11 @@ public class ControladorProduto {
             boolean ok = arqProdutos.update(produto);
 
             ClearConsole.clearScreen();
-            
+
             if (ok) {
                 System.out.println("\n-- Produto reativado com sucesso! --\n");
             } else {
-                System.out.println("\n-- Nao foi possivel reativar o produto. --\n");
+                System.out.println("\n-- Não foi possível reativar o produto. --\n");
             }
         } catch (Exception e) {
             System.err.println("\nErro ao reativar produto: " + e.getMessage() + "\n");
