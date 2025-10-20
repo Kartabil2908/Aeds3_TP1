@@ -27,14 +27,24 @@ public class ControladorProduto {
     }
 
     public void cadastrarNovoProduto(Scanner scanner) {
+
         System.out.println("-------- PresenteFácil 1.0 --------");
         System.out.println("-----------------------------------");
         System.out.println("> Inicio > Produtos > Cadastrar\n");
+
         try {
             System.out.print("GTIN-13: ");
             String gtin13 = scanner.nextLine();
 
-            if (arqProdutos.read(gtin13) != null) {
+            // --- Verificação 1: GTIN deve ter exatamente 13 dígitos numéricos ---
+            if (!gtin13.matches("\\d{13}")) {
+                System.out.println("\n-- ERRO: GTIN-13 inválido. Deve conter exatamente 13 dígitos numéricos. --\n");
+                return;
+            }
+
+            // --- Verificação 2: GTIN já cadastrado ---
+            Produto existente = arqProdutos.read(gtin13);
+            if (existente != null) {
                 System.out.println("\n-- ERRO: Já existe um produto com o GTIN-13 informado. --\n");
                 return;
             }
