@@ -31,7 +31,17 @@ Este relatório descreve a segunda parte do Trabalho Prático da disciplina de A
 
 ### **Resumo**
 
-O presente trabalho detalha a evolução do "PresenteFácil", um sistema de gerenciamento de listas de presentes implementado na linguagem Java. Esta segunda fase do projeto, desenvolvida para a disciplina de Algoritmos e Estruturas de Dados III, foca na implementação de um relacionamento N:N (Muitos-para-Muitos) entre as entidades `Lista` e `Produto`. O sistema agora suporta um CRUD (Create, Read, Update, Delete) completo para `Produtos` e para a entidade associativa `ListaProduto`. Para garantir a eficiência no acesso aos dados, foram implementadas e utilizadas estruturas de indexação externas, notadamente a Hash Extensível e a Árvore B+. A Hash Extensível é utilizada para criar índices diretos e indiretos, enquanto a Árvore B+ foi empregada para materializar o relacionamento N:N, otimizando consultas complexas, como "em quais listas este produto aparece?" e "quais produtos estão nesta lista?". A arquitetura do sistema segue o padrão Model-View-Controller (MVC) e utiliza uma classe base `ArquivoIndexado` para gerenciar a persistência em arquivos.
+Este trabalho é a segunda fase de evolução do "PresenteFácil", um sistema de gerenciamento de listas de presentes em Java, desenvolvido para a disciplina de Algoritmos e Estruturas de Dados III.
+
+O foco principal foi implementar um relacionamento N:N  entre as entidades Lista e Produto. Para isso, o sistema agora oferece operações CRUD completas para Produtos e para a nova entidade de associação, ListaProduto.
+
+Para garantir um acesso eficiente aos dados, utilizamos estruturas de indexação externas:
+
+Hash Extensível: Usada para criar índices diretos e indiretos.
+
+Árvore B+: Empregada para materializar e otimizar o relacionamento N:N, acelerando consultas cruciais como "quais produtos estão nesta lista?" e "em quais listas este produto aparece?".
+
+A arquitetura geral do sistema segue o padrão Model-View-Controller (MVC) e utiliza uma classe base ArquivoIndexado para gerenciar a persistência em arquivos.
 
 **Palavras-chave:** Java, Estrutura de Dados, Hash Extensível, Árvore B+, CRUD, N:N, Persistência de Dados.
 
@@ -55,7 +65,15 @@ O presente trabalho detalha a evolução do "PresenteFácil", um sistema de gere
 
 ## 1\. INTRODUÇÃO
 
-O principal objetivo deste trabalho foi construir um sistema funcional que não dependesse de um banco de dados tradicional. Toda a persistência dos dados foi implementada diretamente em arquivos binários, gerenciados por meio de classes customizadas (`ArquivoIndexado`) que controlam a alocação de espaço, o tratamento de registros de tamanho variável e a reutilização de espaços liberados. A eficiência das operações de busca, inserção e remoção é garantida pelo uso de arquivos de índice baseados em Hash Extensível (para chaves primárias e secundárias únicas) e Árvore B+ (para materializar relacionamentos N:N).
+O principal objetivo deste trabalho foi desenvolver um sistema totalmente funcional que dispensasse o uso de um banco de dados tradicional.
+
+Toda a persistência de dados foi implementada diretamente em arquivos binários. Para isso, usamos classes customizadas (ArquivoIndexado) responsáveis por gerenciar a alocação de espaço, o controle de registros de tamanhos variáveis e a reutilização de espaços livres.
+
+A performance de operações cruciais (busca, inserção e remoção) é garantida pelo uso de arquivos de índice:
+
+Hash Extensível: Usado para chaves primárias e secundárias (únicas).
+
+Árvore B+: Essencial para materializar eficientemente os relacionamentos N:N.
 
 
 ## 2\. CHECKLIST DE REQUISITOS
@@ -66,39 +84,49 @@ A seguir, são apresentadas as respostas ao checklist proposto para a avaliaçã
 
 **Sim.** A classe `ArquivoProduto`, que herda da classe genérica `ArquivoIndexado`, é a responsável por gerenciar a persistência e indexação dos produtos.
 
-Sua estrutura inclui um índice indireto, uma `HashExtensivel`, para mapear um identificador textual único (como um código EAN ou SKU) do produto ao seu ID numérico interno. O construtor inicializa este índice e o método `create` é sobrescrito para garantir que, ao criar um produto, seu EAN e ID sejam devidamente registrados no índice.
+Sua estrutura inclui um índice indireto, uma `HashExtensivel`, para mapear um identificador textual único do produto ao seu ID numérico interno. O construtor inicializa este índice e o método `create` é sobrescrito para garantir que, ao criar um produto, seu GTIN e ID sejam devidamente registrados no índice.
 
 <br>
-<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
-
-**Figura 1**: *Evidência em Código: Estrutura, construtor e criação em `ArquivoProduto.java`. Fonte: Elaborado pelos autores.*
-
-<br>
-
-A principal vantagem desse índice é permitir a leitura de um produto diretamente pelo seu código EAN. O método `read(String ean)` utiliza o índice para encontrar o ID correspondente e, em seguida, chama o método de leitura por ID da classe pai.
-
-<br>
-<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
-
-**Figura 2**: *Evidência em Código: Leitura de produto por EAN. Fonte: Elaborado pelos autores.*
-
-<br>
-
-Para manter a integridade do índice, os métodos `delete` e `update` também são sobrescritos. Eles garantem que qualquer remoção ou alteração de um produto (principalmente do seu EAN) seja refletida no arquivo de índice.
-
-<br>
-<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
-
-**Figura 3**: *Evidência em Código: Manutenção do índice EAN nos métodos delete e update. Fonte: Elaborado pelos autores.*
+<p align="center">
+  <table align="center" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center" valign="top">
+        <img src="fig_readmeTP2/fig1.png" alt="Legenda da Imagem 1" width="350">
+        <br>
+        <b>Figura 1:</b> <i>Evidência em Código: Método cadastrarNovoProduto em ControladorProduto.java - Implementa o 'Create' do CRUD. A lógica de controle é responsável por receber os dados do usuário, validar o GTIN (verificando o formato e a duplicidade através de arqProdutos.read) e, por fim, invocar arqProdutos.create para persistir o novo produto. Fonte: Elaborado pelos autores. </i>
+      </td>
+      
+      <td width="20">&nbsp;</td> 
+      
+      <td align="center" valign="top">
+        <img src="fig_readmeTP2/fig2.png" alt="Legenda da Imagem 2" width="350">
+        <br>
+        <b>Figura 2:</b> <i> Evidência em Código: Método buscarProdutoPorGtin. Este método implementa a operação 'Read' do CRUD. Ele solicita o GTIN-13 ao usuário e invoca arqProdutos.read(gtin13). Esta chamada, por sua vez, utiliza o índice Hash Extensível (mapeando GTIN -> ID) para localizar o produto de forma eficiente, sem a necessidade de varrer o arquivo principal. Fonte: Elaborado pelos autores.</i>
+      </td>
+    </tr>
+  </table>
+</p>
 
 <br>
-
-A figura a seguir mostra a prova de execução da criação de um novo produto através do menu do sistema no terminal.
-
-<br>
-<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
-
-**Figura 4**: *Prova de Execução: Tela de criação de um novo produto. Fonte: Elaborado pelos autores.*
+<p align="center">
+  <table align="center" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center" valign="top">
+        <img src="fig_readmeTP2/fig3.png" alt="Legenda da Imagem 3" width="350">
+        <br>
+        <b>Figura3:</b> <i>Evidência em Código: Método alterarDadosProduto. Este método implementa a operação 'Update' do CRUD. Ele permite ao usuário modificar os dados de um produto (como descrição ou GTIN). Ao final, ele invoca arqProdutos.update(produto). A camada de persistência (ArquivoProduto) é responsável por sobrescrever o registro no arquivo e, crucialmente, atualizar o índice Hash Extensível caso a chave (GTIN-13) tenha sido alterada, garantindo a integridade do índice. Fonte: Elaborado pelos autores.</i>
+      </td>
+      
+      <td width="20">&nbsp;</td> 
+      
+      <td align="center" valign="top">
+        <img src="fig_readmeTP2/fig4.png" alt="Legenda da Imagem 4" width="350">
+        <br>
+        <b>Figura 4:</b> <i>Evidência em Código: Método inativarProduto. Este método implementa a operação 'Delete' (lógica) do CRUD, conforme especificado nos requisitos do trabalho. Em vez de uma exclusão física, o produto é marcado como inativo (produto.setAtivo(false)). Em seguida, o método arqProdutos.update(produto) é chamado para persistir essa alteração de estado no arquivo, ocultando o produto de listagens futuras, mas mantendo a integridade referencial para listas antigas. Fonte: Elaborado pelos autores.</i>
+      </td>
+    </tr>
+  </table>
+</p>
 
 <br>
 
@@ -173,10 +201,10 @@ Isso garante que não haja registros "órfãos" na entidade associativa `ListaPr
 
 ### 2.6 O trabalho compila corretamente?
 
-**Sim.** O trabalho foi desenvolvido em Java e compila sem erros ou *warnings* utilizando o JDK 17. Todas as dependências externas (como a biblioteca NanoID, se utilizada) estão corretamente configuradas.
+**Sim.** O trabalho foi desenvolvido em Java e compila sem erros ou *warnings* utilizando o JDK 17. Todas as dependências externas estão corretamente configuradas.
 
 <br>
-<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
+<p align="center"><img src="fig_readmeTP2/compilacao.png"  width="400"></p>
 
 **Figura 11**: *Prova de Execução: Compilação. Fonte: Elaborado pelos autores.*
 
