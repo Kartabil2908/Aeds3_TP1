@@ -291,8 +291,10 @@ public class ControladorListaDePresentes {
                         System.out.println("\n-- Formato de data inválido. Tente novamente. --\n");
                     }
                 }
+                
             }
-            
+            ClearConsole.clearScreen();
+
             if (arqListas.update(lista)) {
                 System.out.println("\n-- Lista alterada com sucesso! --\n");
             } else {

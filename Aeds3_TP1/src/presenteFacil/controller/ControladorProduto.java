@@ -305,19 +305,23 @@ public class ControladorProduto {
     }
 
     private void inativarProduto(Scanner scanner, Produto produto) {
+
         try {
-            System.out.print("\nVoce tem certeza que deseja inativar este produto? (S/N): ");
+            System.out.print("\nVocê tem certeza que deseja inativar este produto? (S/N): ");
             String conf = scanner.nextLine().trim().toUpperCase();
             if (!"S".equals(conf)) {
-                System.out.println("\n-- Operacao cancelada. --\n");
+                System.out.println("\n-- Operação cancelada. --\n");
                 return;
             }
             produto.setAtivo(false);
             boolean ok = arqProdutos.update(produto);
+
+            ClearConsole.clearScreen();
+
             if (ok) {
                 System.out.println("\n-- Produto inativado com sucesso! --\n");
             } else {
-                System.out.println("\n-- Nao foi possivel inativar o produto. --\n");
+                System.out.println("\n-- Não foi possivel inativar o produto. --\n");
             }
         } catch (Exception e) {
             System.err.println("\nErro ao inativar produto: " + e.getMessage() + "\n");
@@ -326,14 +330,17 @@ public class ControladorProduto {
 
     private void reativarProduto(Scanner scanner, Produto produto) {
         try {
-            System.out.print("\nVoce tem certeza que deseja reativar este produto? (S/N): ");
+            System.out.print("\nVocê tem certeza que deseja reativar este produto? (S/N): ");
             String conf = scanner.nextLine().trim().toUpperCase();
             if (!"S".equals(conf)) {
-                System.out.println("\n-- Operacao cancelada. --\n");
+                System.out.println("\n-- Operação cancelada. --\n");
                 return;
             }
             produto.setAtivo(true);
             boolean ok = arqProdutos.update(produto);
+
+            ClearConsole.clearScreen();
+            
             if (ok) {
                 System.out.println("\n-- Produto reativado com sucesso! --\n");
             } else {
