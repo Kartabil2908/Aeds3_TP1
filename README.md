@@ -170,9 +170,22 @@ A prova de execução abaixo demonstra a tela de detalhes de um produto, listand
 Quando um usuário seleciona "Gerenciar Lista", o sistema consulta esta árvore B+ usando o `idLista` e obtém todos os registros `ListaProduto` associados. A partir desses registros, o sistema recupera os `idProduto` correspondentes, busca os dados de cada produto em `ArquivoProduto` e exibe a lista completa de produtos e suas quantidades para o usuário, permitindo a edição e remoção.
 
 <br>
-<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
+<p align="center">
+  <img src="fig_readmeTP2/fig9.png" alt="Código de consulta à Árvore B+ (idLista -> idListaProduto)" width="600">
+  <br>
+  <b>Figura 9:</b> <i>Evidência em Código: Uso da Árvore B+ (`listaListaProduto`) no método `getProdutosByListaId` em `ArquivoListaProduto.java` para implementar a visão Lista -> Produtos. Fonte: Elaborado pelos autores.</i>
+</p>
+<br>
 
-**Figura 9**: *Prova de Execução: Visão de Listas. Fonte: Elaborado pelos autores.*
+A prova de execução abaixo demonstra o menu de gerenciamento de produtos dentro de uma lista específica.
+
+<br>
+<p align="center">
+  <img src="fig_readmeTP2/fig6.png" alt="Menu de gerenciamento de produtos dentro de uma lista" width="450">
+  <br>
+  <b>Figura 10:</b> <i>Prova de Execução: Visão de Listas, mostrando os produtos associados e permitindo a gestão (adicionar/remover/editar quantidade). (Esta é a mesma tela da Figura 6, pois demonstra ambos os requisitos). Fonte: Elaborado pelos autores.</i>
+</p>
+<br>
 
 ### 2.5 A integridade do relacionamento entre listas e produtos está mantida em todas as operações?
 
