@@ -188,9 +188,9 @@ public class ControladorUsuario {
             System.out.println(this.usuarioLogado.toString());
             System.out.println("(1) Alterar meus dados");
             System.out.println("(R) Retornar");
-            System.out.print("\nOpcao: ");
-            String op = scanner.nextLine().trim().toUpperCase();
+            System.out.print("\nOpção: ");
 
+            String op = scanner.nextLine().trim().toUpperCase();
             ClearConsole.clearScreen();
 
             switch (op) {
@@ -201,7 +201,7 @@ public class ControladorUsuario {
                     sair = true;
                     break;
                 default:
-                    System.out.println("\n-- Opcao invalida. --\n");
+                    System.out.println("\n-- Opção inválida. --\n");
             }
         }
     }
@@ -219,9 +219,9 @@ public class ControladorUsuario {
             System.out.println("(4) Pergunta Secreta");
             System.out.println("(5) Resposta Secreta");
             System.out.println("(R) Retornar");
-            System.out.print("\nOpcao: ");
-            String op = scanner.nextLine().trim().toUpperCase();
+            System.out.print("\nOpção: ");
 
+            String op = scanner.nextLine().trim().toUpperCase();
             ClearConsole.clearScreen();
 
             try {

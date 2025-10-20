@@ -53,6 +53,9 @@ public class MenuMinhasListas {
                 default:
                     if(isNumber(opcao)){ 
                         int indice = Integer.parseInt(opcao); 
+
+                        ClearConsole.clearScreen();
+
                         System.out.println("\n[Selecionou a lista " + indice + "]\n"); 
 
                         if(listas != null && indice > 0 && indice <= listas.length){ 
@@ -84,6 +87,7 @@ public class MenuMinhasListas {
             System.out.print("\nOpção: "); 
 
             opcao = scanner.nextLine().trim().toUpperCase(); 
+            ClearConsole.clearScreen();
 
             switch (opcao) {
                 case "R":

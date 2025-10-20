@@ -214,6 +214,8 @@ public class ControladorListaDePresentes {
 
                 opcao = scanner.nextLine().trim().toUpperCase();
 
+                ClearConsole.clearScreen();
+
                 switch (opcao) {
                     case "1":
                         controladorListaProduto.gerenciarProdutoLista(scanner, lista, usuarioLogado);

@@ -187,6 +187,9 @@ public class ControladorProduto {
             System.out.print("\nOpção: ");
 
             String opcao = scanner.nextLine().trim().toUpperCase();
+
+            ClearConsole.clearScreen();
+
             switch (opcao) {
                 case "1":
                     alterarDadosProduto(scanner, produto);
@@ -227,37 +230,42 @@ public class ControladorProduto {
                 System.out.print("\nOpção: ");
                 String op = scanner.nextLine().trim().toUpperCase();
 
+                ClearConsole.clearScreen();
+
                 switch (op) {
                     case "1": {
-                        System.out.println("\nDescricao atual: " + produto.getDescricao());
-                        System.out.print("Nova descricao: ");
+                        System.out.println("\nDescrição atual: " + produto.getDescricao());
+                        System.out.print("\nNova descrição: ");
                         String novaDescricao = scanner.nextLine();
                         if (!novaDescricao.trim().isEmpty()) {
                             produto.setDescricao(novaDescricao);
                             boolean ok = arqProdutos.update(produto);
-                            if (ok) System.out.println("\n-- Descricao alterada com sucesso! --\n");
-                            else System.out.println("\n-- Nao foi possivel alterar a descricao. --\n");
+                            if (ok) System.out.println("\n-- Descrição alterada com sucesso! --\n");
+                            else System.out.println("\n-- Não foi possível alterar a descrição. --\n");
                         } else {
-                            System.out.println("\n-- Nenhuma alteracao realizada. --\n");
+                            System.out.println("\n-- Nenhuma alteração realizada. --\n");
                         }
+
+                        ClearConsole.clearScreen();
+
                         break;
                     }
                     case "2": {
                         System.out.println("\nGTIN-13 atual: " + produto.getGtin13());
-                        System.out.print("Novo GTIN-13 (13 digitos): ");
+                        System.out.print("\nNovo GTIN-13 (13 digitos): ");
                         String novoGtin = scanner.nextLine().trim();
                         if (novoGtin.isEmpty()) {
-                            System.out.println("\n-- Nenhuma alteracao realizada. --\n");
+                            System.out.println("\n-- Nenhuma alteração realizada. --\n");
                             break;
                         }
                         if (!novoGtin.matches("\\d{13}")) {
-                            System.out.println("\n-- GTIN-13 invalido. Deve conter 13 digitos. --\n");
+                            System.out.println("\n-- GTIN-13 inválido. Deve conter 13 dígitos. --\n");
                             break;
                         }
                         try {
                             Produto existente = arqProdutos.read(novoGtin);
                             if (existente != null && existente.getID() != produto.getID()) {
-                                System.out.println("\n-- Ja existe um produto com esse GTIN-13. --\n");
+                                System.out.println("\n-- Já existe um produto com esse GTIN-13. --\n");
                                 break;
                             }
                         } catch (Exception ignored) { }
@@ -270,7 +278,7 @@ public class ControladorProduto {
                             System.err.println("\nErro ao atualizar GTIN: " + e.getMessage() + "\n");
                         }
                         if (ok) System.out.println("\n-- GTIN-13 alterado com sucesso! --\n");
-                        else System.out.println("\n-- Nao foi possivel alterar o GTIN-13. --\n");
+                        else System.out.println("\n-- Não foi possível alterar o GTIN-13. --\n");
                         break;
                     }
                     case "R":

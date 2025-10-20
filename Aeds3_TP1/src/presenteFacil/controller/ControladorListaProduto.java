@@ -24,6 +24,7 @@ public class ControladorListaProduto {
     }
 
     public void gerenciarProdutoLista(Scanner scanner, Lista lista, Usuario usuarioLogado) throws Exception{
+
         setUsuario(usuarioLogado);
         String opcao;
         boolean continua = true;
@@ -44,13 +45,15 @@ public class ControladorListaProduto {
 
                 opcao = scanner.nextLine().trim().toUpperCase();
 
+                ClearConsole.clearScreen();
+
                 switch (opcao) {
                     case "R":
                         System.out.println("\n-- Retornando ao menu anterior. --\n");
                         continua = false;
                         break;
                     case "A":
-                        System.out.println("\n-- vai ser acresentada. --\n");
+                        System.out.println("\n-- Há ser acresentada. --\n");
                         acresentarProdutoLista(scanner, lista);
                         continua = false;
                         break;
@@ -62,15 +65,15 @@ public class ControladorListaProduto {
                             if(produtos != null && indice > 0 && indice <= produtos.length){ 
                                 mostrarDetalhesListaProduto(scanner, lista, produtos[indice - 1]); 
                             } else { 
-                                System.out.println("\nOpição Invalida. Tente novamente.\n");
+                                System.out.println("\nOpção Inválida. Tente novamente.\n");
                             } 
                         }else{
-                            System.out.println("\nOpição Invalida. Tente novamente.\n");
+                            System.out.println("\nOpção Inválida. Tente novamente.\n");
                         }
                 }
             }
         } catch (Exception e) {
-            System.err.println("\nOcorreu um erro ao Gerenciar os produtos da lista: " + e.getMessage() + "\n");
+            System.err.println("\nOcorreu um erro ao gerenciar os produtos da lista: " + e.getMessage() + "\n");
         }
     }
 
@@ -114,7 +117,7 @@ public class ControladorListaProduto {
                     case "R":
                         return;
                     default:
-                        System.out.println("\n-- Opcao invalida. --\n");
+                        System.out.println("\n-- Opção inválida. --\n");
                 }
             }
         } catch (Exception e) {
@@ -130,6 +133,8 @@ public class ControladorListaProduto {
             while (continua) {
                 System.out.print("Deseja deletar esse produto da lista? (S/N): ");
                 opcao = scanner.nextLine().trim().toUpperCase();
+
+                ClearConsole.clearScreen();
 
                 if (opcao.equals("S")) {
                     boolean result = arqListaProduto.delete(listaProduto.getId());
@@ -153,7 +158,7 @@ public class ControladorListaProduto {
         return false;
     }
 
-    public void buscarProdutorPorGtin(Scanner scanner, Lista lista) throws Exception {
+    public void buscarProdutosPorGTIN(Scanner scanner, Lista lista) throws Exception {
         try {
             System.out.println("-------- PresenteFácil 1.0 --------"); 
             System.out.println("-----------------------------------"); 
@@ -173,14 +178,18 @@ public class ControladorListaProduto {
 
             if(estaNaLista){
                 System.out.println("\n--- Projduto já está cadastrado na lista! ---\n");
+                ClearConsole.clearScreen();
                 return;
             }
 
             Produto produto = arqProduto.read(gtin13);
 
             if (produto == null) {
+                ClearConsole.clearScreen();
                 System.out.println("\n-- Nenhum produto encontrado com este GTIN-13. --\n");
-            } else {
+            } 
+            
+            else {
                 System.out.println("\n------------- Detalhes do Produto ---------------\n");
                 System.out.println(produto);
                 System.out.println("\n-------------------------------------------------\n");
@@ -193,7 +202,7 @@ public class ControladorListaProduto {
                     quantidade = scanner.nextInt();
 
                     if(quantidade < 1){
-                        System.out.println("--- A quantidade não pode ser menor ou igual a zero! ---");
+                        System.out.println("\n--- A quantidade não pode ser menor ou igual a zero! ---\n");
                     }
                     continua = false;
                 }
@@ -208,17 +217,22 @@ public class ControladorListaProduto {
                 continua = true;
 
                 while (continua) {
-                    System.out.print("Deseja acrescentar esse produto à lista? (S/N): ");
+                    System.out.print("\nDeseja acrescentar esse produto à lista? (S/N): ");
                     opcao = scanner.nextLine().trim().toUpperCase();
 
+                    ClearConsole.clearScreen();
+
                     if (opcao.equals("S")) {
-                        System.out.println("Produto adicionado à lista com sucesso!");
+                        System.out.println("\nProduto adicionado à lista com sucesso!\n");
                         continua = false;
+
                     } else if (opcao.equals("N")) {
-                        System.out.println("Produto não foi adicionado à lista.");
+                        System.out.println("\nProduto não foi adicionado à lista.\n");
                         return;
-                    } else {
-                        System.out.println("Entrada inválida. Por favor, digite 'S' para sim ou 'N' para não.");
+                    } 
+                    
+                    else {
+                        System.out.println("\nEntrada inválida. Por favor, digite 'S' para sim ou 'N' para não.\n");
                     }
                 }
 
@@ -231,9 +245,10 @@ public class ControladorListaProduto {
     }  
 
     public void acresentarProdutoLista(Scanner scanner, Lista lista) throws Exception {
+
         System.out.println("-------- PresenteFácil 1.0 --------"); 
         System.out.println("-----------------------------------"); 
-        System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Protudos > Acrescentar produto \n");
+        System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Produtos > Acrescentar produto \n");
 
         String opcao;
         boolean continua = true;
@@ -249,9 +264,11 @@ public class ControladorListaProduto {
 
                 opcao = scanner.nextLine().trim().toUpperCase();
 
+                ClearConsole.clearScreen();
+
                 switch (opcao) {
                     case "1": //busca por GTIN
-                        buscarProdutorPorGtin(scanner, lista);
+                        buscarProdutosPorGTIN(scanner, lista);
                         continua = false;
                         break;
                     case "2": // listagem 
@@ -264,7 +281,7 @@ public class ControladorListaProduto {
                         continua = false;
                         break;
                     default:
-                        System.out.println("\nOpição Invalida. Tente novamente.\n");
+                        System.out.println("\nOpção Inválida. Tente novamente.\n");
                 }
             }
         } catch (Exception e) {
@@ -317,7 +334,7 @@ public class ControladorListaProduto {
             while (!sair){
                 System.out.println("-------- PresenteFácil 1.0 --------"); 
                 System.out.println("-----------------------------------"); 
-                System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Protudos > Acrescentar produto > Listagem \n");
+                System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Produtos > Acrescentar produto > Listagem \n");
 
                 int totalPaginas = (int) Math.ceil((double) produtos.size() / ITENS_POR_PAGINA);
                 System.out.println("Pagina " + (paginaAtual + 1) + " de " + totalPaginas);
@@ -330,12 +347,15 @@ public class ControladorListaProduto {
                     System.out.println("(" + (i + 1) + ") " + produtos.get(i).getNome());
                 }
 
-                System.out.println("\nDigite o numero para ver detalhes");
+                System.out.println("\nEscolha uma opção para ver mais detalhes:\n");
                 System.out.println("(P) Proxima pagina");
                 System.out.println("(A) Pagina anterior");
                 System.out.println("(R) Retornar ao menu anterior");
-                System.out.print("\nOpcao: ");
+                System.out.print("\nOpção: ");
+
                 String opcao = scanner.nextLine().trim().toUpperCase();
+
+                ClearConsole.clearScreen();
 
                 switch (opcao) {
                     case "P":
@@ -355,10 +375,10 @@ public class ControladorListaProduto {
                                 Produto selecionado = produtos.get(indiceEscolhido); 
                                 acrescentarPorListagemDeProdutos(scanner, lista, selecionado);
                             } else {
-                                System.out.println("\n-- Numero fora da pagina atual. --\n");
+                                System.out.println("\n-- Número fora da página atual. --\n");
                             }
                         } catch (NumberFormatException nf) {
-                            System.out.println("\n-- Opcao invalida. --\n");
+                            System.out.println("\n-- Opção inválida. --\n");
                         }
                         break;
                 }
@@ -388,9 +408,9 @@ public class ControladorListaProduto {
             if (produto == null) {
                 System.out.println("\n-- Nenhum produto encontrado com este GTIN-13. --\n");
             } else {
-                System.out.println("\n-------- Detalhes do Produto --------\n");
+                System.out.println("\n-------------- Detalhes do Produto --------------\n");
                 System.out.println(produto);
-                System.out.println("-------------------------------------\n");
+                System.out.println("\n---------------------------------------------------\n");
 
                 boolean continua = true;
                 int quantidade = 1;
@@ -400,7 +420,7 @@ public class ControladorListaProduto {
                     quantidade = scanner.nextInt();
 
                     if(quantidade < 1){
-                        System.out.println("--- A quantidade não pode ser menor ou igual a zero! ---");
+                        System.out.println("\n--- A quantidade não pode ser menor ou igual a zero! ---\n");
                     }
                     continua = false;
                 }
@@ -418,14 +438,18 @@ public class ControladorListaProduto {
                     System.out.print("Deseja acrescentar esse produto à lista? (S/N): ");
                     opcao = scanner.nextLine().trim().toUpperCase();
 
+                    ClearConsole.clearScreen();
+
                     if (opcao.equals("S")) {
-                        System.out.println("Produto adicionado à lista com sucesso!");
+                        System.out.println("\nProduto adicionado à lista com sucesso!\n");
                         continua = false;
-                    } else if (opcao.equals("N")) {
-                        System.out.println("Produto não foi adicionado à lista.");
+                    } 
+                    
+                    else if (opcao.equals("N")) {
+                        System.out.println("\nProduto não foi adicionado à lista.\n");
                         return;
                     } else {
-                        System.out.println("Entrada inválida. Por favor, digite 'S' para sim ou 'N' para não.");
+                        System.out.println("\nEntrada inválida. Por favor, digite 'S' para sim ou 'N' para não.\n");
                     }
                 }
 
@@ -441,22 +465,28 @@ public class ControladorListaProduto {
         boolean continua = true;
 
         while(continua){
-            System.out.print("Digite a nova quantidade: ");
+            System.out.print("\nDigite a nova quantidade: ");
             int quantidade = scanner.nextInt();
+
             if(quantidade < 1){
-                System.out.println("--- A quantidade não pode ser menor ou igual a zero! ---");
+                System.out.println("\n--- A quantidade não pode ser menor ou igual a zero! ---\n");
+                ClearConsole.clearScreen();
             }
+
             listaProduto.setQuantidade(quantidade);
             continua = false;
         }
     }
 
     public void mudarObservacoes(Scanner scanner, ListaProduto listaProduto){
-        System.out.print("Digite aas novas observações: ");
+
+        System.out.print("\nDigite as novas observações: ");
         String observacoes = scanner.nextLine();
         if(!observacoes.equals(" ")){
             listaProduto.setObservacoes(observacoes);
         }
+
+        ClearConsole.clearScreen();
     }
 
     public boolean isNumber(String str) {
