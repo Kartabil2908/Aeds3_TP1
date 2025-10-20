@@ -6,7 +6,7 @@
 <h3 align="center">Instituto de Ciências Exatas e de Informática</h3>
 <h3 align="center">Curso de Ciência da Computação</h3>
 
------
+<br>
 
 # Relatório Trabalho Prático 02
 
