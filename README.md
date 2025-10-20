@@ -1,9 +1,6 @@
-<p align="center"\>
-  <img src="fig\_readmeTP2/brasao.jpg" alt="Brasão PUC Minas" width="150"\>
-</p\>
-
-<div align="center"\>
- 
+<p align="center">
+  <img src="fig_readmeTP2/brasao.jpg" alt="Brasão PUC Minas" width="150">
+</p>
 
 # PONTIFÍCIA UNIVERSIDADE CATÓLICA DE MINAS GERAIS
 
@@ -75,7 +72,10 @@ A seguir, são apresentadas as respostas ao checklist proposto para a avaliaçã
 
 Sua estrutura inclui um índice indireto, uma `HashExtensivel`, para mapear um identificador textual único (como um código EAN ou SKU) do produto ao seu ID numérico interno. O construtor inicializa este índice e o método `create` é sobrescrito para garantir que, ao criar um produto, seu EAN e ID sejam devidamente registrados no índice.
 
-**Figura 6**: *Evidência em Código: Estrutura, construtor e criação em `ArquivoProduto.java`. Fonte: Elaborado pelos autores.*
+<br>
+<img src="fig_readmeTP2/brasao.jpg"  width="200">
+
+**Figura 1**: *Evidência em Código: Estrutura, construtor e criação em `ArquivoProduto.java`. Fonte: Elaborado pelos autores.*
 
 <br>
 
