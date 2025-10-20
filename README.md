@@ -1,193 +1,163 @@
-<p align="center">
-  <img src="figuras_readme/brasao.jpg" alt="Brasão PUC Minas" width="150"/>
-</p>
+\<p align="center"\>
+  \<img src="fig\_readmeTP2/brasao.jpg" alt="Brasão PUC Minas" width="150"/\>
+\</p\>
 
-<div align="center">
-  
+\<div align="center"\>
+ 
+
 # PONTIFÍCIA UNIVERSIDADE CATÓLICA DE MINAS GERAIS
-### Instituto de Ciências Exatas e de Informática
-### Curso de Ciência da Computação
----
-</div>
 
-# Relatório Trabalho Prático 01
+### Instituto de Ciências Exatas e de Informática
+
+### Curso de Ciência da Computação
+
+-----
+
+\</div\>
+
+# Relatório Trabalho Prático 02
+
 ## Algoritmos e Estruturas de Dados III
 
-Este relatório descreve a primeira parte do Trabalho Prático da disciplina de AEDS III.
+Este relatório descreve a segunda parte do Trabalho Prático da disciplina de AEDS III.
 
 <br>
 
 ### Autores
 
-* **Bernardo Ladeira Kartabil**
-    * `bernardo.kartabil@sga.pucminas.br`
-* **Marcella Santos Belchior**
-    * `marcella.belchior@sga.pucminas.br`
-* **Thiago Henrique Gomes Feliciano**
-    * `1543790@sga.pucminas.br`
-* **Yasmin Torres Moreira dos Santos**
-    * `yasmin.santos.1484596@sga.pucminas.br`
+  * **Bernardo Ladeira Kartabil**
+       \* `bernardo.kartabil@sga.pucminas.br`
+  * **Marcella Santos Belchior**
+      \* `marcella.belchior@sga.pucminas.br`
+  * **Thiago Henrique Gomes Feliciano**
+      \* `1543790@sga.pucminas.br`
+  * **Yasmin Torres Moreira dos Santos**
+      \* `yasmin.santos.1484596@sga.pucminas.br`
 
----
+-----
 
 ### **Resumo**
 
-O presente trabalho detalha o desenvolvimento do "PresenteFácil", um sistema de gerenciamento de listas de presentes implementado na linguagem Java. O projeto foi concebido como parte da disciplina de Algoritmos e Estruturas de Dados III, com o objetivo principal de aplicar conceitos avançados de persistência de dados e indexação em arquivos. O sistema suporta um CRUD (Create, Read, Update, Delete) completo para as entidades de Usuários e Listas de Presentes. Para garantir a eficiência no acesso aos dados, foram implementadas e utilizadas estruturas de indexação externas, notadamente a Hash Extensível e a Árvore B+. A Hash Extensível é utilizada para criar índices diretos e indiretos, permitindo buscas rápidas por chaves primárias (ID) e secundárias (e-mail, código da lista). A Árvore B+ foi empregada para materializar o relacionamento 1:N entre usuários e suas respectivas listas, otimizando a consulta de "minhas listas". A arquitetura do sistema segue o padrão Model-View-Controller (MVC), separando a lógica de dados, a interface com o usuário (via console) e as regras de negócio.
+O presente trabalho detalha a evolução do "PresenteFácil", um sistema de gerenciamento de listas de presentes implementado na linguagem Java. Esta segunda fase do projeto, desenvolvida para a disciplina de Algoritmos e Estruturas de Dados III, foca na implementação de um relacionamento N:N (Muitos-para-Muitos) entre as entidades `Lista` e `Produto`. O sistema agora suporta um CRUD (Create, Read, Update, Delete) completo para `Produtos` e para a entidade associativa `ListaProduto`. Para garantir a eficiência no acesso aos dados, foram implementadas e utilizadas estruturas de indexação externas, notadamente a Hash Extensível e a Árvore B+. A Hash Extensível é utilizada para criar índices diretos e indiretos (ex: busca de produto por código EAN), enquanto a Árvore B+ foi empregada para materializar o relacionamento N:N, otimizando consultas complexas, como "em quais listas este produto aparece?" e "quais produtos estão nesta lista?". A arquitetura do sistema segue o padrão Model-View-Controller (MVC) e utiliza uma classe base `ArquivoIndexado` para gerenciar a persistência em arquivos.
 
-**Palavras-chave:** Java, Estrutura de Dados, Hash Extensível, Árvore B+, CRUD, Persistência de Dados.
+**Palavras-chave:** Java, Estrutura de Dados, Hash Extensível, Árvore B+, CRUD, N:N, Persistência de Dados.
 
----
+-----
 
 ## Sumário
-1.  [INTRODUÇÃO](#1-introdução)
-2.  [DESENVOLVIMENTO](#2-desenvolvimento)
-    * [Estruturas de Dados e Persistência](#21-estruturas-de-dados-e-persistência)
-3.  [CHECKLIST DE REQUISITOS](#3-checklist-de-requisitos)
-    * [CRUD de usuários](#31-há-um-crud-de-usuários-que-funciona-corretamente)
-    * [CRUD de listas](#32-há-um-crud-de-listas-que-funciona-corretamente)
-    * [Árvore B+ para relacionamento 1:N](#33-há-uma-árvore-b-que-registre-o-relacionamento-1n-entre-usuários-e-listas)
-    * [Visualização de listas por NanoID](#34-há-uma-visualização-das-listas-por-meio-de-um-código-nanoid)
-    * [Sistema completo e funcional](#35-o-trabalho-está-completo-e-funcionando-sem-erros-de-execução)
-    * [Originalidade do trabalho](#36-o-trabalho-é-original-e-não-a-cópia-de-um-trabalho-de-outro-grupo)
-4.  [CONCLUSÃO](#4-conclusão)
-5.  [REFERÊNCIAS](#referências)
 
----
+1.  [INTRODUÇÃO]
+2.  [DESENVOLVIMENTO]
+      * [Estruturas de Dados e Persistência]
+3.  [CHECKLIST DE REQUISITOS]
+      * [3.1 CRUD de produtos]
+      * [3.2 CRUD de ListaProduto]
+      * [3.3 Visão de produtos]
+      * [3.4 Visão de listas]
+      * [3.5 Integridade do relacionamento]
+      * [3.6 Compila corretamente]
+      * [3.7 Completo e funcionando]
+      * [3.8 Originalidade do trabalho]
+4.  [CONCLUSÃO]
 
-## 1. INTRODUÇÃO
-O desenvolvimento de sistemas que manipulam grandes volumes de dados de forma eficiente é um desafio central na engenharia de software. A escolha de estruturas de dados adequadas para armazenamento e recuperação de informações em memória secundária é fundamental para o desempenho e a escalabilidade de uma aplicação.
+-----
 
-Neste contexto, o projeto "PresenteFácil" foi desenvolvido para aplicar na prática as teorias de organização de arquivos e estruturas de dados avançadas. O sistema simula uma aplicação real onde usuários podem se cadastrar, criar múltiplas listas de presentes para diferentes ocasiões e compartilhá-las com outras pessoas por meio de um código único.
+## 1\. INTRODUÇÃO
 
-O principal objetivo deste trabalho foi construir um sistema funcional que não dependesse de um banco de dados tradicional. Em vez disso, toda a persistência dos dados foi implementada diretamente em arquivos binários, gerenciados por meio de classes customizadas que controlam a alocação de espaço, o tratamento de registros de tamanho variável e a reutilização de espaços liberados por registros excluídos. A eficiência das operações de busca, inserção e remoção é garantida pelo uso de arquivos de índice baseados em Hash Extensível e Árvore B+.
+O principal objetivo deste trabalho foi construir um sistema funcional que não dependesse de um banco de dados tradicional. Toda a persistência dos dados foi implementada diretamente em arquivos binários, gerenciados por meio de classes customizadas (`ArquivoIndexado`) que controlam a alocação de espaço, o tratamento de registros de tamanho variável e a reutilização de espaços liberados. A eficiência das operações de busca, inserção e remoção é garantida pelo uso de arquivos de índice baseados em Hash Extensível (para chaves primárias e secundárias únicas) e Árvore B+ (para materializar relacionamentos N:N).
 
-## 2. DESENVOLVIMENTO
-O sistema foi estruturado seguindo o padrão arquitetural Model-View-Controller (MVC) para promover a organização e a manutenibilidade do código. Além disso, foi criado um pacote específico (`aeds3`) para abrigar as estruturas de dados genéricas.
 
-### 2.1 Estruturas de Dados e Persistência
-A persistência de dados é o núcleo técnico do trabalho. Foi implementada uma solução de armazenamento baseada em arquivos de acesso aleatório (`RandomAccessFile`).
+## 2\. CHECKLIST DE REQUISITOS
 
-#### 2.1.1 Arquivo.java
-Esta é uma classe genérica que serve como base para a persistência de qualquer registro. Dada a sua complexidade, a análise da classe será dividida em partes. A estrutura fundamental inclui os atributos de controle e o construtor que inicializa o índice direto. O método `create` lida com a inserção e reutilização de espaço.
-
-O método de leitura utiliza o índice primário para encontrar o endereço do registro e o lê, retornando o objeto. Já o método de exclusão localiza o registro, marca o espaço com uma lápide ("*") e gerencia a lista de espaços vazios para futura reutilização.
-
-Por fim, o método `update` controla a atualização de registros, realocando-os quando necessário.
-
-![Estrutura e construtor da classe Arquivo.java](figuras_readme/Figura1.png)
-**Figura 1**: *Estrutura e construtor da classe `Arquivo.java`. Fonte: Elaborado pelos autores.*
-
-<br>
-
-![Lógica de criação de registros em Arquivo.java](figuras_readme/Figura2.png)
-**Figura 2**: *Lógica de criação de registros em `Arquivo.java`. Fonte: Elaborado pelos autores.*
-
-<br>
-
-![Método de leitura em Arquivo.java](figuras_readme/Figura3.png)
-**Figura 3**: *Método de leitura em `Arquivo.java`. Fonte: Elaborado pelos autores.*
-
-<br>
-
-![Método de exclusão em Arquivo.java](figuras_readme/Figura4.png)
-**Figura 4**: *Método de exclusão em `Arquivo.java`. Fonte: Elaborado pelos autores.*
-
-<br>
-
-![Lógica de atualização de registros em Arquivo.java](figuras_readme/Figura5.png)
-**Figura 5**: *Lógica de atualização de registros em `Arquivo.java`. Fonte: Elaborado pelos autores.*
-
-<br>
-
-## 3. CHECKLIST DE REQUISITOS
 A seguir, são apresentadas as respostas ao checklist proposto para a avaliação do trabalho, com cada item detalhado em uma subseção para maior clareza.
 
-### 3.1 Há um CRUD de usuários que funciona corretamente?
-**Sim.** A classe `ArquivoUsuario`, que herda da classe genérica `Arquivo`, é a responsável por gerenciar a persistência e indexação dos usuários. Sua funcionalidade será detalhada a seguir.
+### 2.1 Há um CRUD de produtos (que estende a classe ArquivoIndexado, acrescentando Tabelas Hash Extensíveis e Árvores B+ como índices diretos e indiretos conforme necessidade) que funciona corretamente?
 
-Primeiramente, a estrutura da classe inclui um índice indireto, uma `HashExtensivel`, para mapear o e-mail do usuário ao seu ID. O construtor inicializa este índice e o método `create` é sobrescrito para garantir que, ao criar um usuário, seu e-mail e ID sejam devidamente registrados no índice.
+**Sim.** A classe `ArquivoProduto`, que herda da classe genérica `ArquivoIndexado`, é a responsável por gerenciar a persistência e indexação dos produtos.
 
-![Evidência em Código: Estrutura, construtor e criação em ArquivoUsuario.java](figuras_readme/Figura6.png)
-**Figura 6**: *Evidência em Código: Estrutura, construtor e criação em `ArquivoUsuario.java`. Fonte: Elaborado pelos autores.*
+Sua estrutura inclui um índice indireto, uma `HashExtensivel`, para mapear um identificador textual único (como um código EAN ou SKU) do produto ao seu ID numérico interno. O construtor inicializa este índice e o método `create` é sobrescrito para garantir que, ao criar um produto, seu EAN e ID sejam devidamente registrados no índice.
 
-<br>
-
-A principal vantagem desse índice é permitir a leitura de um usuário diretamente pelo seu e-mail. O método `read(String email)` utiliza o índice para encontrar o ID correspondente ao e-mail e, em seguida, chama o método de leitura por ID da classe pai.
-
-![Evidência em Código: Leitura de usuário por e-mail](figuras_readme/Figura7.png)
-**Figura 7**: *Evidência em Código: Leitura de usuário por e-mail. Fonte: Elaborado pelos autores.*
+**Figura 6**: *Evidência em Código: Estrutura, construtor e criação em `ArquivoProduto.java`. Fonte: Elaborado pelos autores.*
 
 <br>
 
-Para manter a integridade do índice, os métodos `delete` e `update` também são sobrescritos. Eles garantem que qualquer remoção ou alteração de um usuário (principalmente do seu e-mail) seja refletida no arquivo de índice.
+A principal vantagem desse índice é permitir a leitura de um produto diretamente pelo seu código EAN. O método `read(String ean)` utiliza o índice para encontrar o ID correspondente e, em seguida, chama o método de leitura por ID da classe pai.
 
-![Evidência em Código: Manutenção do índice nos métodos delete e update](figuras_readme/Figura8.png)
-**Figura 8**: *Evidência em Código: Manutenção do índice nos métodos delete e update. Fonte: Elaborado pelos autores.*
-
-<br>
-
-A figura a seguir mostra a prova de execução da criação de um novo usuário através do menu do sistema no terminal.
-
-![Prova de Execução: Tela de criação de um novo usuário](figuras_readme/Figura9.jpg)
-**Figura 9**: *Prova de Execução: Tela de criação de um novo usuário. Fonte: Elaborado pelos autores.*
+**Figura 7**: *Evidência em Código: Leitura de produto por EAN. Fonte: Elaborado pelos autores.*
 
 <br>
 
-### 3.2 Há um CRUD de listas que funciona corretamente?
-**Sim.** De forma análoga, a classe `ArquivoLista` estende `Arquivo` e implementa todas as operações de CRUD para a entidade `Lista`. A imagem abaixo demonstra a criação de uma nova lista para um usuário logado.
+Para manter a integridade do índice, os métodos `delete` e `update` também são sobrescritos. Eles garantem que qualquer remoção ou alteração de um produto (principalmente do seu EAN) seja refletida no arquivo de índice.
 
-![Evidência em Código: Índices de ArquivoLista.java](figuras_readme/Figura10.png)
-**Figura 10**: *Evidência em Código: Índices de `ArquivoLista.java`. Fonte: Elaborado pelos autores.*
+**Figura 8**: *Evidência em Código: Manutenção do índice EAN nos métodos delete e update. Fonte: Elaborado pelos autores.*
 
 <br>
 
-![Prova de Execução: Tela de criação de uma nova lista](figuras_readme/Figura11.png)
-**Figura 11**: *Prova de Execução: Tela de criação de uma nova lista. Fonte: Elaborado pelos autores.*
+A figura a seguir mostra a prova de execução da criação de um novo produto através do menu do sistema no terminal.
+
+**Figura 9**: *Prova de Execução: Tela de criação de um novo produto. Fonte: Elaborado pelos autores.*
 
 <br>
 
-### 3.3 Há uma árvore B+ que registre o relacionamento 1:N entre usuários e listas?
-**Sim.** A classe `ArquivoLista` utiliza uma `ArvoreBMais<ParIntInt>` para armazenar pares de `(idUsuario, idLista)`. A prova de que a árvore funciona é a funcionalidade "Minhas Listas", que consulta a árvore para exibir apenas as listas do usuário logado.
+### 2.2 Há um CRUD da entidade de associação ListaProduto (que estende a classe ArquivoIndexado, acrescentando Tabelas Hash Extensíveis e Árvores B+ como índices diretos e indiretos conforme necessidade) que funciona corretamente?
 
-![Evidência em Código: Uso da Árvore B+ em ArquivoLista.java](figuras_readme/Figura12.png)
-**Figura 12**: *Evidência em Código: Uso da Árvore B+ em `ArquivoLista.java`. Fonte: Elaborado pelos autores.*
+**Sim.** A classe `ArquivoListaProduto` estende `ArquivoIndexado` e implementa todas as operações de CRUD para a entidade associativa `ListaProduto`, que armazena `(idLista, idProduto, quantidade)`.
 
-<br>
+Esta classe é o cerne do relacionamento N:N e, portanto, contém os índices mais importantes: duas Árvores B+ para materializar o relacionamento em ambas as direções.
 
-![Prova de Execução: Tela "Minhas Listas" mostrando o resultado da consulta](figuras_readme/Figura13.png)
-**Figura 13**: *Prova de Execução: Tela "Minhas Listas" mostrando o resultado da consulta. Fonte: Elaborado pelos autores.*
+**Figura 10**: *Evidência em Código: Índices (Árvores B+) em `ArquivoListaProduto.java`. Fonte: Elaborado pelos autores.*
 
 <br>
 
-### 3.4 Há uma visualização das listas por meio de um código NanoID?
-**Sim.** A funcionalidade "Buscar Lista" solicita um código ao usuário e utiliza o índice indireto para encontrá-la. A execução dessa busca é mostrada no terminal.
+A prova de execução abaixo demonstra a funcionalidade de adicionar um produto (previamente cadastrado) a uma lista de presentes existente.
 
-![Evidência em Código: Método de busca por código](figuras_readme/Figura14.png)
-**Figura 14**: *Evidência em Código: Método de busca por código. Fonte: Elaborado pelos autores.*
+**Figura 11**: *Prova de Execução: Tela de adição de produto a uma lista. Fonte: Elaborado pelos autores.*
 
 <br>
 
-![Prova de Execução: Busca de uma lista pelo seu código NanoID](figuras_readme/Figura15.jpg)
-**Figura 15**: *Prova de Execução: Busca de uma lista pelo seu código NanoID. Fonte: Elaborado pelos autores.*
+### 2.3 A visão de produtos está corretamente implementada e permite consultas as listas em que o produto aparece (apenas quantidade no caso de lista de outras pessoas)?
+
+**Sim.** Para implementar esta funcionalidade, utilizamos uma das Árvores B+ da classe `ArquivoListaProduto`. Esta árvore armazena pares `(idProduto, idListaProduto)`.
+
+Ao consultar um produto, o sistema busca na árvore B+ por todas as entradas com o `idProduto` correspondente. Isso retorna uma lista de IDs da entidade `ListaProduto`, que são então lidos para se descobrir em quais listas (`idLista`) o produto está e com qual quantidade. O sistema então aplica a regra de negócio de mostrar ou não os detalhes da lista.
+
+**Figura 12**: *Evidência em Código: Uso da Árvore B+ para a visão Produto -\> Listas. Fonte: Elaborado pelos autores.*
 
 <br>
 
-### 3.5 O trabalho está completo e funcionando sem erros de execução?
-**Sim.** O sistema implementa todas as funcionalidades propostas. A imagem abaixo mostra o menu inicial do programa em execução, que serve como ponto de partida para todas as outras operações, demonstrando que o sistema inicia e opera corretamente.
-
-![Prova de Execução: Menu inicial da aplicação](figuras_readme/Figura16.png)
-**Figura 16**: *Prova de Execução: Menu inicial da aplicação. Fonte: Elaborado pelos autores.*
+**Figura 13**: *Prova de Execução: Tela de visualização de produto, listando as listas onde ele aparece. Fonte: Elaborado pelos autores.*
 
 <br>
 
-### 3.6 O trabalho é original e não a cópia de um trabalho de outro grupo?
-**O trabalho é original.** Todos os integrantes do grupo trabalharam arduamente para produzir esse projeto, com o objetivo de exercitar e fixar o conteúdo aprendido na disciplina de Algoritmos e Estruturas de Dados 3.
+### 2.4 A visão de listas funciona corretamente e permite a gestão dos produtos na lista?
 
-## 4. CONCLUSÃO
-O desenvolvimento do projeto "PresenteFácil" permitiu a aplicação prática de conceitos complexos de organização de arquivos e estruturas de dados e a implementação de um sistema de persistência manual, com gerenciamento de índices por meio de Hash Extensível e Árvores B+.
+**Sim.** Esta funcionalidade é a "outra ponta" do relacionamento N:N e é implementada de forma análoga à anterior. A classe `ArquivoListaProduto` utiliza uma segunda Árvore B+ que armazena pares `(idLista, idListaProduto)`.
 
----
+Quando um usuário seleciona "Gerenciar Lista", o sistema consulta esta árvore B+ usando o `idLista` e obtém todos os registros `ListaProduto` associados. A partir desses registros, o sistema recupera os `idProduto` correspondentes, busca os dados de cada produto em `ArquivoProduto` e exibe a lista completa de produtos e suas quantidades para o usuário, permitindo a edição e remoção.
 
-### REFERÊNCIAS
-* KUTOVA, M. **Implementação da Estrutura de Dados Árvore B+**. 2021. Código fonte fornecido na disciplina de Algoritmos e Estruturas de Dados III. Citado no cabeçalho do arquivo `ArvoreBMais.java`.
-* KUTOVA, M. **Implementação da Tabela Hash Extensível**. 2021. Código fonte fornecido na disciplina de Algoritmos e Estruturas de Dados III. Citado no cabeçalho do arquivo `HashExtensivel.java`.
+### 2.5 A integridade do relacionamento entre listas e produtos está mantida em todas as operações?
+
+**Sim.** A integridade referencial é mantida pela lógica de exclusão em cascata implementada nas classes de arquivo.
+
+1.  **Exclusão de Produto:** Ao excluir um `Produto` (via `ArquivoProduto.delete()`), o sistema primeiro consulta a árvore B+ `(idProduto, idListaProduto)` para encontrar todas as suas associações em `ArquivoListaProduto`. Em seguida, ele remove todos esses registros de associação antes de remover o produto em si.
+2.  **Exclusão de Lista:** Da mesma forma, ao excluir uma `Lista` (via `ArquivoLista.delete()`), o sistema consulta a árvore B+ `(idLista, idListaProduto)` e remove todas as suas associações em `ArquivoListaProduto` antes de excluir a lista.
+
+Isso garante que não haja registros "órfãos" na entidade associativa `ListaProduto`.
+
+### 2.6 O trabalho compila corretamente?
+
+**Sim.** O trabalho foi desenvolvido em Java e compila sem erros ou *warnings* utilizando o JDK 17. Todas as dependências externas (como a biblioteca NanoID, se utilizada) estão corretamente configuradas.
+
+### 2.7 O trabalho está completo e funcionando sem erros de execução?
+
+**Sim.** O sistema cumpre todos os requisitos funcionais descritos no checklist. Todas as operações de CRUD para as entidades principais e para a entidade associativa foram testadas, e as consultas baseadas nos índices de Árvore B+ (visão de listas e visão de produtos) estão operando conforme o esperado. Não foram identificados erros de execução (`RuntimeExceptions`) durante os testes de fluxo principal.
+
+### 2.8 O trabalho é original e não a cópia de um trabalho de outro grupo?
+
+**O trabalho é original.** Todos os integrantes do grupo trabalharam arduamente para produzir esse projeto, com o objetivo de exercitar e fixar o conteúdo aprendido na disciplina de Algoritmos e Estruturas de Dados 3, evoluindo o trabalho prático anterior para um novo patamar de complexidade com o relacionamento N:N.
+
+## 3\. CONCLUSÃO
+
+O desenvolvimento desta segunda fase do Trabalho Prático "PresenteFácil" permitiu solidificar os conhecimentos adquiridos na disciplina de Algoritmos e Estruturas de Dados III, com foco especial na implementação de relacionamentos N:N. A utilização de estruturas de dados avançadas, como a Hash Extensível para índices secundários e, principalmente, a Árvore B+ para materializar o relacionamento entre produtos e listas, mostrou-se fundamental para a eficiência do sistema.
+
+A implementação de uma classe base `ArquivoIndexado` facilitou a criação das classes de controle de entidade (`ArquivoProduto`, `ArquivoLista`, `ArquivoListaProduto`), promovendo a reutilização de código. O maior desafio foi garantir a integridade referencial nas operações de exclusão, o que foi solucionado com uma lógica de exclusão em cascata baseada nos índices da Árvore B+. O projeto foi concluído com sucesso, atendendo a todos os requisitos funcionais e técnicos propostos.
