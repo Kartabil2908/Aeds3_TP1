@@ -2,15 +2,13 @@
   <img src="fig_readmeTP2/brasao.jpg" alt="Brasão PUC Minas" width="150">
 </p>
 
-# PONTIFÍCIA UNIVERSIDADE CATÓLICA DE MINAS GERAIS
+<p align="center"> # PONTIFÍCIA UNIVERSIDADE CATÓLICA DE MINAS GERAIS </p>
 
-### Instituto de Ciências Exatas e de Informática
+<p align="center"> ### Instituto de Ciências Exatas e de Informática </p>
 
-### Curso de Ciência da Computação
+<p align="center"> ### Curso de Ciência da Computação </p>
 
 -----
-
-<div\>
 
 # Relatório Trabalho Prático 02
 
@@ -73,7 +71,7 @@ A seguir, são apresentadas as respostas ao checklist proposto para a avaliaçã
 Sua estrutura inclui um índice indireto, uma `HashExtensivel`, para mapear um identificador textual único (como um código EAN ou SKU) do produto ao seu ID numérico interno. O construtor inicializa este índice e o método `create` é sobrescrito para garantir que, ao criar um produto, seu EAN e ID sejam devidamente registrados no índice.
 
 <br>
-<img src="fig_readmeTP2/brasao.jpg"  width="200">
+<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
 
 **Figura 1**: *Evidência em Código: Estrutura, construtor e criação em `ArquivoProduto.java`. Fonte: Elaborado pelos autores.*
 
@@ -81,19 +79,28 @@ Sua estrutura inclui um índice indireto, uma `HashExtensivel`, para mapear um i
 
 A principal vantagem desse índice é permitir a leitura de um produto diretamente pelo seu código EAN. O método `read(String ean)` utiliza o índice para encontrar o ID correspondente e, em seguida, chama o método de leitura por ID da classe pai.
 
-**Figura 7**: *Evidência em Código: Leitura de produto por EAN. Fonte: Elaborado pelos autores.*
+<br>
+<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
+
+**Figura 2**: *Evidência em Código: Leitura de produto por EAN. Fonte: Elaborado pelos autores.*
 
 <br>
 
 Para manter a integridade do índice, os métodos `delete` e `update` também são sobrescritos. Eles garantem que qualquer remoção ou alteração de um produto (principalmente do seu EAN) seja refletida no arquivo de índice.
 
-**Figura 8**: *Evidência em Código: Manutenção do índice EAN nos métodos delete e update. Fonte: Elaborado pelos autores.*
+<br>
+<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
+
+**Figura 3**: *Evidência em Código: Manutenção do índice EAN nos métodos delete e update. Fonte: Elaborado pelos autores.*
 
 <br>
 
 A figura a seguir mostra a prova de execução da criação de um novo produto através do menu do sistema no terminal.
 
-**Figura 9**: *Prova de Execução: Tela de criação de um novo produto. Fonte: Elaborado pelos autores.*
+<br>
+<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
+
+**Figura 4**: *Prova de Execução: Tela de criação de um novo produto. Fonte: Elaborado pelos autores.*
 
 <br>
 
@@ -103,13 +110,19 @@ A figura a seguir mostra a prova de execução da criação de um novo produto a
 
 Esta classe é o cerne do relacionamento N:N e, portanto, contém os índices mais importantes: duas Árvores B+ para materializar o relacionamento em ambas as direções.
 
-**Figura 10**: *Evidência em Código: Índices (Árvores B+) em `ArquivoListaProduto.java`. Fonte: Elaborado pelos autores.*
+<br>
+<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
+
+**Figura 5**: *Evidência em Código: Índices (Árvores B+) em `ArquivoListaProduto.java`. Fonte: Elaborado pelos autores.*
 
 <br>
 
 A prova de execução abaixo demonstra a funcionalidade de adicionar um produto (previamente cadastrado) a uma lista de presentes existente.
 
-**Figura 11**: *Prova de Execução: Tela de adição de produto a uma lista. Fonte: Elaborado pelos autores.*
+<br>
+<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
+
+**Figura 6**: *Prova de Execução: Tela de adição de produto a uma lista. Fonte: Elaborado pelos autores.*
 
 <br>
 
@@ -119,11 +132,19 @@ A prova de execução abaixo demonstra a funcionalidade de adicionar um produto 
 
 Ao consultar um produto, o sistema busca na árvore B+ por todas as entradas com o `idProduto` correspondente. Isso retorna uma lista de IDs da entidade `ListaProduto`, que são então lidos para se descobrir em quais listas (`idLista`) o produto está e com qual quantidade. O sistema então aplica a regra de negócio de mostrar ou não os detalhes da lista.
 
-**Figura 12**: *Evidência em Código: Uso da Árvore B+ para a visão Produto -\> Listas. Fonte: Elaborado pelos autores.*
+<br>
+<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
+
+**Figura 7**: *Evidência em Código: Uso da Árvore B+ para a visão Produto -\> Listas. Fonte: Elaborado pelos autores.*
+
 
 <br>
+<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
 
-**Figura 13**: *Prova de Execução: Tela de visualização de produto, listando as listas onde ele aparece. Fonte: Elaborado pelos autores.*
+<br>
+<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
+
+**Figura 8**: *Prova de Execução: Tela de visualização de produto, listando as listas onde ele aparece. Fonte: Elaborado pelos autores.*
 
 <br>
 
@@ -132,6 +153,11 @@ Ao consultar um produto, o sistema busca na árvore B+ por todas as entradas com
 **Sim.** Esta funcionalidade é a "outra ponta" do relacionamento N:N e é implementada de forma análoga à anterior. A classe `ArquivoListaProduto` utiliza uma segunda Árvore B+ que armazena pares `(idLista, idListaProduto)`.
 
 Quando um usuário seleciona "Gerenciar Lista", o sistema consulta esta árvore B+ usando o `idLista` e obtém todos os registros `ListaProduto` associados. A partir desses registros, o sistema recupera os `idProduto` correspondentes, busca os dados de cada produto em `ArquivoProduto` e exibe a lista completa de produtos e suas quantidades para o usuário, permitindo a edição e remoção.
+
+<br>
+<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
+
+**Figura 9**: *Prova de Execução: Visão de Listas. Fonte: Elaborado pelos autores.*
 
 ### 2.5 A integridade do relacionamento entre listas e produtos está mantida em todas as operações?
 
@@ -142,9 +168,19 @@ Quando um usuário seleciona "Gerenciar Lista", o sistema consulta esta árvore 
 
 Isso garante que não haja registros "órfãos" na entidade associativa `ListaProduto`.
 
+<br>
+<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
+
+**Figura 10**: *Prova de Execução: Integridade N:N. Fonte: Elaborado pelos autores.*
+
 ### 2.6 O trabalho compila corretamente?
 
 **Sim.** O trabalho foi desenvolvido em Java e compila sem erros ou *warnings* utilizando o JDK 17. Todas as dependências externas (como a biblioteca NanoID, se utilizada) estão corretamente configuradas.
+
+<br>
+<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
+
+**Figura 11**: *Prova de Execução: Compilação. Fonte: Elaborado pelos autores.*
 
 ### 2.7 O trabalho está completo e funcionando sem erros de execução?
 
