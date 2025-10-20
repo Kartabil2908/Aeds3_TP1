@@ -31,7 +31,12 @@ public class ControladorProduto {
         System.out.println("> Inicio > Produtos > Cadastrar\n");
         try {
             System.out.print("GTIN-13: ");
-            String gtin13 = scanner.nextLine();
+            String gtin13 = scanner.nextLine().trim();
+
+            if (!gtin13.matches("\\d{13}")) {
+                System.out.println("\n-- GTIN-13 invalido. Deve conter exatamente 13 digitos numericos. --\n");
+                return;
+            }
 
             if (arqProdutos.read(gtin13) != null) {
                 System.out.println("\n-- ERRO: Já existe um produto com o GTIN-13 informado. --\n");
