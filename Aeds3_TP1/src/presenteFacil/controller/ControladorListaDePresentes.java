@@ -139,7 +139,13 @@ public class ControladorListaDePresentes {
         }
     }
 
-    public void buscarListaPorCodigo(Scanner scanner, ArquivoLista arqListas) {
+    public void buscarListaPorCodigo(Scanner scanner, Usuario usuarioLogado) {
+
+        if (usuarioLogado == null) {
+            System.err.println("\n-- Usuário não autenticado. Faça login antes de buscar listas. --\n");
+            return;
+        }
+        this.usuarioLogado = usuarioLogado; // garante o campo preenchido
 
         System.out.println("-------- PresenteFácil 1.0 --------"); 
         System.out.println("-----------------------------------"); 
@@ -148,16 +154,17 @@ public class ControladorListaDePresentes {
         try {
             System.out.print("\nDigite o código da lista: ");
             String codigo = scanner.nextLine();
-            Lista lista = arqListas.readByCodigo(codigo);
-            
-            if (lista == null || !lista.isAtiva() ) {
+            Lista lista = arqListas.readByCodigo(codigo); // usa o campo, não o parâmetro
+
+            if (lista == null || !lista.isAtiva()) {
                 System.out.println("\n-- Nenhuma lista encontrada com esse código. --\n");
             } else {
                 System.out.println("\n-- Lista encontrada! --");
                 ClearConsole.clearScreen();
                 System.out.println("-------- PresenteFácil 1.0 --------"); 
                 System.out.println("-----------------------------------"); 
-                System.out.println("> Início > Minhas Listas > " + lista.getNome() + "\n");
+                System.out.println("> Início > " + lista.getNome() + "\n");
+                System.out.println("Proprietário(a) da lista: " + usuarioLogado.getNome());
                 System.out.println("Nome: " + lista.getNome());
                 System.out.println("Descrição: " + lista.getDescricao());
                 System.out.println("Data de criação: " + lista.getDataCriacao().format(formato));
@@ -168,10 +175,11 @@ public class ControladorListaDePresentes {
             }
         } catch (Exception e) {
             System.err.println("\nErro ao buscar lista: " + e.getMessage() + "\n");
-        }   
+        }
     }
 
-    public void MostrarLista(Scanner scanner, Lista lista, Usuario usuarioLogado) throws Exception{
+
+    public void mostrarLista(Scanner scanner, Lista lista, Usuario usuarioLogado) throws Exception{
         try {
             if (lista == null) {
                 System.out.println("\n-- Nenhuma lista encontrada com esse código. --\n");
