@@ -139,9 +139,6 @@ A prova de execução abaixo demonstra a funcionalidade de adicionar um produto 
 </p>
 <br>
 
-
-<br>
-
 ### 2.3 A visão de produtos está corretamente implementada e permite consultas as listas em que o produto aparece (apenas quantidade no caso de lista de outras pessoas)?
 
 **Sim.** Para implementar esta funcionalidade, utilizamos uma das Árvores B+ da classe `ArquivoListaProduto`. Esta árvore armazena pares `(idProduto, idListaProduto)`.
@@ -149,19 +146,21 @@ A prova de execução abaixo demonstra a funcionalidade de adicionar um produto 
 Ao consultar um produto, o sistema busca na árvore B+ por todas as entradas com o `idProduto` correspondente. Isso retorna uma lista de IDs da entidade `ListaProduto`, que são então lidos para se descobrir em quais listas (`idLista`) o produto está e com qual quantidade. O sistema então aplica a regra de negócio de mostrar ou não os detalhes da lista.
 
 <br>
-<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
+<p align="center">
+  <img src="fig_readmeTP2/fig7.png" alt="Código de consulta à Árvore B+ (idProduto -> idListaProduto)" width="600">
+  <br>
+  <b>Figura 7:</b> <i>Evidência em Código: Uso da Árvore B+ (`produtoListaProduto`) no método `getListasByProdutoId` em `ArquivoListaProduto.java` para implementar a visão Produto -> Listas. Fonte: Elaborado pelos autores.</i>
+</p>
+<br>
 
-**Figura 7**: *Evidência em Código: Uso da Árvore B+ para a visão Produto -\> Listas. Fonte: Elaborado pelos autores.*
-
+A prova de execução abaixo demonstra a tela de detalhes de um produto, listando as listas do usuário onde ele está presente e a contagem de listas de outros usuários.
 
 <br>
-<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
-
-<br>
-<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
-
-**Figura 8**: *Prova de Execução: Tela de visualização de produto, listando as listas onde ele aparece. Fonte: Elaborado pelos autores.*
-
+<p align="center">
+  <img src="fig_readmeTP2/fig8.png" alt="Tela de detalhes do produto mostrando listas associadas" width="450">
+  <br>
+  <b>Figura 8:</b> <i>Prova de Execução: Tela de visualização de produto, listando as listas onde ele aparece (diferenciando listas do usuário e de outros). Fonte: Elaborado pelos autores.</i>
+</p>
 <br>
 
 ### 2.4 A visão de listas funciona corretamente e permite a gestão dos produtos na lista?
