@@ -53,6 +53,7 @@ public class ControladorProduto {
     }
 
     public void buscarProdutoPorGtin(Scanner scanner, Usuario usuarioLogado) {
+
         System.out.println("-------- PresenteFácil 1.0 --------");
         System.out.println("-----------------------------------");
         System.out.println("> Inicio > Produtos > Buscar por GTIN\n");
@@ -149,6 +150,7 @@ public class ControladorProduto {
     }
 
     private void exibirDetalhesProduto(Scanner scanner, Produto produto) throws Exception {
+        
         while (true) {
             System.out.println("\n-------- Detalhes do Produto --------");
             System.out.println(produto.toString());
