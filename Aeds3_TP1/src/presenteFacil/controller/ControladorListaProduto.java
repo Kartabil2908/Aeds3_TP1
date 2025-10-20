@@ -84,7 +84,7 @@ public class ControladorListaProduto {
                 System.out.println("-----------------------------------"); 
                 System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Produtos > " + produto.getNome() +"\n");
 
-                System.out.println("\n-------- Detalhes do Produto --------");
+                System.out.println("\n-------- Detalhes do Produto --------\n");
                 System.out.println(produto.toString());
                 System.out.println(listaProduto.toString());
                 System.out.println("-------------------------------------\n");
@@ -95,6 +95,9 @@ public class ControladorListaProduto {
                 System.out.print("\nOpcao: ");
 
                 String opcao = scanner.nextLine().trim().toUpperCase();
+
+                ClearConsole.clearScreen();
+
                 switch (opcao) {
                     case "1":
                         mudarQuantidade(scanner, listaProduto);
@@ -178,9 +181,9 @@ public class ControladorListaProduto {
             if (produto == null) {
                 System.out.println("\n-- Nenhum produto encontrado com este GTIN-13. --\n");
             } else {
-                System.out.println("\n-------- Detalhes do Produto --------");
+                System.out.println("\n------------- Detalhes do Produto ---------------\n");
                 System.out.println(produto);
-                System.out.println("-------------------------------------\n");
+                System.out.println("\n-------------------------------------------------\n");
 
                 boolean continua = true;
                 int quantidade = 1;
@@ -385,7 +388,7 @@ public class ControladorListaProduto {
             if (produto == null) {
                 System.out.println("\n-- Nenhum produto encontrado com este GTIN-13. --\n");
             } else {
-                System.out.println("\n-------- Detalhes do Produto --------");
+                System.out.println("\n-------- Detalhes do Produto --------\n");
                 System.out.println(produto);
                 System.out.println("-------------------------------------\n");
 

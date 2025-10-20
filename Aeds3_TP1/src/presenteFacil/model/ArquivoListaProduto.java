@@ -4,6 +4,7 @@ import java.util.*;
 import src.presenteFacil.aeds3.*;
 
 public class ArquivoListaProduto extends Arquivo<ListaProduto>{
+
     ArvoreBMais<ParIntInt> listaListaProduto; // Par(idLista; idListaProduto)
     ArvoreBMais<ParIntInt> produtoListaProduto; // Par(idProduto; idListaProduto)
 
@@ -31,6 +32,7 @@ public class ArquivoListaProduto extends Arquivo<ListaProduto>{
 
     @Override
     public int create(ListaProduto lp) throws Exception {
+        
         int id = super.create(lp);
 
         listaListaProduto.create(new ParIntInt(lp.getIdLista(), id));
@@ -41,6 +43,7 @@ public class ArquivoListaProduto extends Arquivo<ListaProduto>{
 
     @Override
     public boolean delete(int idListaProduto) throws Exception {
+        
         ListaProduto listaProduto = super.read(idListaProduto);
         
         if(listaProduto == null) return false;
@@ -55,6 +58,7 @@ public class ArquivoListaProduto extends Arquivo<ListaProduto>{
     }
 
     public Produto[] getProdutosByListaId(int listaId) throws Exception {
+        
         ArrayList<ParIntInt> pares = listaListaProduto.read(new ParIntInt(listaId, -1));
         ArrayList<Produto> produtos = new ArrayList<>();
 
@@ -69,6 +73,7 @@ public class ArquivoListaProduto extends Arquivo<ListaProduto>{
     }
 
     public Lista[] getListasByProdutoId(int produtoId) throws Exception {
+
         ArrayList<ParIntInt> pares = produtoListaProduto.read(new ParIntInt(produtoId, -1));
         ArrayList<Lista> listas = new ArrayList<>();
 
@@ -82,6 +87,7 @@ public class ArquivoListaProduto extends Arquivo<ListaProduto>{
     }
 
     public Lista[] getListaByProdutoIdAndUsuario(int produtoId, int idUsuario) throws Exception {
+
         ArrayList<ParIntInt> pares = produtoListaProduto.read(new ParIntInt(produtoId, -1));
         ArrayList<Lista> listas = new ArrayList<>();
 
@@ -100,6 +106,7 @@ public class ArquivoListaProduto extends Arquivo<ListaProduto>{
 
 
     public ListaProduto[] readByListaId(int listaId) throws Exception {
+
         ArrayList<ParIntInt> pares = listaListaProduto.read(new ParIntInt(listaId, -1));
         ArrayList<ListaProduto> listaProdutos = new ArrayList<>();
 
@@ -114,6 +121,7 @@ public class ArquivoListaProduto extends Arquivo<ListaProduto>{
     }
 
     public ListaProduto[] readByProdutoId(int produtoId) throws Exception {
+
         ArrayList<ParIntInt> pares = produtoListaProduto.read(new ParIntInt(produtoId, -1));
         ArrayList<ListaProduto> listaProdutos = new ArrayList<>();
 
@@ -128,6 +136,7 @@ public class ArquivoListaProduto extends Arquivo<ListaProduto>{
     }
 
     public ListaProduto readByListaIdAndProdutoId(int listaId, int produtoId) throws Exception {
+        
         ArrayList<ParIntInt> pares = listaListaProduto.read(new ParIntInt(listaId, -1));
 
         for (ParIntInt par : pares) {

@@ -5,6 +5,7 @@ import src.presenteFacil.model.ArquivoProduto;
 import src.presenteFacil.model.Lista;
 import src.presenteFacil.model.Produto;
 import src.presenteFacil.model.Usuario;
+import src.presenteFacil.utils.ClearConsole;
 
 import java.util.Comparator;
 import java.util.List;
@@ -38,15 +39,18 @@ public class ControladorProduto {
                 return;
             }
 
-            System.out.print("Nome do Produto: ");
+            System.out.print("\nNome do Produto: ");
             String nome = scanner.nextLine();
-            System.out.print("Descricao: ");
+            System.out.print("\nDescrição: ");
             String descricao = scanner.nextLine();
 
             Produto novoProduto = new Produto(gtin13, nome, descricao);
             arqProdutos.create(novoProduto);
 
+            ClearConsole.delayAndClear();
+
             System.out.println("\n-- Produto cadastrado com sucesso! --\n");
+
         } catch (Exception e) {
             System.err.println("\nOcorreu um erro ao cadastrar o produto: " + e.getMessage() + "\n");
         }
@@ -91,13 +95,13 @@ public class ControladorProduto {
             boolean sair = false;
 
             while (!sair) {
-                System.out.println("-------- PresenteFácil 1.0 --------");
-                System.out.println("-----------------------------------");
+                System.out.println("------------ PresenteFácil 1.0 -----------");
+                System.out.println("------------------------------------------");
                 System.out.println("> Início > Produtos > Listagem\n");
 
                 int totalPaginas = (int) Math.ceil((double) produtos.size() / ITENS_POR_PAGINA);
                 System.out.println("Página " + (paginaAtual + 1) + " de " + totalPaginas);
-                System.out.println("----------------------------------\n");
+                System.out.println("------------------------ ---------------\n");
 
                 int inicio = paginaAtual * ITENS_POR_PAGINA;
                 int fim = Math.min(inicio + ITENS_POR_PAGINA, produtos.size());
@@ -107,12 +111,14 @@ public class ControladorProduto {
                     System.out.println("(" + numeroExibido + ") " + produtos.get(i).getNome());
                 }
 
-                System.out.println("\nDigite uma letra para ver detalhes:");
+                System.out.println("\nEscolha uma opção para avançar ou voltar uma página:\n");
                 System.out.println("(P) Proxima página");
                 System.out.println("(A) Página anterior");
                 System.out.println("(R) Retornar ao menu anterior");
                 System.out.print("\nOpção: ");
                 String opcao = scanner.nextLine().trim().toUpperCase();
+
+                ClearConsole.clearScreen();
 
                 switch (opcao) {
                     case "P":
@@ -132,10 +138,10 @@ public class ControladorProduto {
                                 Produto selecionado = produtos.get(inicio + indicePagina);
                                 exibirDetalhesProduto(scanner, selecionado);
                             } else {
-                                System.out.println("\n-- Numero fora da pagina atual. --\n");
+                                System.out.println("\n-- Número fora da página atual. --\n");
                             }
                         } catch (NumberFormatException nf) {
-                            System.out.println("\n-- Opcao invalida. --\n");
+                            System.out.println("\n-- Opção inválida. --\n");
                         }
                         break;
                 }
@@ -152,9 +158,25 @@ public class ControladorProduto {
     private void exibirDetalhesProduto(Scanner scanner, Produto produto) throws Exception {
         
         while (true) {
-            System.out.println("\n-------- Detalhes do Produto --------");
+
+            System.out.println("------------- PresenteFácil 1.0 -------------");
+            System.out.println("---------------------------------------------");
+            System.out.println("> Início > Produtos > Listagem > " + produto.getNome() + "\n");
+
+            System.out.println("\n----------- Detalhes do Produto -----------\n");
             System.out.println(produto.toString());
-            System.out.println("-------------------------------------\n");
+            System.out.println("\n---------------------------------------------\n");
+            
+            Lista[] ListasDoUsuario = arqListaProduto.getListaByProdutoIdAndUsuario(produto.getId(), usuario.getId());
+            Lista[] listasDeOutros = arqListaProduto.getListasByProdutoId(produto.getId());
+
+            System.out.println("Aparece nas minhas listas: ");
+            for(int i = 0; i < ListasDoUsuario.length; i++) {
+                System.out.println(" - " + ListasDoUsuario[i].getNome());
+            }
+
+            System.out.println("\nAparece também em mais " + (listasDeOutros.length == 0 ? (listasDeOutros.length) : (listasDeOutros.length - 1)) + " listas" + " de outras pessoas.\n");
+
             System.out.println("(1) Alterar dados do produto");
             if (produto.isAtivo()) {
                 System.out.println("(2) Inativar o produto");
@@ -162,7 +184,7 @@ public class ControladorProduto {
                 System.out.println("(3) Reativar produto");
             }
             System.out.println("(R) Retornar ao menu anterior");
-            System.out.print("\nOpcao: ");
+            System.out.print("\nOpção: ");
 
             String opcao = scanner.nextLine().trim().toUpperCase();
             switch (opcao) {
@@ -176,20 +198,20 @@ public class ControladorProduto {
                     if (produto.isAtivo()) {
                         inativarProduto(scanner, produto);
                     } else {
-                        System.out.println("\n-- Opcao invalida para produto inativo. --\n");
+                        System.out.println("\n-- Opção inválida para produto inativo. --\n");
                     }
                     break;
                 case "3":
                     if (!produto.isAtivo()) {
                         reativarProduto(scanner, produto);
                     } else {
-                        System.out.println("\n-- Opcao invalida para produto ativo. --\n");
+                        System.out.println("\n-- Opção inválida para produto ativo. --\n");
                     }
                     break;
                 case "R":
                     return;
                 default:
-                    System.out.println("\n-- Opcao invalida. --\n");
+                    System.out.println("\n-- Opção inválida. --\n");
             }
         }
     }
@@ -202,7 +224,7 @@ public class ControladorProduto {
                 System.out.println("(1) Alterar descricao");
                 System.out.println("(2) Alterar GTIN-13");
                 System.out.println("(R) Retornar");
-                System.out.print("\nOpcao: ");
+                System.out.print("\nOpção: ");
                 String op = scanner.nextLine().trim().toUpperCase();
 
                 switch (op) {
@@ -255,7 +277,7 @@ public class ControladorProduto {
                         sair = true;
                         break;
                     default:
-                        System.out.println("\n-- Opcao invalida. --\n");
+                        System.out.println("\n-- Opção inválida. --\n");
                 }
             } catch (Exception e) {
                 System.err.println("\nErro ao alterar dados do produto: " + e.getMessage() + "\n");
