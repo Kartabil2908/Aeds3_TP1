@@ -150,6 +150,43 @@ public class ControladorProduto {
         }
     }
 
+    // Reativar produto diretamente via GTIN
+    public void reativarProdutoPorGtin(Scanner scanner) {
+        System.out.println("-------- PresenteFacil 1.0 --------");
+        System.out.println("-----------------------------------");
+        System.out.println("> Inicio > Produtos > Reativar\n");
+
+        try {
+            System.out.print("Digite o GTIN-13 do produto: ");
+            String gtin13 = scanner.nextLine().trim();
+
+            if (!gtin13.matches("\\d{13}")) {
+                System.out.println("\n-- GTIN-13 invalido. Deve conter exatamente 13 digitos numericos. --\n");
+                return;
+            }
+
+            Produto produto = arqProdutos.read(gtin13);
+            if (produto == null) {
+                System.out.println("\n-- Nenhum produto encontrado com este GTIN-13. --\n");
+                return;
+            }
+
+            // Exibe informacoes do produto antes da confirmacao
+            System.out.println("\n-------- Detalhes do Produto --------");
+            System.out.println(produto.toString());
+            System.out.println("-------------------------------------\n");
+
+            if (produto.isAtivo()) {
+                System.out.println("\n-- Produto ja esta ativo. --\n");
+                return;
+            }
+
+            reativarProduto(scanner, produto);
+        } catch (Exception e) {
+            System.err.println("\nErro ao reativar produto: " + e.getMessage() + "\n");
+        }
+    }
+
     public void mostrarDetalhesProduto(Scanner scanner, Produto produto) throws Exception {
         exibirDetalhesProduto(scanner, produto);
     }
@@ -271,6 +308,15 @@ public class ControladorProduto {
 
     private void inativarProduto(Scanner scanner, Produto produto) {
         try {
+            int qtdListas = 0;
+            try {
+                Lista[] listas = arqListaProduto.getListasByProdutoId(produto.getID());
+                qtdListas = (listas != null) ? listas.length : 0;
+            } catch (Exception e) {
+                // Se houver erro ao obter as listas, mantem qtdListas = 0 e segue o fluxo
+            }
+
+            System.out.println("\nEste produto participa de " + qtdListas + " lista(s).");
             System.out.print("\nVoce tem certeza que deseja inativar este produto? (S/N): ");
             String conf = scanner.nextLine().trim().toUpperCase();
             if (!"S".equals(conf)) {

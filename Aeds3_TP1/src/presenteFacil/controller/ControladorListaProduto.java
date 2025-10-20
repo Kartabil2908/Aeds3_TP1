@@ -284,7 +284,8 @@ public class ControladorListaProduto {
             for (int i = 0; i < produtos.length; i++) {
                 for (int j = 0; j < listaProdutos.length; j++) {
                     if (produtos[i].getId() == listaProdutos[j].getIdProduto()) {
-                        System.out.println("(" + (i + 1) + ") " + produtos[i].getNome() + " " +
+                        String status = produtos[i].isAtivo() ? "" : " (Inativo)";
+                        System.out.println("(" + (i + 1) + ") " + produtos[i].getNome() + status + " " +
                             "(x" + listaProdutos[j].getQuantidade() + ")");
                     }
                 }
@@ -324,7 +325,9 @@ public class ControladorListaProduto {
                 int fim = Math.min(inicio + ITENS_POR_PAGINA, produtos.size());
 
                 for (int i = inicio; i < fim; i++) {
-                    System.out.println("(" + (i + 1) + ") " + produtos.get(i).getNome());
+                    Produto p = produtos.get(i);
+                    String status = p.isAtivo() ? "" : " (Inativo)";
+                    System.out.println("(" + (i + 1) + ") " + p.getNome() + status);
                 }
 
                 System.out.println("\nDigite o numero para ver detalhes");
