@@ -191,15 +191,18 @@ A prova de execução abaixo demonstra o menu de gerenciamento de produtos dentr
 
 **Sim.** A integridade referencial é mantida pela lógica de exclusão em cascata implementada nas classes de arquivo.
 
-1.  **Exclusão de Produto:** Ao excluir um `Produto` (via `ArquivoProduto.delete()`), o sistema primeiro consulta a árvore B+ `(idProduto, idListaProduto)` para encontrar todas as suas associações em `ArquivoListaProduto`. Em seguida, ele remove todos esses registros de associação antes de remover o produto em si.
-2.  **Exclusão de Lista:** Da mesma forma, ao excluir uma `Lista` (via `ArquivoLista.delete()`), o sistema consulta a árvore B+ `(idLista, idListaProduto)` e remove todas as suas associações em `ArquivoListaProduto` antes de excluir a lista.
+1.  **Exclusão de Produto:** Ao inativar/excluir um `Produto` (via `ArquivoProduto.delete()` ou `update()`), o sistema primeiro consulta a árvore B+ `(idProduto, idListaProduto)` para encontrar todas as suas associações em `ArquivoListaProduto`. Em seguida, ele remove todos esses registros de associação antes de remover/inativar o produto em si.
+2.  **Exclusão de Lista:** Da mesma forma, ao excluir uma `Lista` (via `ArquivoLista.delete()`), o sistema consulta a árvore B+ `(idLista, idListaProduto)` e remove todas as suas associações em `ArquivoListaProduto` antes de excluir a lista, como evidenciado no código abaixo.
 
 Isso garante que não haja registros "órfãos" na entidade associativa `ListaProduto`.
 
 <br>
-<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
-
-**Figura 10**: *Prova de Execução: Integridade N:N. Fonte: Elaborado pelos autores.*
+<p align="center">
+  <img src="fig_readmeTP2/fig11.png" alt="Código de exclusão em cascata no método delete de ArquivoLista" width="600">
+  <br>
+  <b>Figura 11:</b> <i>Evidência em Código: Lógica de exclusão em cascata no método `delete` de `ArquivoLista.java`. Antes de deletar a lista (`super.delete`), o método consulta `arqListaProduto` para encontrar e remover todas as associações N:N (`ListaProduto`) vinculadas a esta lista, garantindo a integridade referencial. Fonte: Elaborado pelos autores.</i>
+</p>
+<br>
 
 ### 2.6 O trabalho compila corretamente?
 
