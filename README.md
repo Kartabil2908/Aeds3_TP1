@@ -88,46 +88,31 @@ Sua estrutura inclui um índice indireto, uma `HashExtensivel`, para mapear um i
 
 <br>
 <p align="center">
-  <table align="center" border="0" cellpadding="0" cellspacing="0">
-    <tr>
-      <td align="center" valign="top">
-        <img src="fig_readmeTP2/fig1.png" alt="Legenda da Imagem 1" width="350">
-        <br>
-        <b>Figura 1:</b> <i>Evidência em Código: Método cadastrarNovoProduto em ControladorProduto.java - Implementa o 'Create' do CRUD. A lógica de controle é responsável por receber os dados do usuário, validar o GTIN (verificando o formato e a duplicidade através de arqProdutos.read) e, por fim, invocar arqProdutos.create para persistir o novo produto. Fonte: Elaborado pelos autores. </i>
-      </td>
-      
-      <td width="20">&nbsp;</td> 
-      
-      <td align="center" valign="top">
-        <img src="fig_readmeTP2/fig2.png" alt="Legenda da Imagem 2" width="350">
-        <br>
-        <b>Figura 2:</b> <i> Evidência em Código: Método buscarProdutoPorGtin. Este método implementa a operação 'Read' do CRUD. Ele solicita o GTIN-13 ao usuário e invoca arqProdutos.read(gtin13). Esta chamada, por sua vez, utiliza o índice Hash Extensível (mapeando GTIN -> ID) para localizar o produto de forma eficiente, sem a necessidade de varrer o arquivo principal. Fonte: Elaborado pelos autores.</i>
-      </td>
-    </tr>
-  </table>
+  <img src="fig_readmeTP2/fig1.png" alt="Legenda da Imagem 1" width="600">
+  <br>
+  <b>Figura 1:</b> <i>Evidência em Código: Método cadastrarNovoProduto em ControladorProduto.java - Implementa o 'Create' do CRUD. A lógica de controle é responsável por receber os dados do usuário, validar o GTIN (verificando o formato e a duplicidade através de arqProdutos.read) e, por fim, invocar arqProdutos.create para persistir o novo produto. Fonte: Elaborado pelos autores.</i>
 </p>
-
 <br>
-<p align="center">
-  <table align="center" border="0" cellpadding="0" cellspacing="0">
-    <tr>
-      <td align="center" valign="top">
-        <img src="fig_readmeTP2/fig3.png" alt="Legenda da Imagem 3" width="350">
-        <br>
-        <b>Figura3:</b> <i>Evidência em Código: Método alterarDadosProduto. Este método implementa a operação 'Update' do CRUD. Ele permite ao usuário modificar os dados de um produto (como descrição ou GTIN). Ao final, ele invoca arqProdutos.update(produto). A camada de persistência (ArquivoProduto) é responsável por sobrescrever o registro no arquivo e, crucialmente, atualizar o índice Hash Extensível caso a chave (GTIN-13) tenha sido alterada, garantindo a integridade do índice. Fonte: Elaborado pelos autores.</i>
-      </td>
-      
-      <td width="20">&nbsp;</td> 
-      
-      <td align="center" valign="top">
-        <img src="fig_readmeTP2/fig4.png" alt="Legenda da Imagem 4" width="350">
-        <br>
-        <b>Figura 4:</b> <i>Evidência em Código: Método inativarProduto. Este método implementa a operação 'Delete' (lógica) do CRUD, conforme especificado nos requisitos do trabalho. Em vez de uma exclusão física, o produto é marcado como inativo (produto.setAtivo(false)). Em seguida, o método arqProdutos.update(produto) é chamado para persistir essa alteração de estado no arquivo, ocultando o produto de listagens futuras, mas mantendo a integridade referencial para listas antigas. Fonte: Elaborado pelos autores.</i>
-      </td>
-    </tr>
-  </table>
-</p>
 
+<p align="center">
+  <img src="fig_readmeTP2/fig2.png" alt="Legenda da Imagem 2" width="600">
+  <br>
+  <b>Figura 2:</b> <i> Evidência em Código: Método buscarProdutoPorGtin. Este método implementa a operação 'Read' do CRUD. Ele solicita o GTIN-13 ao usuário e invoca arqProdutos.read(gtin13). Esta chamada, por sua vez, utiliza o índice Hash Extensível (mapeando GTIN -> ID) para localizar o produto de forma eficiente, sem a necessidade de varrer o arquivo principal. Fonte: Elaborado pelos autores.</i>
+</p>
+<br>
+
+<p align="center">
+  <img src="fig_readmeTP2/fig3.png" alt="Legenda da Imagem 3" width="600">
+  <br>
+  <b>Figura 3:</b> <i>Evidência em Código: Método alterarDadosProduto. Este método implementa a operação 'Update' do CRUD. Ele permite ao usuário modificar os dados de um produto (como descrição ou GTIN). Ao final, ele invoca arqProdutos.update(produto). A camada de persistência (ArquivoProduto) é responsável por sobrescrever o registro no arquivo e, crucialmente, atualizar o índice Hash Extensível caso a chave (GTIN-13) tenha sido alterada, garantindo a integridade do índice. Fonte: Elaborado pelos autores.</i>
+</p>
+<br>
+
+<p align="center">
+  <img src="fig_readmeTP2/fig4.png" alt="Legenda da Imagem 4" width="600">
+  <br>
+  <b>Figura 4:</b> <i>Evidência em Código: Método inativarProduto. Este método implementa a operação 'Delete' (lógica) do CRUD, conforme especificado nos requisitos do trabalho. Em vez de uma exclusão física, o produto é marcado como inativo (produto.setAtivo(false)). Em seguida, o método arqProdutos.update(produto) é chamado para persistir essa alteração de estado no arquivo, ocultando o produto de listagens futuras, mas mantendo a integridade referencial para listas antigas. Fonte: Elaborado pelos autores.</i>
+</p>
 <br>
 
 ### 2.2 Há um CRUD da entidade de associação ListaProduto (que estende a classe ArquivoIndexado, acrescentando Tabelas Hash Extensíveis e Árvores B+ como índices diretos e indiretos conforme necessidade) que funciona corretamente?
