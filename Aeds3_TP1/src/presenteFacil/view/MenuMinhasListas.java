@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import src.presenteFacil.controller.ControladorListaDePresentes;
 import src.presenteFacil.model.*;
+import src.presenteFacil.utils.ClearConsole;
 
 
 public class MenuMinhasListas {
@@ -32,7 +33,8 @@ public class MenuMinhasListas {
             System.out.print("\nOpção: "); 
 
             opcao = scanner.nextLine().trim().toUpperCase(); 
-            System.out.println(opcao);
+            
+            ClearConsole.clearScreen();
 
             switch (opcao) {
                 case "N":
@@ -56,10 +58,10 @@ public class MenuMinhasListas {
                         if(listas != null && indice > 0 && indice <= listas.length){ 
                             giftListController.MostrarLista(scanner, listas[indice - 1], usuarioLogado); 
                         } else { 
-                            System.out.println("\nOpição Invalida. Tente novamente.\n");
+                            System.out.println("\nOpção Inválida. Tente novamente.\n");
                         } 
                     }else{
-                        System.out.println("\nOpição Invalida. Tente novamente.\n");
+                        System.out.println("\nOpção Inválida. Tente novamente.\n");
                     }
             }
         }
@@ -82,7 +84,6 @@ public class MenuMinhasListas {
             System.out.print("\nOpção: "); 
 
             opcao = scanner.nextLine().trim().toUpperCase(); 
-            System.out.println(opcao);
 
             switch (opcao) {
                 case "R":

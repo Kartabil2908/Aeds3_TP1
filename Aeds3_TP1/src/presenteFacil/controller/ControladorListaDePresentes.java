@@ -26,6 +26,7 @@ public class ControladorListaDePresentes {
     }
 
     public void criarNovaLista(Scanner scanner, Usuario usuario) {   
+
         System.out.println("-------- PresenteFácil 1.0 --------"); 
         System.out.println("-----------------------------------"); 
         System.out.println("> Início > Minhas Listas > Nova Lista\n");
@@ -33,16 +34,20 @@ public class ControladorListaDePresentes {
             System.out.print("Nome da Lista: ");
             String nome = scanner.nextLine();
 
-            System.out.print("Descrição: ");
+            System.out.print("\nDescrição: ");
             String descricao = scanner.nextLine();
 
             LocalDate dataLimite = null;
+
             while(dataLimite == null) {
-                System.out.print("Data limite (dd/MM/yyyy): ");
+
+                System.out.print("\nData limite (dd/MM/yyyy): ");
                 String dataLimiteStr = scanner.nextLine();
+                
                 try {
                     dataLimite = LocalDate.parse(dataLimiteStr, formato);
-                } catch(DateTimeParseException e) {
+                } 
+                catch(DateTimeParseException e) {
                     System.out.println("\n-- Data em formato inválido. Tente novamente. --\n");
                 }
             }
@@ -53,6 +58,8 @@ public class ControladorListaDePresentes {
             LocalDate dataCriacao = LocalDate.now();
             Lista novaLista = new Lista(codigo, nome, descricao, dataCriacao, dataLimite, idUsuario);
             arqListas.create(novaLista);
+
+            ClearConsole.clearScreen();
 
             System.out.println("\n-- Lista criada com sucesso! (Código compartilhável: " + codigo + ") --\n");
         }
@@ -68,7 +75,7 @@ public class ControladorListaDePresentes {
             System.out.println("-------- PresenteFácil 1.0 --------"); 
             System.out.println("-----------------------------------"); 
             System.out.println("> Início > Minhas Listas\n");
-            System.out.println("LISTAS");
+            System.out.println("\nLISTAS");
             boolean temListasAtivas = false;
             Lista[] listas = arqListas.readByUsuario(usuario.getId());
 
@@ -82,7 +89,7 @@ public class ControladorListaDePresentes {
             for (int i = 0; i < listas.length; i++) {
                 if(listas[i].isAtiva()){
                     temListasAtivas = true;
-                    System.out.println("(" + (i + 1) + ") " + listas[i].getNome() + " - "
+                    System.out.println("\n(" + (i + 1) + ") " + listas[i].getNome() + " - "
                         + listas[i].getDataCriacao().format(formato));
                 }
             }
@@ -99,15 +106,17 @@ public class ControladorListaDePresentes {
     }
 
     public void mostrarListasDesativadas(Usuario usuario) {
+
         System.out.println("-------- PresenteFácil 1.0 --------"); 
         System.out.println("-----------------------------------"); 
         System.out.println("> Início > Minhas Listas > Listas Desativadas\n");
+        
         try{
             boolean temListasDesativadas = false;
             Lista[] listas = arqListas.readByUsuarioDisableLists(usuario.getId());
 
             if (listas == null || listas.length == 0) {
-                System.out.println("\n-- Nenhuma lista cadastrada. --\n");
+                System.out.println("\n-- Nenhuma lista desativada. --\n");
                 return;
             }
 
@@ -131,6 +140,7 @@ public class ControladorListaDePresentes {
     }
 
     public void buscarListaPorCodigo(Scanner scanner, ArquivoLista arqListas) {
+
         System.out.println("-------- PresenteFácil 1.0 --------"); 
         System.out.println("-----------------------------------"); 
         System.out.println("> Início > Buscar Lista\n");
@@ -153,7 +163,7 @@ public class ControladorListaDePresentes {
                 System.out.println("Data de criação: " + lista.getDataCriacao().format(formato));
                 System.out.println("Data limite: " + lista.getDataLimite().format(formato));
                 System.out.println("Código compartilhável: " + lista.getCodigo());
-                System.err.println("ativa: " + lista.isAtiva());
+                System.out.println("Ativa: " + (lista.isAtiva() ? "Sim" : "Não"));
                 System.out.println("------------------------------\n");
             }
         } catch (Exception e) {
@@ -177,7 +187,7 @@ public class ControladorListaDePresentes {
             System.out.println("Descrição: " + lista.getDescricao());
             System.out.println("Data de criação: " + lista.getDataCriacao().format(formato));
             System.out.println("Data limite: " + lista.getDataLimite().format(formato));
-            System.out.println("ID do Usuário dono: " + lista.getIdUsuario());
+            //System.out.println("ID do Usuário: " + lista.getIdUsuario());
             System.out.println("Código compartilhável: " + lista.getCodigo());
             System.out.println();
 
@@ -238,18 +248,18 @@ public class ControladorListaDePresentes {
         System.out.println("-----------------------------------"); 
         System.out.println("> Início > Minhas Listas > " + lista.getNome() + " > Alterar Dados da Lista\n");
         System.out.println("\n----- Alterar Dados da Lista ------");
-        System.out.println("[Deixe o campo em branco para manter a informação atual.]\n");
+        System.out.println("\n[Deixe o campo em branco para manter a informação atual.]\n");
 
         try {
             System.out.println("Nome atual: " + lista.getNome());
-            System.out.print("Novo nome: ");
+            System.out.print("\nNovo nome: ");
             String novoNome = scanner.nextLine();
             if (!novoNome.trim().isEmpty()) {
                 lista.setNome(novoNome);
             }
 
             System.out.println("\nDescrição atual: " + lista.getDescricao());
-            System.out.print("Nova descrição: ");
+            System.out.print("\nNova descrição: ");
             String novaDescricao = scanner.nextLine();
             if (!novaDescricao.trim().isEmpty()) {
                 lista.setDescricao(novaDescricao);
@@ -258,7 +268,7 @@ public class ControladorListaDePresentes {
             boolean dataValida = false;
             while(!dataValida) {
                 System.out.println("\nData limite atual: " + lista.getDataLimite().format(formato));
-                System.out.print("Nova data limite (dd/MM/yyyy): ");
+                System.out.print("\nNova data limite (dd/MM/yyyy): ");
                 String novaDataStr = scanner.nextLine();
                 if (novaDataStr.trim().isEmpty()) {
                     dataValida = true;
@@ -320,7 +330,7 @@ public class ControladorListaDePresentes {
         System.out.println("-----------------------------------"); 
         System.out.println("> Início > Minhas Listas > " + nome + " > Desativar Lista\n");
         System.out.println("\n-------- Desativar Lista ----------");
-        System.out.print("Você tem certeza que deseja deletar esta lista? (S/N): ");
+        System.out.print("\nVocê tem certeza que deseja deletar esta lista? (S/N): ");
         String confirmacao = scanner.nextLine().toUpperCase();
 
         if (!confirmacao.equals("S")) {

@@ -212,7 +212,7 @@ public class ControladorUsuario {
         boolean sair = false;
         while (!sair) {
             System.out.println("\n-------- Alterar Meus Dados --------");
-            System.out.println("\n");
+            System.out.println("\nDeseja alterar:\n");
             System.out.println("(1) Nome");
             System.out.println("(2) E-mail");
             System.out.println("(3) Senha");
@@ -228,27 +228,38 @@ public class ControladorUsuario {
                 switch (op) {
                     case "1": {
                         System.out.println("Nome atual: " + usuarioLogado.getNome());
-                        System.out.print("Novo nome: ");
+                        System.out.print("\nNovo nome: ");
                         String novo = scanner.nextLine();
+
+                        ClearConsole.clearScreen();
+
                         if (!novo.trim().isEmpty()) {
                             usuarioLogado.setNome(novo);
                             salvarUsuarioLogado();
                             System.out.println("\n-- Nome atualizado! --\n");
-                        } else {
-                            System.out.println("\n-- Nenhuma alteracao realizada. --\n");
+                        } 
+                        
+                        else {
+                            System.out.println("\n-- Nenhuma alteração realizada. --\n");
                         }
                         break;
                     }
+
                     case "2": {
                         System.out.println("Email atual: " + usuarioLogado.getEmail());
-                        System.out.print("Novo e-mail: ");
+                        System.out.print("\nNovo e-mail: ");
                         String novo = scanner.nextLine().trim();
-                        if (novo.isEmpty()) { System.out.println("\n-- Nenhuma alteracao realizada. --\n"); break; }
+                        
+                        ClearConsole.clearScreen();
+
+                        if (novo.isEmpty()) { System.out.println("\n-- Nenhuma alteração realizada. --\n"); break; }
                         Usuario existente = arqUsuarios.read(novo);
+
                         if (existente != null && existente.getId() != usuarioLogado.getId()) {
-                            System.out.println("\n-- Ja existe conta com esse e-mail. --\n");
+                            System.out.println("\n-- Já existe uma conta com este e-mail. --\n");
                             break;
                         }
+
                         usuarioLogado.setEmail(novo);
                         salvarUsuarioLogado();
                         System.out.println("\n-- E-mail atualizado! --\n");
@@ -257,7 +268,10 @@ public class ControladorUsuario {
                     case "3": {
                         System.out.print("Nova senha: ");
                         String s = scanner.nextLine();
-                        if (s.trim().isEmpty()) { System.out.println("\n-- Nenhuma alteracao realizada. --\n"); break; }
+
+                        ClearConsole.clearScreen();
+
+                        if (s.trim().isEmpty()) { System.out.println("\n-- Nenhuma alteração realizada. --\n"); break; }
                         usuarioLogado.setHashSenha(s.hashCode());
                         salvarUsuarioLogado();
                         System.out.println("\n-- Senha atualizada! --\n");
@@ -265,18 +279,24 @@ public class ControladorUsuario {
                     }
                     case "4": {
                         System.out.println("Pergunta atual: " + usuarioLogado.getPerguntaSecreta());
-                        System.out.print("Nova pergunta: ");
+                        System.out.print("\nNova pergunta: ");
                         String p = scanner.nextLine();
-                        if (p.trim().isEmpty()) { System.out.println("\n-- Nenhuma alteracao realizada. --\n"); break; }
+
+                        ClearConsole.clearScreen();
+
+                        if (p.trim().isEmpty()) { System.out.println("\n-- Nenhuma alteração realizada. --\n"); break; }
                         usuarioLogado.setPerguntaSecreta(p);
                         salvarUsuarioLogado();
                         System.out.println("\n-- Pergunta secreta atualizada! --\n");
                         break;
                     }
                     case "5": {
-                        System.out.print("Nova resposta secreta: ");
+                        System.out.print("\nNova resposta secreta: ");
                         String r = scanner.nextLine();
-                        if (r.trim().isEmpty()) { System.out.println("\n-- Nenhuma alteracao realizada. --\n"); break; }
+
+                        ClearConsole.clearScreen();
+
+                        if (r.trim().isEmpty()) { System.out.println("\n-- Nenhuma alteração realizada. --\n"); break; }
                         usuarioLogado.setRespostaSecreta(r);
                         salvarUsuarioLogado();
                         System.out.println("\n-- Resposta secreta atualizada! --\n");
@@ -286,10 +306,10 @@ public class ControladorUsuario {
                         sair = true;
                         break;
                     default:
-                        System.out.println("\n-- Opcao invalida. --\n");
+                        System.out.println("\n-- Opção inválida. --\n");
                 }
             } catch (Exception e) {
-                System.err.println("\nErro ao alterar dados do usuario: " + e.getMessage() + "\n");
+                System.err.println("\nErro ao alterar dados do usuário: " + e.getMessage() + "\n");
                 return;
             }
         }

@@ -69,7 +69,7 @@ public class Usuario implements Registro {
         return "Nome: " + this.nome + "\n" +
                "Email: " + this.email + "\n" +
                "PerguntaSecreta: " + this.PerguntaSecreta + "\n" +
-               "Ativo: " + this.ativo + "\n";
+               "Ativo: " + (this.ativo ? "Sim" : "Não") + "\n";
     }
 
     // Getters
