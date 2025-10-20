@@ -122,18 +122,23 @@ Sua estrutura inclui um índice indireto, uma `HashExtensivel`, para mapear um i
 Esta classe é o cerne do relacionamento N:N e, portanto, contém os índices mais importantes: duas Árvores B+ para materializar o relacionamento em ambas as direções.
 
 <br>
-<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
-
-**Figura 5**: *Evidência em Código: Índices (Árvores B+) em `ArquivoListaProduto.java`. Fonte: Elaborado pelos autores.*
-
+<p align="center">
+  <img src="fig_readmeTP2/fig5.png" alt="Índices Árvore B+" width="600">
+  <br>
+  <b>Figura 5:</b> <i>Evidência em Código: Índices (Árvores B+) em `ArquivoListaProduto.java`. Fonte: Elaborado pelos autores.</i>
+</p>
 <br>
 
 A prova de execução abaixo demonstra a funcionalidade de adicionar um produto (previamente cadastrado) a uma lista de presentes existente.
 
 <br>
-<p align="center"><img src="fig_readmeTP2/brasao.jpg"  width="400"></p>
+<p align="center">
+  <img src="fig_readmeTP2/fig6.png" alt="Tela de adição de produto a uma lista" width="600">
+  <br>
+  <b>Figura 6:</b> <i>Prova de Execução: Tela de adição de produto a uma lista. Fonte: Elaborado pelos autores.</i>
+</p>
+<br>
 
-**Figura 6**: *Prova de Execução: Tela de adição de produto a uma lista. Fonte: Elaborado pelos autores.*
 
 <br>
 
