@@ -2,10 +2,13 @@
   <img src="fig_readmeTP2/brasao.jpg" alt="Brasão PUC Minas" width="150">
 </p>
 
- 
+<div align="center>
+
 # PONTIFÍCIA UNIVERSIDADE CATÓLICA DE MINAS GERAIS 
 ### Instituto de Ciências Exatas e de Informática 
 ### Curso de Ciência da Computação 
+
+</div>
 
 -----
 
