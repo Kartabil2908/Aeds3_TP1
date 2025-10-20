@@ -181,7 +181,7 @@ A prova de execução abaixo demonstra o menu de gerenciamento de produtos dentr
 
 <br>
 <p align="center">
-  <img src="fig_readmeTP2/fig6.png" alt="Menu de gerenciamento de produtos dentro de uma lista" width="450">
+  <img src="fig_readmeTP2/fig10.png" alt="Menu de gerenciamento de produtos dentro de uma lista" width="450">
   <br>
   <b>Figura 10:</b> <i>Prova de Execução: Visão de Listas, mostrando os produtos associados e permitindo a gestão (adicionar/remover/editar quantidade). (Esta é a mesma tela da Figura 6, pois demonstra ambos os requisitos). Fonte: Elaborado pelos autores.</i>
 </p>
