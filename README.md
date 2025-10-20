@@ -1,8 +1,8 @@
-\<p align="center"\>
-  \<img src="fig\_readmeTP2/brasao.jpg" alt="Brasão PUC Minas" width="150"/\>
-\</p\>
+<p align="center"\>
+  <img src="fig\_readmeTP2/brasao.jpg" alt="Brasão PUC Minas" width="150"\>
+</p\>
 
-\<div align="center"\>
+<div align="center"\>
  
 
 # PONTIFÍCIA UNIVERSIDADE CATÓLICA DE MINAS GERAIS
@@ -13,7 +13,7 @@
 
 -----
 
-\</div\>
+<div\>
 
 # Relatório Trabalho Prático 02
 
@@ -38,7 +38,7 @@ Este relatório descreve a segunda parte do Trabalho Prático da disciplina de A
 
 ### **Resumo**
 
-O presente trabalho detalha a evolução do "PresenteFácil", um sistema de gerenciamento de listas de presentes implementado na linguagem Java. Esta segunda fase do projeto, desenvolvida para a disciplina de Algoritmos e Estruturas de Dados III, foca na implementação de um relacionamento N:N (Muitos-para-Muitos) entre as entidades `Lista` e `Produto`. O sistema agora suporta um CRUD (Create, Read, Update, Delete) completo para `Produtos` e para a entidade associativa `ListaProduto`. Para garantir a eficiência no acesso aos dados, foram implementadas e utilizadas estruturas de indexação externas, notadamente a Hash Extensível e a Árvore B+. A Hash Extensível é utilizada para criar índices diretos e indiretos (ex: busca de produto por código EAN), enquanto a Árvore B+ foi empregada para materializar o relacionamento N:N, otimizando consultas complexas, como "em quais listas este produto aparece?" e "quais produtos estão nesta lista?". A arquitetura do sistema segue o padrão Model-View-Controller (MVC) e utiliza uma classe base `ArquivoIndexado` para gerenciar a persistência em arquivos.
+O presente trabalho detalha a evolução do "PresenteFácil", um sistema de gerenciamento de listas de presentes implementado na linguagem Java. Esta segunda fase do projeto, desenvolvida para a disciplina de Algoritmos e Estruturas de Dados III, foca na implementação de um relacionamento N:N (Muitos-para-Muitos) entre as entidades `Lista` e `Produto`. O sistema agora suporta um CRUD (Create, Read, Update, Delete) completo para `Produtos` e para a entidade associativa `ListaProduto`. Para garantir a eficiência no acesso aos dados, foram implementadas e utilizadas estruturas de indexação externas, notadamente a Hash Extensível e a Árvore B+. A Hash Extensível é utilizada para criar índices diretos e indiretos, enquanto a Árvore B+ foi empregada para materializar o relacionamento N:N, otimizando consultas complexas, como "em quais listas este produto aparece?" e "quais produtos estão nesta lista?". A arquitetura do sistema segue o padrão Model-View-Controller (MVC) e utiliza uma classe base `ArquivoIndexado` para gerenciar a persistência em arquivos.
 
 **Palavras-chave:** Java, Estrutura de Dados, Hash Extensível, Árvore B+, CRUD, N:N, Persistência de Dados.
 
@@ -47,17 +47,15 @@ O presente trabalho detalha a evolução do "PresenteFácil", um sistema de gere
 ## Sumário
 
 1.  [INTRODUÇÃO]
-2.  [DESENVOLVIMENTO]
-      * [Estruturas de Dados e Persistência]
-3.  [CHECKLIST DE REQUISITOS]
-      * [3.1 CRUD de produtos]
-      * [3.2 CRUD de ListaProduto]
-      * [3.3 Visão de produtos]
-      * [3.4 Visão de listas]
-      * [3.5 Integridade do relacionamento]
-      * [3.6 Compila corretamente]
-      * [3.7 Completo e funcionando]
-      * [3.8 Originalidade do trabalho]
+2.  [CHECKLIST DE REQUISITOS]
+      * [2.1 CRUD de produtos]
+      * [2.2 CRUD de ListaProduto]
+      * [2.3 Visão de produtos]
+      * [2.4 Visão de listas]
+      * [2.5 Integridade do relacionamento]
+      * [2.6 Compila corretamente]
+      * [2.7 Completo e funcionando]
+      * [2.8 Originalidade do trabalho]
 4.  [CONCLUSÃO]
 
 -----
