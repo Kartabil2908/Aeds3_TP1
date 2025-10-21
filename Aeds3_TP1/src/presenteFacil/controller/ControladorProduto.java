@@ -184,7 +184,7 @@ public class ControladorProduto {
 
             System.out.println("Aparece nas minhas listas:\n");
             for(int i = 0; i < ListasDoUsuario.length; i++) {
-                System.out.println(" - " + ListasDoUsuario[i].getNome());
+                System.out.println(" - " + ListasDoUsuario[i].getNome() + "\n");
             }
 
             System.out.println("\nAparece também em mais " + (listasDeOutros.length == 0 ? (listasDeOutros.length) : (listasDeOutros.length - 1)) + " listas" + " de outras pessoas.\n");
