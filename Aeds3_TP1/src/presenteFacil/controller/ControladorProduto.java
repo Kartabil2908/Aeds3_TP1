@@ -79,6 +79,8 @@ public class ControladorProduto {
             String gtin13 = scanner.nextLine();
             Produto produto = arqProdutos.read(gtin13);
 
+            ClearConsole.clearScreen();
+
             if (produto == null) {
                 System.out.println("\n-- Nenhum produto encontrado com este GTIN-13. --\n");
             } else {
@@ -195,7 +197,7 @@ public class ControladorProduto {
                 System.out.println("(2) Inativar o produto");
             }
                 System.out.println("(3) Reativar produto");
-        
+
                 System.out.println("(4) Reativar produto por GTIN");
             
             System.out.println("(R) Retornar ao menu anterior");
@@ -232,7 +234,7 @@ public class ControladorProduto {
 
                 case "4":
                     if (!produto.isAtivo()) {
-                        reativarProduto(scanner, produto);
+                        reativarProdutoPorGtin(scanner);
                     } else {
                         System.out.println("\n-- Opção inválida para produto ativo. --\n");
                     }
@@ -424,7 +426,7 @@ public class ControladorProduto {
             System.out.println("-------------------------------------\n");
 
             if (produto.isAtivo()) {
-                System.out.println("\n-- Produto já esta ativo. --\n");
+                System.out.println("\n-- Produto já está ativo. --\n");
                 return;
             }
 
