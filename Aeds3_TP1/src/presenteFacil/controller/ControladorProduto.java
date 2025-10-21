@@ -1,14 +1,15 @@
 package src.presenteFacil.controller;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
 import src.presenteFacil.model.ArquivoListaProduto;
 import src.presenteFacil.model.ArquivoProduto;
 import src.presenteFacil.model.Lista;
 import src.presenteFacil.model.Produto;
 import src.presenteFacil.model.Usuario;
 import src.presenteFacil.utils.ClearConsole;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
 
 public class ControladorProduto {
 
@@ -29,7 +30,7 @@ public class ControladorProduto {
 
         System.out.println("-------- PresenteFácil 2.0 --------");
         System.out.println("-----------------------------------");
-        System.out.println("> Inicio > Produtos > Cadastrar\n");
+        System.out.println("> Início > Produtos > Cadastrar\n");
 
         try {
             System.out.print("GTIN-13: ");
@@ -56,7 +57,7 @@ public class ControladorProduto {
             Produto novoProduto = new Produto(gtin13, nome, descricao);
             arqProdutos.create(novoProduto);
 
-            ClearConsole.delayAndClear();
+            ClearConsole.clearScreen();
 
             System.out.println("\n-- Produto cadastrado com sucesso! --\n");
 
@@ -69,7 +70,7 @@ public class ControladorProduto {
 
         System.out.println("-------- PresenteFácil 2.0 --------");
         System.out.println("-----------------------------------");
-        System.out.println("> Inicio > Produtos > Buscar por GTIN\n");
+        System.out.println("> Início > Produtos > Buscar por GTIN\n");
 
         setUsuario(usuarioLogado);
 
@@ -89,9 +90,11 @@ public class ControladorProduto {
     }
 
     public void listarTodosOsProdutos(Scanner scanner, Usuario usuarioLogado) {
+        
         try {
             setUsuario(usuarioLogado);
             List<Produto> produtos = arqProdutos.listarTodos();
+
             if (produtos.isEmpty()) {
                 System.out.println("\n-- Nenhum produto cadastrado. --\n");
                 return;
@@ -110,7 +113,7 @@ public class ControladorProduto {
 
                 int totalPaginas = (int) Math.ceil((double) produtos.size() / ITENS_POR_PAGINA);
                 System.out.println("Página " + (paginaAtual + 1) + " de " + totalPaginas);
-                System.out.println("------------------------ ---------------\n");
+                System.out.println("----------------------------------------\n");
 
                 int inicio = paginaAtual * ITENS_POR_PAGINA;
                 int fim = Math.min(inicio + ITENS_POR_PAGINA, produtos.size());
@@ -125,8 +128,8 @@ public class ControladorProduto {
                 System.out.println("(A) Página anterior");
                 System.out.println("(R) Retornar ao menu anterior");
                 System.out.print("\nOpção: ");
-                String opcao = scanner.nextLine().trim().toUpperCase();
 
+                String opcao = scanner.nextLine().trim().toUpperCase();
                 ClearConsole.clearScreen();
 
                 switch (opcao) {
@@ -179,7 +182,7 @@ public class ControladorProduto {
             Lista[] ListasDoUsuario = arqListaProduto.getListaByProdutoIdAndUsuario(produto.getId(), usuario.getId());
             Lista[] listasDeOutros = arqListaProduto.getListasByProdutoId(produto.getId());
 
-            System.out.println("Aparece nas minhas listas: ");
+            System.out.println("Aparece nas minhas listas:\n");
             for(int i = 0; i < ListasDoUsuario.length; i++) {
                 System.out.println(" - " + ListasDoUsuario[i].getNome());
             }
@@ -187,11 +190,14 @@ public class ControladorProduto {
             System.out.println("\nAparece também em mais " + (listasDeOutros.length == 0 ? (listasDeOutros.length) : (listasDeOutros.length - 1)) + " listas" + " de outras pessoas.\n");
 
             System.out.println("(1) Alterar dados do produto");
+            
             if (produto.isAtivo()) {
                 System.out.println("(2) Inativar o produto");
-            } else {
-                System.out.println("(3) Reativar produto");
             }
+                System.out.println("(3) Reativar produto");
+        
+                System.out.println("(4) Reativar produto por GTIN");
+            
             System.out.println("(R) Retornar ao menu anterior");
             System.out.print("\nOpção: ");
 
@@ -200,12 +206,14 @@ public class ControladorProduto {
             ClearConsole.clearScreen();
 
             switch (opcao) {
+
                 case "1":
                     alterarDadosProduto(scanner, produto);
                     // recarrega pelo ID atualizado (GTIN pode mudar)
                     produto = arqProdutos.read(produto.getID());
                     if (produto == null) return;
                     break;
+
                 case "2":
                     if (produto.isAtivo()) {
                         inativarProduto(scanner, produto);
@@ -213,6 +221,7 @@ public class ControladorProduto {
                         System.out.println("\n-- Opção inválida para produto inativo. --\n");
                     }
                     break;
+
                 case "3":
                     if (!produto.isAtivo()) {
                         reativarProduto(scanner, produto);
@@ -220,6 +229,15 @@ public class ControladorProduto {
                         System.out.println("\n-- Opção inválida para produto ativo. --\n");
                     }
                     break;
+
+                case "4":
+                    if (!produto.isAtivo()) {
+                        reativarProduto(scanner, produto);
+                    } else {
+                        System.out.println("\n-- Opção inválida para produto ativo. --\n");
+                    }
+                    break;
+
                 case "R":
                     return;
                 default:
@@ -229,12 +247,15 @@ public class ControladorProduto {
     }
 
     private void alterarDadosProduto(Scanner scanner, Produto produto) {
+        
         boolean sair = false;
+        
         while (!sair) {
+
             try {
-                System.out.println("\n-------- Alterar Dados do Produto --------");
-                System.out.println("(1) Alterar descricao");
-                System.out.println("(2) Alterar GTIN-13");
+                System.out.println("\n-------- Alterar Dados do Produto --------\n");
+                System.out.println("(1) Alterar descrição");
+                System.out.println("(2) Alterar GTIN-13\n");
                 System.out.println("(R) Retornar");
                 System.out.print("\nOpção: ");
                 String op = scanner.nextLine().trim().toUpperCase();
@@ -306,12 +327,27 @@ public class ControladorProduto {
     private void inativarProduto(Scanner scanner, Produto produto) {
 
         try {
+
+            int qtdListas = 0;
+
+            try {
+                Lista[] listas = arqListaProduto.getListasByProdutoId(produto.getID());
+                qtdListas = (listas != null) ? listas.length : 0;
+            } 
+            
+            catch (Exception e) {
+                // Se houver erro ao obter as listas, mantem qtdListas = 0 e segue o fluxo
+            }
+
+            System.out.println("\nEste produto participa de " + qtdListas + " lista(s).");
             System.out.print("\nVocê tem certeza que deseja inativar este produto? (S/N): ");
             String conf = scanner.nextLine().trim().toUpperCase();
+            
             if (!"S".equals(conf)) {
                 System.out.println("\n-- Operação cancelada. --\n");
                 return;
             }
+
             produto.setAtivo(false);
             boolean ok = arqProdutos.update(produto);
 
@@ -320,7 +356,7 @@ public class ControladorProduto {
             if (ok) {
                 System.out.println("\n-- Produto inativado com sucesso! --\n");
             } else {
-                System.out.println("\n-- Não foi possivel inativar o produto. --\n");
+                System.out.println("\n-- Não foi possível inativar o produto. --\n");
             }
         } catch (Exception e) {
             System.err.println("\nErro ao inativar produto: " + e.getMessage() + "\n");
@@ -328,13 +364,20 @@ public class ControladorProduto {
     }
 
     private void reativarProduto(Scanner scanner, Produto produto) {
+
+        System.out.println("------------ PresenteFácil 2.0 ------------");
+        System.out.println("-------------------------------------------");
+        System.out.println("> Início > Produtos > Reativar\n");
+
         try {
             System.out.print("\nVocê tem certeza que deseja reativar este produto? (S/N): ");
             String conf = scanner.nextLine().trim().toUpperCase();
+
             if (!"S".equals(conf)) {
                 System.out.println("\n-- Operação cancelada. --\n");
                 return;
             }
+
             produto.setAtivo(true);
             boolean ok = arqProdutos.update(produto);
 
@@ -342,9 +385,51 @@ public class ControladorProduto {
 
             if (ok) {
                 System.out.println("\n-- Produto reativado com sucesso! --\n");
-            } else {
+            } 
+
+            else {
                 System.out.println("\n-- Não foi possível reativar o produto. --\n");
             }
+
+        } catch (Exception e) {
+            System.err.println("\nErro ao reativar produto: " + e.getMessage() + "\n");
+        }
+    }
+
+    // Reativar produto diretamente via GTIN
+    public void reativarProdutoPorGtin(Scanner scanner) {
+
+        System.out.println("-------- PresenteFácil 2.0 --------");
+        System.out.println("-----------------------------------");
+        System.out.println("> Início > Produtos > Reativar\n");
+
+        try {
+            System.out.print("Digite o GTIN-13 do produto: ");
+            String gtin13 = scanner.nextLine().trim();
+
+            if (!gtin13.matches("\\d{13}")) {
+                System.out.println("\n-- GTIN-13 inválido. Deve conter exatamente 13 dígitos numéricos. --\n");
+                return;
+            }
+
+            Produto produto = arqProdutos.read(gtin13);
+            if (produto == null) {
+                System.out.println("\n-- Nenhum produto encontrado com este GTIN-13. --\n");
+                return;
+            }
+
+            // Exibe informações do produto antes da confirmação
+            System.out.println("\n-------- Detalhes do Produto --------");
+            System.out.println(produto.toString());
+            System.out.println("-------------------------------------\n");
+
+            if (produto.isAtivo()) {
+                System.out.println("\n-- Produto já esta ativo. --\n");
+                return;
+            }
+
+            reativarProduto(scanner, produto);
+
         } catch (Exception e) {
             System.err.println("\nErro ao reativar produto: " + e.getMessage() + "\n");
         }

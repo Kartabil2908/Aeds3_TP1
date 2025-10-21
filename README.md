@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="fig_readmeTP2/brasao.jpg" alt="Brasão PUC Minas" width="150">
+  <img src="relatorios/figuras_readme/tp2/brasao.jpg" alt="Brasão PUC Minas" width="150">
 </p>
 
 <h1 align="center">PONTIFÍCIA UNIVERSIDADE CATÓLICA DE MINAS GERAIS</h1>
@@ -88,28 +88,28 @@ Sua estrutura inclui um índice indireto, uma `HashExtensivel`, para mapear um i
 
 <br>
 <p align="center">
-  <img src="fig_readmeTP2/fig1.png" alt="Legenda da Imagem 1" width="600">
+  <img src="relatorios/figuras_readme/tp2/fig1.png" alt="Legenda da Imagem 1" width="600">
   <br>
   <b>Figura 1:</b> <i>Evidência em Código: Método cadastrarNovoProduto em ControladorProduto.java - Implementa o 'Create' do CRUD. A lógica de controle é responsável por receber os dados do usuário, validar o GTIN (verificando o formato e a duplicidade através de arqProdutos.read) e, por fim, invocar arqProdutos.create para persistir o novo produto. Fonte: Elaborado pelos autores.</i>
 </p>
 <br>
 
 <p align="center">
-  <img src="fig_readmeTP2/fig2.png" alt="Legenda da Imagem 2" width="600">
+  <img src="relatorios/figuras_readme/tp2/fig2.png" alt="Legenda da Imagem 2" width="600">
   <br>
   <b>Figura 2:</b> <i> Evidência em Código: Método buscarProdutoPorGtin. Este método implementa a operação 'Read' do CRUD. Ele solicita o GTIN-13 ao usuário e invoca arqProdutos.read(gtin13). Esta chamada, por sua vez, utiliza o índice Hash Extensível (mapeando GTIN -> ID) para localizar o produto de forma eficiente, sem a necessidade de varrer o arquivo principal. Fonte: Elaborado pelos autores.</i>
 </p>
 <br>
 
 <p align="center">
-  <img src="fig_readmeTP2/fig3.png" alt="Legenda da Imagem 3" width="600">
+  <img src="relatorios/figuras_readme/tp2/fig3.png" alt="Legenda da Imagem 3" width="600">
   <br>
   <b>Figura 3:</b> <i>Evidência em Código: Método alterarDadosProduto. Este método implementa a operação 'Update' do CRUD. Ele permite ao usuário modificar os dados de um produto (como descrição ou GTIN). Ao final, ele invoca arqProdutos.update(produto). A camada de persistência (ArquivoProduto) é responsável por sobrescrever o registro no arquivo e, crucialmente, atualizar o índice Hash Extensível caso a chave (GTIN-13) tenha sido alterada, garantindo a integridade do índice. Fonte: Elaborado pelos autores.</i>
 </p>
 <br>
 
 <p align="center">
-  <img src="fig_readmeTP2/fig4.png" alt="Legenda da Imagem 4" width="600">
+  <img src="relatorios/figuras_readme/tp2/fig4.png" alt="Legenda da Imagem 4" width="600">
   <br>
   <b>Figura 4:</b> <i>Evidência em Código: Método inativarProduto. Este método implementa a operação 'Delete' (lógica) do CRUD, conforme especificado nos requisitos do trabalho. Em vez de uma exclusão física, o produto é marcado como inativo (produto.setAtivo(false)). Em seguida, o método arqProdutos.update(produto) é chamado para persistir essa alteração de estado no arquivo, ocultando o produto de listagens futuras, mas mantendo a integridade referencial para listas antigas. Fonte: Elaborado pelos autores.</i>
 </p>
@@ -123,7 +123,7 @@ Esta classe é o cerne do relacionamento N:N e, portanto, contém os índices ma
 
 <br>
 <p align="center">
-  <img src="fig_readmeTP2/fig5.png" alt="Índices Árvore B+" width="600">
+  <img src="relatorios/figuras_readme/tp2/fig5.png" alt="Índices Árvore B+" width="600">
   <br>
   <b>Figura 5:</b> <i>Evidência em Código: Índices (Árvores B+) em `ArquivoListaProduto.java`. Fonte: Elaborado pelos autores.</i>
 </p>
@@ -133,7 +133,7 @@ A prova de execução abaixo demonstra a funcionalidade de adicionar um produto 
 
 <br>
 <p align="center">
-  <img src="fig_readmeTP2/fig6.png" alt="Tela de adição de produto a uma lista" width="600">
+  <img src="relatorios/figuras_readme/tp2/fig6.png" alt="Tela de adição de produto a uma lista" width="600">
   <br>
   <b>Figura 6:</b> <i>Prova de Execução: Tela de adição de produto a uma lista. Fonte: Elaborado pelos autores.</i>
 </p>
@@ -147,7 +147,7 @@ Ao consultar um produto, o sistema busca na árvore B+ por todas as entradas com
 
 <br>
 <p align="center">
-  <img src="fig_readmeTP2/fig7.png" alt="Código de consulta à Árvore B+ (idProduto -> idListaProduto)" width="600">
+  <img src="relatorios/figuras_readme/tp2/fig7.png" alt="Código de consulta à Árvore B+ (idProduto -> idListaProduto)" width="600">
   <br>
   <b>Figura 7:</b> <i>Evidência em Código: Uso da Árvore B+ (`produtoListaProduto`) no método `getListasByProdutoId` em `ArquivoListaProduto.java` para implementar a visão Produto -> Listas. Fonte: Elaborado pelos autores.</i>
 </p>
@@ -157,7 +157,7 @@ A prova de execução abaixo demonstra a tela de detalhes de um produto, listand
 
 <br>
 <p align="center">
-  <img src="fig_readmeTP2/fig8.png" alt="Tela de detalhes do produto mostrando listas associadas" width="450">
+  <img src="relatorios/figuras_readme/tp2/fig8.png" alt="Tela de detalhes do produto mostrando listas associadas" width="450">
   <br>
   <b>Figura 8:</b> <i>Prova de Execução: Tela de visualização de produto, listando as listas onde ele aparece (diferenciando listas do usuário e de outros). Fonte: Elaborado pelos autores.</i>
 </p>
@@ -171,7 +171,7 @@ Quando um usuário seleciona "Gerenciar Lista", o sistema consulta esta árvore 
 
 <br>
 <p align="center">
-  <img src="fig_readmeTP2/fig9.png" alt="Código de consulta à Árvore B+ (idLista -> idListaProduto)" width="600">
+  <img src="relatorios/figuras_readme/tp2/fig9.png" alt="Código de consulta à Árvore B+ (idLista -> idListaProduto)" width="600">
   <br>
   <b>Figura 9:</b> <i>Evidência em Código: Uso da Árvore B+ (`listaListaProduto`) no método `getProdutosByListaId` em `ArquivoListaProduto.java` para implementar a visão Lista -> Produtos. Fonte: Elaborado pelos autores.</i>
 </p>
@@ -181,7 +181,7 @@ A prova de execução abaixo demonstra o menu de gerenciamento de produtos dentr
 
 <br>
 <p align="center">
-  <img src="fig_readmeTP2/fig10.png" alt="Menu de gerenciamento de produtos dentro de uma lista" width="450">
+  <img src="relatorios/figuras_readme/tp2/fig10.png" alt="Menu de gerenciamento de produtos dentro de uma lista" width="450">
   <br>
   <b>Figura 10:</b> <i>Prova de Execução: Visão de Listas, mostrando os produtos associados e permitindo a gestão (adicionar/remover/editar quantidade). (Esta é a mesma tela da Figura 6, pois demonstra ambos os requisitos). Fonte: Elaborado pelos autores.</i>
 </p>
@@ -198,7 +198,7 @@ Isso garante que não haja registros "órfãos" na entidade associativa `ListaPr
 
 <br>
 <p align="center">
-  <img src="fig_readmeTP2/fig11.png" alt="Código de exclusão em cascata no método delete de ArquivoLista" width="600">
+  <img src="relatorios/figuras_readme/tp2/fig11.png" alt="Código de exclusão em cascata no método delete de ArquivoLista" width="600">
   <br>
   <b>Figura 11:</b> <i>Evidência em Código: Lógica de exclusão em cascata no método `delete` de `ArquivoLista.java`. Antes de deletar a lista (`super.delete`), o método consulta `arqListaProduto` para encontrar e remover todas as associações N:N (`ListaProduto`) vinculadas a esta lista, garantindo a integridade referencial. Fonte: Elaborado pelos autores.</i>
 </p>
@@ -209,7 +209,7 @@ Isso garante que não haja registros "órfãos" na entidade associativa `ListaPr
 **Sim.** O trabalho foi desenvolvido em Java e compila sem erros ou *warnings* utilizando o JDK 17. Todas as dependências externas estão corretamente configuradas.
 
 <br>
-<p align="center"><img src="fig_readmeTP2/compilacao.png"  width="400"></p>
+<p align="center"><img src="relatorios/figuras_readme/tp2/compilacao.png"  width="400"></p>
 
 **Figura 11**: *Prova de Execução: Compilação. Fonte: Elaborado pelos autores.*
 

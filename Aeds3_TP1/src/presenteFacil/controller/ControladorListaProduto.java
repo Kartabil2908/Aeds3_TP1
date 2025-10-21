@@ -345,8 +345,8 @@ public class ControladorListaProduto {
                 }
 
                 System.out.println("\nEscolha uma opção para ver mais detalhes:\n");
-                System.out.println("(P) Proxima pagina");
-                System.out.println("(A) Pagina anterior");
+                System.out.println("(P) Proxima página");
+                System.out.println("(A) Página anterior");
                 System.out.println("(R) Retornar ao menu anterior");
                 System.out.print("\nOpção: ");
 
