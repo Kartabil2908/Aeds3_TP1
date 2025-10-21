@@ -3,7 +3,7 @@ import src.presenteFacil.controller.ControladorUsuario;
 import src.presenteFacil.view.MenuInicial;
 
 /**
- * Classe principal do sistema PresenteFácil 1.0.
+ * Classe principal do sistema PresenteFácil 2.0.
  * 
  * Responsável por iniciar a aplicação, instanciar os controladores
  * e chamar a primeira tela de interação (MenuInicial).
@@ -14,7 +14,7 @@ import src.presenteFacil.view.MenuInicial;
  * </pre>
  * 
  * @author Yasmin Torres Moreira dos Santos
- * @version 2.0
+ * @version 3.0
  */
 
 public class Main {
